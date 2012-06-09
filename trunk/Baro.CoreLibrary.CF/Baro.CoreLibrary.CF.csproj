@@ -1,0 +1,201 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B0D6E9D2-C7C7-4F09-A353-89D962B2F058}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Baro.CoreLibrary</RootNamespace>
+    <AssemblyName>Baro.CoreLibrary.CF</AssemblyName>
+    <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PlatformFamilyName>PocketPC</PlatformFamilyName>
+    <PlatformID>b2c48bd2-963d-4549-9169-1fa021dce484</PlatformID>
+    <OSVersion>5.02</OSVersion>
+    <DeployDirSuffix>CoreCF</DeployDirSuffix>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NativePlatformName>Windows Mobile 6 Professional SDK</NativePlatformName>
+    <FormFactorID>
+    </FormFactorID>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>false</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PocketPC,DEBUG</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;PocketPC,RELEASE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsCE.Forms" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cache\CacheStream2.cs" />
+    <Compile Include="Collections\ArraySegmentSeamlessBuffer.cs" />
+    <Compile Include="Collections\BinarySearchHelper.cs" />
+    <Compile Include="Collections\BitSet.cs" />
+    <Compile Include="Collections\Generics\IPQueueNode.cs" />
+    <Compile Include="Collections\Generics\PQueue.cs" />
+    <Compile Include="Collections\Generics\StaticStack.cs" />
+    <Compile Include="Collections\Hash\HashFunctions.cs" />
+    <Compile Include="Collections\PQueueInt.cs" />
+    <Compile Include="Collections\SynchBiDictionary.cs" />
+    <Compile Include="Collections\SynchDictionary.cs" />
+    <Compile Include="Configuration\ConfigIni.cs" />
+    <Compile Include="Configuration\ConfigIniSection.cs" />
+    <Compile Include="Configuration\ConfigRepositoryException.cs" />
+    <Compile Include="Configuration\ConfigUtil.cs" />
+    <Compile Include="Configuration\IConfigRepository.cs" />
+    <Compile Include="Configuration\IConfigSection.cs" />
+    <Compile Include="CoordSys\CoordSys.cs" />
+    <Compile Include="CoordSys\CoordSysFactory.cs" />
+    <Compile Include="CoordSys\CoordSysLambert.cs" />
+    <Compile Include="CoordSys\CoordSysMercator.cs" />
+    <Compile Include="CoordSys\CoordSysOSGB.cs" />
+    <Compile Include="Core\DescriptionAttribute.cs" />
+    <Compile Include="Core\MathInt.cs" />
+    <Compile Include="Core\SystemDLL.cs" />
+    <Compile Include="Core\ThreadSafeRandom.cs" />
+    <Compile Include="Crc\Crc.cs" />
+    <Compile Include="Crc\Crc32.cs" />
+    <Compile Include="Device\DeviceID.cs" />
+    <Compile Include="Device\DeviceUniqueHash.cs" />
+    <Compile Include="Device\FullScreen.cs" />
+    <Compile Include="Device\HasKeyboard.cs" />
+    <Compile Include="Device\UnattendedMode.cs" />
+    <Compile Include="Encoding\Encoding.cs" />
+    <Compile Include="Encoding\Encoding1254.cs" />
+    <Compile Include="Encoding\Encoding12542.cs" />
+    <Compile Include="Encoding\EncodingFactory.cs" />
+    <Compile Include="Extensions\ByteArrayExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Cache\CacheItem.cs" />
+    <Compile Include="Cache\Q2Algorithm.cs" />
+    <Compile Include="Cache\CircularQueue.cs" />
+    <Compile Include="Cache\LRUQueue.cs" />
+    <Compile Include="Extensions\GraphicsExtensions.cs" />
+    <Compile Include="Gps\Api\DegreesMinutesSeconds.cs" />
+    <Compile Include="Gps\Api\DeviceStateChangedEventArgs.cs" />
+    <Compile Include="Gps\Api\GPS.cs" />
+    <Compile Include="Gps\Api\GpsDeviceState.cs" />
+    <Compile Include="Gps\Api\GpsPosition.cs" />
+    <Compile Include="Gps\Api\LocationChangedEventArgs.cs" />
+    <Compile Include="Gps\Api\Utils.cs" />
+    <Compile Include="Gps\Serial\NativeMethods.cs" />
+    <Compile Include="Gps\Serial\SerialPort.cs" />
+    <Compile Include="Gps\Serial\SerialStream.cs" />
+    <Compile Include="IO\LNKFile.cs" />
+    <Compile Include="IO\NativeFile\SimpleFile.cs" />
+    <Compile Include="IO\MemoryMappedFile\MemoryMappedFile.cs" />
+    <Compile Include="IO\NativeFile\NativeFileReader.cs" />
+    <Compile Include="IO\FileNativeMethods.cs" />
+    <Compile Include="IO\DriveInfo.cs" />
+    <Compile Include="IO\FileVersionInfo.cs" />
+    <Compile Include="IO\MemoryMappedFile\MemoryMappedFileNatives.cs" />
+    <Compile Include="IO\ProtectedData.cs" />
+    <Compile Include="IO\SDCardID.cs" />
+    <Compile Include="IO\SDCardMessage.cs" />
+    <Compile Include="IO\SDCards.cs" />
+    <Compile Include="Media\SoundDeviceVolume.cs" />
+    <Compile Include="Media\SoundPlayer.cs" />
+    <Compile Include="Memory\MemoryManager.cs" />
+    <Compile Include="Memory\HeapMemoryManager.cs" />
+    <Compile Include="Core\App2.cs" />
+    <Compile Include="Core\NativeMethods.cs" />
+    <Compile Include="Core\NotifyIcon.cs">
+    </Compile>
+    <Compile Include="Phone\AddressType.cs" />
+    <Compile Include="Phone\CallerIDType.cs" />
+    <Compile Include="Phone\CallLog.cs" />
+    <Compile Include="Phone\CallLogEntry.cs" />
+    <Compile Include="Phone\CallLogSeek.cs" />
+    <Compile Include="Phone\CallType.cs" />
+    <Compile Include="Phone\Cm\ConnectionManager.cs" />
+    <Compile Include="Phone\Cm\MakeGprsConnection.cs" />
+    <Compile Include="Phone\Phone.cs" />
+    <Compile Include="Power\ACLineStatus.cs" />
+    <Compile Include="Power\Aygshell.cs" />
+    <Compile Include="Power\BatteryChemistry.cs" />
+    <Compile Include="Power\BatteryFlag.cs" />
+    <Compile Include="Power\CEDEVICE_POWER_STATE.cs" />
+    <Compile Include="Power\CoreDLL.cs" />
+    <Compile Include="Power\DevicePowerFlags.cs" />
+    <Compile Include="Power\Event.cs" />
+    <Compile Include="Power\PowerNotification.cs" />
+    <Compile Include="Power\PowerState.cs" />
+    <Compile Include="Power\PPNMessage.cs" />
+    <Compile Include="Power\SPI.cs" />
+    <Compile Include="Power\SysGen.cs" />
+    <Compile Include="Power\SYSTEM_POWER_STATUS_EX2.cs" />
+    <Compile Include="Power\VibrateNote.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\StopWatch.cs" />
+    <Compile Include="Core\SystemTime.cs" />
+    <Compile Include="Serializer\Message.cs" />
+    <Compile Include="Serializer\MessageCrcException.cs" />
+    <Compile Include="Serializer\MessageDeserializer.cs" />
+    <Compile Include="Serializer\MessageKey.cs" />
+    <Compile Include="Serializer\MessageNotRegisteredException.cs" />
+    <Compile Include="Serializer\MessageSerializer.cs" />
+    <Compile Include="Serializer\MessageUtils.cs" />
+    <Compile Include="Serializer\UncompressBufferPool.cs" />
+    <Compile Include="UI\ScreenDpi.cs" />
+    <Compile Include="UI\SIP\SIPUI.cs" />
+    <Compile Include="UI\UITools.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}">
+        <HostingProcess disable="1" />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
