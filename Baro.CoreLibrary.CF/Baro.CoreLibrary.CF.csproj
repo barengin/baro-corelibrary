@@ -181,7 +181,7 @@
     <Compile Include="Serializer\UncompressBufferPool.cs" />
     <Compile Include="UI\ScreenDpi.cs" />
     <Compile Include="UI\SIP\SIPUI.cs" />
-    <Compile Include="UI\UITools.cs" />
+    <Compile Include="UI\GDI_UITools.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
