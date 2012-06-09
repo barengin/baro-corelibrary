@@ -10,7 +10,7 @@ namespace Baro.CoreLibrary.Extensions
         public static byte[] Clone(this byte[] data, int offset, int count)
         {
             byte[] d = new byte[count];
-            Buffer.BlockCopy(data, 0, d, 0, count);
+            Buffer.BlockCopy(data, offset, d, 0, count);
             return d;
         }
     }
