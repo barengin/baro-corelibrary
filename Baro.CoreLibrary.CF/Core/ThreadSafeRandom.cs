@@ -6,7 +6,7 @@ using System.Text;
 namespace Baro.CoreLibrary
 {
 #if PocketPC || WindowsCE
-    // ThreadSafeRandom desteklenmiyor!
+    // ThreadSafeRandom CF üzerinde desteklenmiyor!
 #else
     public static class ThreadSafeRandom
     {
