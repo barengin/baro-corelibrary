@@ -135,7 +135,7 @@ namespace Baro.CoreLibrary.Extensions
         public const int GRADIENT_FILL_RECT_V = 0x00000001;
 
     }
-    
+
     public static class ImagingFactory
     {
         private static IImagingFactory factory;
@@ -395,10 +395,21 @@ namespace Baro.CoreLibrary.Extensions
         /// <param name="destRect">Desctination rectangle</param>
         public static void DrawImageTransparent(this Graphics gx, Image image, Rectangle destRect)
         {
-            ImageAttributes imageAttr = new ImageAttributes();
             Color transpColor = GetTransparentColor(image);
+            DrawImageTransparent(gx, image, destRect, transpColor);
+        }
+
+        public static void DrawImageTransparentUnstreched(this Graphics gx, Image image, Point pos)
+        {
+            Color transpColor = GetTransparentColor(image);
+
+            ImageAttributes imageAttr = new ImageAttributes();
             imageAttr.SetColorKey(transpColor, transpColor);
-            gx.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttr);
+
+            gx.DrawImage(image, new Rectangle(pos.X - (image.Width / 2), pos.Y - (image.Height / 2), image.Width, image.Height),
+                0, 0, image.Width, image.Height,
+                GraphicsUnit.Pixel, imageAttr);
+
             imageAttr.Dispose();
         }
 
@@ -411,7 +422,6 @@ namespace Baro.CoreLibrary.Extensions
         public static void DrawImageTransparent(this Graphics gx, Image image, Rectangle destRect, Color transpColor)
         {
             ImageAttributes imageAttr = new ImageAttributes();
-            // Color transpColor = GetTransparentColor(image);
             imageAttr.SetColorKey(transpColor, transpColor);
             gx.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttr);
             imageAttr.Dispose();
