@@ -678,7 +678,7 @@ namespace Baro.CoreLibrary.G3
             return start + ((((end - start) << 8) / 255 * amount) >> 8);
         }
 
-        public void Gradient(Rectangle r, G3Color from, G3Color to, int TopAlpha, int BottomAlpha)
+        public void Gradient(Rectangle r, G3Color from, G3Color to, byte TopAlpha, byte BottomAlpha)
         {
             Gradient(r.Left, r.Top, r.Width, r.Height, from, to, TopAlpha, BottomAlpha);
         }
@@ -730,8 +730,14 @@ namespace Baro.CoreLibrary.G3
             }
         }
 
-        public void Gradient(int x, int y, int w, int h, G3Color from, G3Color to, int TopAlpha, int BottomAlpha)
+        public void Gradient(int x, int y, int w, int h, G3Color from, G3Color to, byte TopAlpha, byte BottomAlpha)
         {
+            if ((TopAlpha == 255) && (BottomAlpha == 255))
+            {
+                Gradient(x, y, w, h, from, to);
+                return;
+            }
+
             if (x < 0 || y < 0 || (x + w) > SurfaceWidth || (y + h) > SurfaceHeight)
                 return;
 
