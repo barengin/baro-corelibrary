@@ -20,6 +20,9 @@ namespace Baro.CoreLibrary.UI.Controls
         public GradientLabel()
             : base()
         {
+            FontColor = G3Color.WHITE;
+            HaloColor = G3Color.BLACK;
+
             Border = new Border() { Color = G3Color.GRAY, Enabled = false };
             Gradient = new Gradient();
         }
