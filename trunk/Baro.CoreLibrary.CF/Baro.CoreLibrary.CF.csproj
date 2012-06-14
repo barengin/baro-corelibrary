@@ -152,8 +152,7 @@
     <Compile Include="Memory\HeapMemoryManager.cs" />
     <Compile Include="Core\App2.cs" />
     <Compile Include="Core\NativeMethods.cs" />
-    <Compile Include="Core\NotifyIcon.cs">
-    </Compile>
+    <Compile Include="Core\NotifyIcon.cs" />
     <Compile Include="Phone\AddressType.cs" />
     <Compile Include="Phone\CallerIDType.cs" />
     <Compile Include="Phone\CallLog.cs" />
