@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Baro.CoreLibrary.Encoding;
+using Baro.CoreLibrary.Text;
 
 namespace Baro.CoreLibrary.G3
 {
