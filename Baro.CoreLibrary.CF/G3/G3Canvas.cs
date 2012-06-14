@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Baro.CoreLibrary.Text;
+using Baro.CoreLibrary.Extensions;
 
 namespace Baro.CoreLibrary.G3
 {
+    public enum TextAlign
+    {
+        Left, Center
+    }
+
     public unsafe sealed class G3Canvas : IDisposable
     {
         private bool disposed = false;
@@ -366,7 +372,7 @@ namespace Baro.CoreLibrary.G3
             }
         }
 
-        public void DrawTextUL(byte[] txt, Encoding encoding, G3Font font, int X1, int Y1,
+        public void DrawTextUL(byte[] txt, G3Font font, int X1, int Y1,
             G3Color fontColor, G3Color haloColor)
         {
             X1 += (font.TextWidth(txt) / 2);
@@ -387,6 +393,74 @@ namespace Baro.CoreLibrary.G3
             Y1 += (font.FontHeight / 2);
 
             DrawTextCenter(chars, font, X1, Y1, 0, fontColor, haloColor);
+        }
+
+        public void DrawTextRect(byte[] encodedByteCharArray, G3Font font, Rectangle r,
+            G3Color fontColor, G3Color haloColor, TextAlign align)
+        {
+            // Font yoksa,
+            // Width 20'dan küçükse,
+            // Eğer içine çizim yapacağımız RECT yüksekliği FONT yüksekliğinden küçükse kafadan çık.
+            if (font == null || r.Height < font.FontHeight || r.Width < 20)
+                return;
+
+            int x = r.Left, y = r.Top;
+            int lastS = 0, last = -1;
+            int i = 0, w = 0;
+
+            while (i < encodedByteCharArray.Length)
+            {
+                // en son rastlanılan SPACE !!!
+                if (encodedByteCharArray[i] == 32)
+                {
+                    last = i;
+                }
+
+                int charWidth = font.Chars[encodedByteCharArray[i]].width;
+
+                // Bu karakter ile beraber r.W'den büyükse
+                if (w + charWidth >= (r.Width - 5))
+                {
+                    // Daha önce hiç SPACE bulunmamış
+                    if (last == -1)
+                    {
+                        last = i;
+                    }
+
+                    // DrawText
+                    DrawTextUL(encodedByteCharArray.Clone(lastS, last - lastS), font, x, y, fontColor, haloColor);
+
+                    // Alt satıra in.
+                    y += font.FontHeight;
+                    
+                    // Önceki satırları atlamak için
+                    lastS = last;
+
+                    w = 0;
+                    i = last;
+
+                    last = -1;
+                }
+                else
+                {
+                    // karakter genişliği
+                    w += charWidth;
+                }
+
+                i++;
+            }
+
+            if (i != lastS)
+            {
+                DrawTextUL(encodedByteCharArray.Clone(lastS, i - lastS), font, x, y, fontColor, haloColor);
+            }
+        }
+
+        public void DrawTextRect(string txt, Encoding encoding, G3Font font, Rectangle r,
+            G3Color fontColor, G3Color haloColor, TextAlign align)
+        {
+            if (!string.IsNullOrEmpty(txt))
+                DrawTextRect(encoding.GetBytes(txt), font, r, fontColor, haloColor, align);
         }
 
         public void DrawTextCenter(string txt, Encoding encoding, G3Font font, int X1, int Y1, int angle,
