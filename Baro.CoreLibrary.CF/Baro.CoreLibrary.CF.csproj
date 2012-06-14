@@ -190,9 +190,32 @@
     <Compile Include="Serializer\MessageUtils.cs" />
     <Compile Include="Serializer\UncompressBufferPool.cs" />
     <Compile Include="GDI\Tools.cs" />
+    <Compile Include="UI\Activities\Activity.cs" />
+    <Compile Include="UI\Controls\Border.cs" />
+    <Compile Include="UI\Controls\Checkbox.cs" />
+    <Compile Include="UI\Controls\Gradient.cs" />
+    <Compile Include="UI\Controls\GradientButton.cs" />
+    <Compile Include="UI\Controls\GradientLabel.cs" />
+    <Compile Include="UI\Controls\IconMenu.cs" />
+    <Compile Include="UI\Controls\IconMenuItem.cs" />
+    <Compile Include="UI\Controls\IconMenuItemList.cs" />
+    <Compile Include="UI\Controls\ImageButton.cs" />
+    <Compile Include="UI\Controls\Keyboard.cs" />
+    <Compile Include="UI\Controls\MessageBox.cs" />
+    <Compile Include="UI\Controls\Textbox.cs" />
+    <Compile Include="UI\Controls\UICanvas.cs" />
+    <Compile Include="UI\Controls\UIElement.cs" />
+    <Compile Include="UI\Controls\UIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\UIForm.Designer.cs">
+      <DependentUpon>UIForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\" />
+    <EmbeddedResource Include="UI\Controls\UIForm.resx">
+      <DependentUpon>UIForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
