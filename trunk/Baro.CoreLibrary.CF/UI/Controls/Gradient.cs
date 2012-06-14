@@ -17,32 +17,40 @@ namespace Baro.CoreLibrary.UI.Controls
         public G3Color FromColor { get; set; }
         public G3Color ToColor { get; set; }
 
-        public void DrawDarker(G3Canvas canvas, Rectangle bound, byte level)
+        public void DrawDarker(G3Canvas canvas, int x, int y, int w, int h, byte level)
         {
             if (UseAlpha)
             {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
+                canvas.Gradient(x, y, w, h,
                     FromColor.Darker(level), ToColor.Darker(level), FromAlpha, ToAlpha);
             }
             else
             {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
+                canvas.Gradient(x, y, w, h,
                     FromColor.Darker(level), ToColor.Darker(level));
+            }
+        }
+
+        public void DrawDarker(G3Canvas canvas, Rectangle bound, byte level)
+        {
+            DrawDarker(canvas, bound.Left, bound.Top, bound.Width, bound.Height, level);
+        }
+
+        public void Draw(G3Canvas canvas, int x, int y, int w, int h)
+        {
+            if (UseAlpha)
+            {
+                canvas.Gradient(x, y, w, h, FromColor, ToColor, FromAlpha, ToAlpha);
+            }
+            else
+            {
+                canvas.Gradient(x, y, w, h, FromColor, ToColor);
             }
         }
 
         public void Draw(G3Canvas canvas, Rectangle bound)
         {
-            if (UseAlpha)
-            {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
-                    FromColor, ToColor, FromAlpha, ToAlpha);
-            }
-            else
-            {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
-                    FromColor, ToColor);
-            }
+            Draw(canvas, bound.Left, bound.Top, bound.Width, bound.Height);
         }
     }
 }
