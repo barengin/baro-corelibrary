@@ -13,6 +13,9 @@ namespace Baro.CoreLibrary.GDI
         public int DpiX, DpiY;
     }
 
+    /// <summary>
+    /// GDI Tools
+    /// </summary>
     public static class Tools
     {
         [DllImport(SystemDLL.NAME, SetLastError = true)]
