@@ -8,9 +8,14 @@ namespace Baro.CoreLibrary.UI.Controls
 {
     public class MessageBox : UIElement
     {
+        public string Text { get; set; }
         public string Title { get; set; }
+        
         public G3Font TitleFont { get; set; }
         public G3Font Font { get; set; }
+
+        public Gradient Gradient { get; set; }
+        public Gradient TitleGradient { get; set; }
 
         internal override void MouseDown(System.Drawing.Point p)
         {
@@ -18,6 +23,24 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal override void MouseUp(System.Drawing.Point p)
         {
+        }
+
+        public MessageBox()
+            : base()
+        {
+            Gradient = new Gradient()
+            {
+                FromColor = new G3Color(107, 162, 182),
+                ToColor = new G3Color(201, 224, 232),
+                UseAlpha = false
+            };
+
+            TitleGradient = new Gradient()
+            {
+                FromColor = new G3Color(18, 73, 130),
+                ToColor = new G3Color(37, 111, 158),
+                UseAlpha = false
+            };
         }
 
         public override void Render(G3Canvas g)
@@ -35,16 +58,17 @@ namespace Baro.CoreLibrary.UI.Controls
             int y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 4;
 
             // MessageBox
-            g.Gradient(x, y + 30, w, h, new G3Color(107, 162, 182), new G3Color(201, 224, 232), 255, 255);
+            this.Gradient.Draw(g, x, y + 30, w, h);
 
             // Title
-            g.Gradient(x, y, w, 30, new G3Color(18, 73, 130), new G3Color(37, 111, 158), 255, 255);
+            this.TitleGradient.Draw(g, x, y, w, 30);
 
             // Title Text
-            g.DrawTextCenter(Title, UICanvas.Encoding, TitleFont, x + (w / 2), y + (30 / 2), 0, G3Color.BLACK, G3Color.WHITE);
+            g.DrawTextCenter(Title, UICanvas.Encoding, TitleFont, x + (w / 2), y + (30 / 2), 0, 
+                G3Color.BLACK, G3Color.WHITE);
 
             // Message Text
-            g.DrawTextCenter("Hello world, this is very easy...", UICanvas.Encoding, 
+            g.DrawTextCenter(Text, UICanvas.Encoding, 
                 Font, x + (w / 2), y + 60, 0, G3Color.BLACK, G3Color.BLACK);
             
             // Border
