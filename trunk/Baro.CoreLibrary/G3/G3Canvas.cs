@@ -716,7 +716,7 @@ namespace Baro.CoreLibrary.G3
         }
 
         /// <summary>
-        /// Verilen koordinattaki kutuyu aydınlatır.
+        /// Verilen koordinattaki kutuyu aydınlatır
         /// </summary>
         /// <param name="x">Başlangıç X</param>
         /// <param name="y">Başlangıç Y</param>
