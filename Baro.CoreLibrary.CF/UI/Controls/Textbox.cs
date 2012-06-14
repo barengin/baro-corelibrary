@@ -111,7 +111,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
             chars = CropText(chars, Size.Width);
 
-            g.DrawTextUL(chars, UICanvas.Encoding, Font,
+            g.DrawTextUL(chars, Font,
                 Location.X + 2,
                 Location.Y + ((Size.Height - Font.FontHeight) / 2),
                 FontColor, HaloColor);
