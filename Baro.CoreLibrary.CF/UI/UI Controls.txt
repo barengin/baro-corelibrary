@@ -1,0 +1,11 @@
+﻿Border				Ok
+Gradient			Ok
+
+Checkbox			Ok
+GradientButton		Ok
+GradientLabel		Ok
+IconMenu			Ok
+ImageButton			Ok
+Keyboard			Ok
+MessageBox			Not ready
+TextBox				Ok

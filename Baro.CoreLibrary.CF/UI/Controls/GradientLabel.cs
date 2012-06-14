@@ -11,6 +11,9 @@ namespace Baro.CoreLibrary.UI.Controls
         public G3Font Font { get; set; }
         public string Text { get; set; }
 
+        public G3Color FontColor { get; set; }
+        public G3Color HaloColor { get; set; }
+
         public Border Border { get; set; }
         public Gradient Gradient { get; set; }
 
@@ -39,7 +42,8 @@ namespace Baro.CoreLibrary.UI.Controls
                 Border.Draw(g, this.Bound);
 
             g.DrawTextCenter(Text, UICanvas.Encoding, Font,
-                Location.X + Size.Width / 2, Location.Y + Size.Height / 2, 0, G3Color.BLACK, G3Color.WHITE);
+                Location.X + Size.Width / 2, Location.Y + Size.Height / 2, 0,
+                FontColor, HaloColor);
 
             g.EndDrawing();
         }
