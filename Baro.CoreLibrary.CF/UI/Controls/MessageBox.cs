@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Baro.CoreLibrary.G3;
+using System.Drawing;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
@@ -19,6 +20,10 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal override void MouseDown(System.Drawing.Point p)
         {
+            if (HitTest(p))
+            {
+                OnClick(EventArgs.Empty);
+            }
         }
 
         internal override void MouseUp(System.Drawing.Point p)
@@ -41,6 +46,15 @@ namespace Baro.CoreLibrary.UI.Controls
                 ToColor = new G3Color(37, 111, 158),
                 UseAlpha = false
             };
+            
+            int w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 5 * 3;
+            int h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 2;
+
+            int x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 5;
+            int y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 4;
+
+            this.Location = new Point(x, y);
+            this.Size = new Size(w, h);
         }
 
         public override void Render(G3Canvas g)
@@ -51,11 +65,11 @@ namespace Baro.CoreLibrary.UI.Controls
                 System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width,
                 System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height, 10);
 
-            int w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 5 * 3;
-            int h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 2;
+            int w = this.Size.Width;
+            int h = this.Size.Height;
 
-            int x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 5;
-            int y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 4;
+            int x = this.Location.X;
+            int y = this.Location.Y;
 
             // MessageBox
             this.Gradient.Draw(g, x, y + 30, w, h);
@@ -68,8 +82,11 @@ namespace Baro.CoreLibrary.UI.Controls
                 G3Color.BLACK, G3Color.WHITE);
 
             // Message Text
-            g.DrawTextCenter(Text, UICanvas.Encoding, 
-                Font, x + (w / 2), y + 60, 0, G3Color.BLACK, G3Color.BLACK);
+            g.DrawTextRect(Text, UICanvas.Encoding, Font, 
+                new Rectangle(x, y + 30, w, h), G3Color.GRAY, G3Color.WHITE, TextAlign.Left);
+
+            //g.DrawTextCenter(Text, UICanvas.Encoding, 
+            //    Font, x + (w / 2), y + 60, 0, G3Color.BLACK, G3Color.BLACK);
             
             // Border
             g.Rectangle(x, y, w, h + 30, G3Color.GRAY);
