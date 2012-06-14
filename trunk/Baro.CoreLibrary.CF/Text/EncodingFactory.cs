@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baro.CoreLibrary.Encoding
+namespace Baro.CoreLibrary.Text
 {
     public class EncodingException : Exception
     {

@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baro.CoreLibrary.Encoding
+namespace Baro.CoreLibrary.Text
 {
     /// <summary>
     /// Eski Yolbil 3 serisinin kullandığı encoding kütüphanesi

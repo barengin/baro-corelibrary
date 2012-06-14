@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baro.CoreLibrary.Encoding
+namespace Baro.CoreLibrary.Text
 {
     public abstract unsafe class Encoding : IComparer<string>
     {
