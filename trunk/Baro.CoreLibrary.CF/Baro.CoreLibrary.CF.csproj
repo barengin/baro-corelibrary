@@ -179,9 +179,10 @@
     <Compile Include="Serializer\MessageSerializer.cs" />
     <Compile Include="Serializer\MessageUtils.cs" />
     <Compile Include="Serializer\UncompressBufferPool.cs" />
-    <Compile Include="UI\ScreenDpi.cs" />
-    <Compile Include="UI\SIP\SIPUI.cs" />
-    <Compile Include="UI\GDI_UITools.cs" />
+    <Compile Include="GDI\Tools.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
