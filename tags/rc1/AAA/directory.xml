@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<users>
+  <user usr="engin" pwd="1">
+    <data>
+      <attr key="inbox" value="49" />
+    </data>
+  </user>
+  <user usr="baris" pwd="1">
+    <data>
+      <attr key="inbox" value="48" />
+    </data>
+  </user>
+</users>
