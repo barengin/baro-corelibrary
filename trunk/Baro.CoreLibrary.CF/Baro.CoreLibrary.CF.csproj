@@ -188,7 +188,6 @@
     <Compile Include="Serializer\MessageSerializer.cs" />
     <Compile Include="Serializer\MessageUtils.cs" />
     <Compile Include="Serializer\UncompressBufferPool.cs" />
-    <Compile Include="GDI\Tools.cs" />
     <Compile Include="UI\Activities\Activity.cs" />
     <Compile Include="UI\Controls\Border.cs" />
     <Compile Include="UI\Controls\Checkbox.cs" />
@@ -218,6 +217,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="UI\UI Controls.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GDI\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
