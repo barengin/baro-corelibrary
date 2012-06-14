@@ -21,11 +21,13 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             if (UseAlpha)
             {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, FromColor.Darker(level), ToColor.Darker(level), FromAlpha, ToAlpha);
+                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
+                    FromColor.Darker(level), ToColor.Darker(level), FromAlpha, ToAlpha);
             }
             else
             {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, FromColor.Darker(level), ToColor.Darker(level));
+                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
+                    FromColor.Darker(level), ToColor.Darker(level));
             }
         }
 
@@ -33,11 +35,13 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             if (UseAlpha)
             {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, FromColor, ToColor, FromAlpha, ToAlpha);
+                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
+                    FromColor, ToColor, FromAlpha, ToAlpha);
             }
             else
             {
-                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, FromColor, ToColor);
+                canvas.Gradient(bound.Left, bound.Top, bound.Width, bound.Height, 
+                    FromColor, ToColor);
             }
         }
     }

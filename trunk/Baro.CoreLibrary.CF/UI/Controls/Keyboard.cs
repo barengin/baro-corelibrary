@@ -87,6 +87,7 @@ namespace Baro.CoreLibrary.UI.Controls
             : base()
         {
             SPACE_BETWEEN_BUTTONS = 5;
+            AutoConnectFocusedTextbox = true;
         }
 
         internal override void MouseDown(System.Drawing.Point p)

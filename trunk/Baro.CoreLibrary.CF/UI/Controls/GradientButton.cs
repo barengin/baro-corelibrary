@@ -13,9 +13,13 @@ namespace Baro.CoreLibrary.UI.Controls
         private bool pressed = false;
 
         public Image MaskImage { get; set; }
+        public G3Color MaskImageColor { get; set; }
 
         public string Text { get; set; }
         public G3Font Font { get; set; }
+
+        public G3Color FontColor { get; set; }
+        public G3Color HaloColor { get; set; }
 
         public Gradient Gradient { get; set; }
         public Border Border { get; set; }
@@ -23,6 +27,11 @@ namespace Baro.CoreLibrary.UI.Controls
         public GradientButton()
             : base()
         {
+            FontColor = G3Color.GRAY;
+            HaloColor = G3Color.WHITE;
+
+            MaskImageColor = G3Color.FromRGB(238, 28, 36);
+
             Border = new Border() { Color = G3Color.GRAY, Enabled = false };
             
             Gradient = new Gradient()
@@ -59,21 +68,20 @@ namespace Baro.CoreLibrary.UI.Controls
             if (pressed)
             {
                 Gradient.DrawDarker(g, this.Bound, 30);
-                // g.Gradient(this.Bound, FromColor.Darker(30), ToColor.Darker(30), TopAlpha, BottomAlpha);
             }
             else
             {
                 Gradient.Draw(g, this.Bound);
-                // g.Gradient(this.Bound, FromColor, ToColor, TopAlpha, BottomAlpha);
             }
 
             g.EndDrawing();
 
             if (MaskImage != null)
             {
-                Graphics gx = g.Surface.WindowsGraphics;
-                gx.DrawImageTransparent(MaskImage, this.Bound, Color.FromArgb(238, 28, 36));
-                gx.Dispose();
+                using (Graphics gx = g.Surface.WindowsGraphics)
+                {
+                    gx.DrawImageTransparent(MaskImage, this.Bound, MaskImageColor.WindowsColor);
+                }
             }
 
             if (!string.IsNullOrEmpty(Text))
@@ -85,7 +93,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
                 g.DrawTextCenter(Text, UICanvas.Encoding, Font, Location.X + (Size.Width / 2),
                                                           Location.Y + (Size.Height / 2), 0,
-                                                          G3Color.GRAY, G3Color.WHITE);
+                                                          FontColor, HaloColor);
 
                 g.EndDrawing();
             }

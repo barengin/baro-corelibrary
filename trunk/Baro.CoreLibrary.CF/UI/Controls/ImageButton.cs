@@ -16,6 +16,9 @@ namespace Baro.CoreLibrary.UI.Controls
         public string Text { get; set; }
         public G3Font Font { get; set; }
 
+        public G3Color FontColor { get; set; }
+        public G3Color HaloColor { get; set; }
+
         internal override void MouseDown(System.Drawing.Point p)
         {
             if (HitTest(p))
@@ -50,7 +53,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
                 g.DrawTextCenter(Text, UICanvas.Encoding, Font, Location.X + (Size.Width / 2),
                                                           Location.Y + (Size.Height / 2), 0,
-                                                          G3Color.GRAY, G3Color.WHITE);
+                                                          FontColor, HaloColor);
 
                 if (_pressed)
                 {
