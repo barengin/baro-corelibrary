@@ -103,7 +103,6 @@
     <Compile Include="Device\FullScreen.cs" />
     <Compile Include="Device\HasKeyboard.cs" />
     <Compile Include="Device\UnattendedMode.cs" />
-    <Compile Include="GDI\Tools.cs" />
     <Compile Include="Text\Encoding.cs" />
     <Compile Include="Text\Encoding1254.cs" />
     <Compile Include="Text\Encoding12542.cs" />
@@ -218,6 +217,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="UI\UI Controls.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GDI\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
