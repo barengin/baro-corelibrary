@@ -103,6 +103,7 @@
     <Compile Include="Device\FullScreen.cs" />
     <Compile Include="Device\HasKeyboard.cs" />
     <Compile Include="Device\UnattendedMode.cs" />
+    <Compile Include="Extensions\GDITools.cs" />
     <Compile Include="Text\Encoding.cs" />
     <Compile Include="Text\Encoding1254.cs" />
     <Compile Include="Text\Encoding12542.cs" />
