@@ -218,9 +218,6 @@
   <ItemGroup>
     <Content Include="UI\UI Controls.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GDI\" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
