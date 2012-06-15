@@ -1,5 +1,7 @@
-#summary Getting started...
-
 = Introduction =
 
 Please check examples and sample codes.
+
+----
+
+If you wish to contribute to project, please send an email to baris.engin@gmail.com
