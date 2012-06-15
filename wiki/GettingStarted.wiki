@@ -3,8 +3,8 @@
 <wiki:toc max_depth="1" />
 
 #sidebar TableOfContents
-  * [Articles HOWTO articles]
-  * [CSSReference CSS reference]
+  * [Articles Page1]
+  * [Articles Page2]
 
 = Introduction =
 
