@@ -85,6 +85,10 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal override void MouseUp(System.Drawing.Point p)
         {
+            if (this.HitTest(p))
+            {
+                OnClick(EventArgs.Empty);
+            }
         }
 
         public override void Render(G3Canvas g)
