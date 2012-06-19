@@ -113,11 +113,6 @@ namespace Baro.CoreLibrary.UI.Controls
             this.Invalidate();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            Invalidate();
-        }
-
         private void UIForm_MouseMove(object sender, MouseEventArgs e)
         {
             this.UICanvas.MouseMove(e);

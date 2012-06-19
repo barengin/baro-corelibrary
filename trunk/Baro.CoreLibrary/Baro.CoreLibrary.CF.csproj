@@ -104,6 +104,7 @@
     <Compile Include="Device\HasKeyboard.cs" />
     <Compile Include="Device\UnattendedMode.cs" />
     <Compile Include="Extensions\GDITools.cs" />
+    <Compile Include="UI\Controls\StaticLabel.cs" />
     <Compile Include="Text\Encoding.cs" />
     <Compile Include="Text\Encoding1254.cs" />
     <Compile Include="Text\Encoding12542.cs" />
@@ -199,8 +200,10 @@
     <Compile Include="UI\Controls\IconMenuItem.cs" />
     <Compile Include="UI\Controls\IconMenuItemList.cs" />
     <Compile Include="UI\Controls\ImageButton.cs" />
+    <Compile Include="UI\Controls\IResourceLoader.cs" />
     <Compile Include="UI\Controls\Keyboard.cs" />
     <Compile Include="UI\Controls\MessageBox.cs" />
+    <Compile Include="UI\Controls\StaticImage.cs" />
     <Compile Include="UI\Controls\Textbox.cs" />
     <Compile Include="UI\Controls\UICanvas.cs" />
     <Compile Include="UI\Controls\UIElement.cs" />

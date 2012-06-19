@@ -29,6 +29,9 @@ namespace Baro.CoreLibrary.UI.Controls
         public G3Font Font { get; set; }
         public bool AutoConnectFocusedTextbox { get; set; }
 
+        public Gradient AlfanumericButtonsGradient { get; set; }
+        public Gradient ControlButtonsGradient { get; set; }
+
         #region Events
         public event KeyboardCharPressedDelegate OnCharPressedEvent;
 
@@ -88,6 +91,20 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             SPACE_BETWEEN_BUTTONS = 5;
             AutoConnectFocusedTextbox = true;
+
+            ControlButtonsGradient = new Gradient()
+            {
+                FromColor = G3Color.FromRGB(166, 52, 0),
+                ToColor = G3Color.BLACK,
+                UseAlpha = false
+            };
+
+            AlfanumericButtonsGradient = new Gradient()
+            {
+                FromColor = G3Color.FromRGB(247, 243, 247),
+                ToColor = G3Color.FromRGB(156, 154, 156),
+                UseAlpha = false
+            };
         }
 
         internal override void MouseDown(System.Drawing.Point p)
@@ -140,51 +157,45 @@ namespace Baro.CoreLibrary.UI.Controls
         private void CreateLayout()
         {
             int y = Location.Y + SPACE_BETWEEN_BUTTONS;
-            int h;
+            float h;
 
             h = CreateLine(y, keyboardline1, _canvasAlfa);
-            CreateLine((h + SPACE_BETWEEN_BUTTONS) + y, keyboardline2, _canvasAlfa);
-            CreateLine((h + SPACE_BETWEEN_BUTTONS) * 2 + y, keyboardline3, _canvasAlfa);
-            CreateLine((h + SPACE_BETWEEN_BUTTONS) * 3 + y, keyboardline4, _canvasAlfa);
+            CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) + y), keyboardline2, _canvasAlfa);
+            CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) * 2 + y), keyboardline3, _canvasAlfa);
+            CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) * 3 + y), keyboardline4, _canvasAlfa);
 
             h = CreateLine(y, keyboardnumber1, _canvasNum);
-            CreateLine((h + SPACE_BETWEEN_BUTTONS) + y, keyboardnumber2, _canvasNum);
-            CreateLine((h + SPACE_BETWEEN_BUTTONS) * 2 + y, keyboardnumber3, _canvasNum);
-            CreateLine((h + SPACE_BETWEEN_BUTTONS) * 3 + y, keyboardnumber4, _canvasNum);
+            CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) + y), keyboardnumber2, _canvasNum);
+            CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) * 2 + y), keyboardnumber3, _canvasNum);
+            CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) * 3 + y), keyboardnumber4, _canvasNum);
         }
 
-        private int CreateLine(int y, string keyboard, UICanvas canvas)
+        private float CreateLine(int y, string keyboard, UICanvas canvas)
         {
-            int w = Size.Width - (((keyboard.Length) + 1) * SPACE_BETWEEN_BUTTONS);
+            float w = Size.Width - (((keyboard.Length) + 1) * SPACE_BETWEEN_BUTTONS);
             w = w / (keyboard.Length);
 
-            int h = Size.Height - (SPACE_BETWEEN_BUTTONS * 5);
-            h = h / 4;
+            float h = Size.Height - (SPACE_BETWEEN_BUTTONS * 5);
+            h = h / 4f;
 
-            int x = Location.X + SPACE_BETWEEN_BUTTONS;
+            float x = Location.X + SPACE_BETWEEN_BUTTONS;
 
             foreach (var i in keyboard)
             {
                 var button = canvas.Add<GradientButton>(() => new GradientButton()
                 {
                     Font = this.Font,
-                    Location = new System.Drawing.Point(x, y),
-                    Size = new System.Drawing.Size(w, h),
+                    Location = new System.Drawing.Point((int)x, y),
+                    Size = new System.Drawing.Size((int)w, (int)h),
                     MaskImage = this.MaskImage,
-                    Gradient = new Gradient()
-                        {
-                            FromColor = G3Color.FromRGB(247, 243, 247),
-                            ToColor = G3Color.FromRGB(156, 154, 156),
-                            UseAlpha = false
-                        }
+                    Gradient = this.AlfanumericButtonsGradient
                 });
 
                 switch (i)
                 {
                     case '\u0020':
-                        button.Text = "boşluk";
-                        button.Gradient.FromColor = G3Color.FromRGB(247, 243, 247);
-                        button.Gradient.ToColor = G3Color.FromRGB(156, 154, 156);
+                        button.Text = "Boşluk";
+                        // button.Gradient = this.AlfanumericButtonsGradient;
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
                         {
                             OnCharPressed('\u0020', KeyboardControl.SpaceBar);
@@ -193,8 +204,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
                     case '\u0025':
                         button.Text = "abc";
-                        button.Gradient.FromColor = G3Color.FromRGB(166, 52, 0);
-                        button.Gradient.ToColor = G3Color.BLACK;
+                        button.Gradient = this.ControlButtonsGradient;
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
                         {
                             this.NumericKeyboard = !this.NumericKeyboard;
@@ -202,19 +212,17 @@ namespace Baro.CoreLibrary.UI.Controls
                         break;
 
                     case '\u0021':
-                        button.Gradient.FromColor = G3Color.FromRGB(166, 52, 0);
-                        button.Gradient.ToColor = G3Color.BLACK;
+                        button.Gradient = this.ControlButtonsGradient;
                         button.Text = "123";
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
-                            {
-                                this.NumericKeyboard = !this.NumericKeyboard;
-                            });
+                        {
+                            this.NumericKeyboard = !this.NumericKeyboard;
+                        });
                         break;
 
                     case '\u0022':
                         button.Text = "Geri";
-                        button.Gradient.FromColor = G3Color.FromRGB(166, 52, 0);
-                        button.Gradient.ToColor = G3Color.BLACK;
+                        button.Gradient = this.ControlButtonsGradient;
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
                         {
                             OnCharPressed('\u0022', KeyboardControl.Back);
@@ -222,9 +230,8 @@ namespace Baro.CoreLibrary.UI.Controls
                         break;
 
                     case '\u0023':
-                        button.Text = "Bk";
-                        button.Gradient.FromColor = G3Color.FromRGB(166, 52, 0);
-                        button.Gradient.ToColor = G3Color.BLACK;
+                        button.Text = "Sil";
+                        button.Gradient = this.ControlButtonsGradient;
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
                         {
                             OnCharPressed('\u0023', KeyboardControl.Backspace);
@@ -233,8 +240,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
                     case '\u0024':
                         button.Text = "Ok";
-                        button.Gradient.FromColor = G3Color.FromRGB(166, 52, 0);
-                        button.Gradient.ToColor = G3Color.BLACK;
+                        button.Gradient = this.ControlButtonsGradient;
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
                         {
                             OnCharPressed('\u0024', KeyboardControl.Enter);
@@ -244,8 +250,6 @@ namespace Baro.CoreLibrary.UI.Controls
 
                     default:
                         button.Text = i.ToString();
-                        button.Gradient.FromColor = G3Color.FromRGB(247, 243, 247);
-                        button.Gradient.ToColor = G3Color.FromRGB(156, 154, 156);
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
                         {
                             OnCharPressed(((GradientButton)sender).Text[0], KeyboardControl.Char);
