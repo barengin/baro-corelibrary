@@ -72,14 +72,14 @@ namespace Baro.CoreLibrary.UI.Controls
             int w = IconSize.Width;
             int h = IconSize.Height;
 
-            for (int k = 0; k < (w * h); k++)
+            for (int k = 0; k < (Width * Height); k++)
             {
                 if (k < Items.Count)
                 {
                     Items[k].Size = new System.Drawing.Size(w, h);
 
                     int x = (w * (k % Width)) + Location.X;
-                    int y = (h * (k / Height)) + Location.Y;
+                    int y = (h * (k / (Height == 1 ? 2 : Height))) + Location.Y;
 
                     Items[k].Location = new System.Drawing.Point(x, y);
                 }
