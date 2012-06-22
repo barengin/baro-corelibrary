@@ -27,7 +27,8 @@ namespace Baro.CoreLibrary.UI.Controls
 
                 if (_mainActivity != null)
                 {
-                    value.Create(this);
+                    _mainActivity.Form = this;
+                    _mainActivity.Create(this);
                     _activityExecuted = false;
                 }
 
