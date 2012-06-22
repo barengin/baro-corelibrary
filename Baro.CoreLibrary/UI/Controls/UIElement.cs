@@ -11,8 +11,8 @@ namespace Baro.CoreLibrary.UI.Controls
     {
         public bool Enable { get; set; }
         public bool Visible { get; set; }
-        public Size Size { get; set; }
-        public Point Location { get; set; }
+        public virtual Size Size { get; set; }
+        public virtual Point Location { get; set; }
         public UICanvas UICanvas { get; internal set; }
         public Rectangle Bound { get { return new Rectangle(Location.X, Location.Y, Size.Width, Size.Height); } }
         public Point Center { get { return new Point(Location.X + (Size.Width / 2), Location.Y + (Size.Height / 2)); } }
