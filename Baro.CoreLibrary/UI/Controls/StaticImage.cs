@@ -32,7 +32,8 @@ namespace Baro.CoreLibrary.UI.Controls
             {
                 if (this.Stretch)
                 {
-                    gx.DrawImage(this.Image, this.Bound, new Rectangle(0, 0, Size.Width, Size.Height), GraphicsUnit.Pixel);
+                    gx.DrawImage(this.Image, this.Bound, 
+                        new Rectangle(0, 0, Size.Width, Size.Height), GraphicsUnit.Pixel);
                 }
                 else
                 {
