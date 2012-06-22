@@ -7,6 +7,8 @@ namespace Baro.CoreLibrary.UI.Activities
 {
     public abstract class Activity
     {
+        public UIForm Form { get; internal set; }
+
         public abstract void Create(UIForm form);
 
         public abstract void ExecuteOnce(UIForm form);
