@@ -26,11 +26,11 @@ namespace Baro.CoreLibrary.UI.Controls
         public bool NumericKeyboard { get; set; }
 
         public Image MaskImage { get; set; }
-        public G3Font Font { get; set; }
         public bool AutoConnectFocusedTextbox { get; set; }
 
         public Gradient AlfanumericButtonsGradient { get; set; }
         public Gradient ControlButtonsGradient { get; set; }
+        public CompundFont FontStyle { get; set; }
 
         #region Events
         public event KeyboardCharPressedDelegate OnCharPressedEvent;
@@ -105,6 +105,8 @@ namespace Baro.CoreLibrary.UI.Controls
                 ToColor = G3Color.FromRGB(156, 154, 156),
                 UseAlpha = false
             };
+
+            this.FontStyle = new CompundFont(null, G3Color.WHITE, G3Color.BLACK);
         }
 
         internal override void MouseDown(System.Drawing.Point p)
@@ -157,7 +159,7 @@ namespace Baro.CoreLibrary.UI.Controls
         private void CreateLayout()
         {
             int y = Location.Y + SPACE_BETWEEN_BUTTONS;
-            float h;
+            int h;
 
             h = CreateLine(y, keyboardline1, _canvasAlfa);
             CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) + y), keyboardline2, _canvasAlfa);
@@ -170,13 +172,13 @@ namespace Baro.CoreLibrary.UI.Controls
             CreateLine((int)((h + SPACE_BETWEEN_BUTTONS) * 3 + y), keyboardnumber4, _canvasNum);
         }
 
-        private float CreateLine(int y, string keyboard, UICanvas canvas)
+        private int CreateLine(int y, string keyboard, UICanvas canvas)
         {
-            float w = Size.Width - (((keyboard.Length) + 1) * SPACE_BETWEEN_BUTTONS);
+            int w = Size.Width - (((keyboard.Length) + 1) * SPACE_BETWEEN_BUTTONS);
             w = w / (keyboard.Length);
 
-            float h = Size.Height - (SPACE_BETWEEN_BUTTONS * 5);
-            h = h / 4f;
+            int h = Size.Height - (SPACE_BETWEEN_BUTTONS * 5);
+            h = h / 4;
 
             float x = Location.X + SPACE_BETWEEN_BUTTONS;
 
@@ -184,7 +186,7 @@ namespace Baro.CoreLibrary.UI.Controls
             {
                 var button = canvas.Add<GradientButton>(() => new GradientButton()
                 {
-                    Font = this.Font,
+                    FontStyle = this.FontStyle,
                     Location = new System.Drawing.Point((int)x, y),
                     Size = new System.Drawing.Size((int)w, (int)h),
                     MaskImage = this.MaskImage,
@@ -195,7 +197,6 @@ namespace Baro.CoreLibrary.UI.Controls
                 {
                     case '\u0020':
                         button.Text = "Boşluk";
-                        // button.Gradient = this.AlfanumericButtonsGradient;
                         button.OnClickEvent += new EventHandler(delegate(object sender, EventArgs e)
                         {
                             OnCharPressed('\u0020', KeyboardControl.SpaceBar);
