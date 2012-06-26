@@ -11,47 +11,6 @@ namespace Baro.CoreLibrary.G3
         public byte[] data;
     }
 
-    public unsafe struct Label
-    {
-        public int BestLabelValue;
-        public int PosX, PosY, Angle;
-        public G3Font Font;
-        public byte* Text1;
-        public int Text1Len;
-        public byte[] Text2;
-        public G3Color FontColor, HaloColor;
-
-        public static int JSHash(ref string encodedByteCharArray)
-        {
-            int hash = 1315423911;
-
-            for (int i = 0; i < encodedByteCharArray.Length; i++)
-                hash ^= ((hash << 5) + (int)encodedByteCharArray[i] + (hash >> 2));
-
-            return hash;
-        }
-
-        public static int JSHash(byte[] encodedByteCharArray)
-        {
-            int hash = 1315423911;
-
-            for (int i = 0; i < encodedByteCharArray.Length; i++)
-                hash ^= ((hash << 5) + encodedByteCharArray[i] + (hash >> 2));
-
-            return hash;
-        }
-
-        public static int JSHash(byte* encodedByteCharArray, int size)
-        {
-            int hash = 1315423911;
-
-            for (int i = 0; i < size; i++)
-                hash ^= ((hash << 5) + encodedByteCharArray[i] + (hash >> 2));
-
-            return hash;
-        }
-    }
-
     public sealed unsafe class G3Font : G3Object
     {
         public readonly int SpaceBetweenChars;
@@ -136,7 +95,7 @@ namespace Baro.CoreLibrary.G3
             for (int k = 0; k < len; k++)
                 r += (this.Chars[encodedByteCharArray[k]].width);
 
-            return r + (this.SpaceBetweenChars * (len - 1) / 2);
+            return r + ((this.SpaceBetweenChars * (len - 1)) / 2);
         }
 
         public int TextWidth(byte[] encodedByteCharArray)
@@ -146,7 +105,7 @@ namespace Baro.CoreLibrary.G3
             for (int k = 0; k < encodedByteCharArray.Length; k++)
                 r += (this.Chars[encodedByteCharArray[k]].width);
 
-            return r + (this.SpaceBetweenChars * (encodedByteCharArray.Length - 1) / 2);
+            return r + ((this.SpaceBetweenChars * (encodedByteCharArray.Length - 1)) / 2);
         }
     }
 }
