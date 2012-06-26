@@ -104,7 +104,10 @@
     <Compile Include="Device\HasKeyboard.cs" />
     <Compile Include="Device\UnattendedMode.cs" />
     <Compile Include="Extensions\GDITools.cs" />
+    <Compile Include="UI\Controls\CompoundFont.cs" />
     <Compile Include="UI\Controls\Listbox.cs" />
+    <Compile Include="UI\Controls\ListboxItem.cs" />
+    <Compile Include="UI\Controls\ListboxItemList.cs" />
     <Compile Include="UI\Controls\StaticLabel.cs" />
     <Compile Include="Text\Encoding.cs" />
     <Compile Include="Text\Encoding1254.cs" />
