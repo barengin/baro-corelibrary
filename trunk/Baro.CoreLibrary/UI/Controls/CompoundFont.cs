@@ -6,13 +6,13 @@ using Baro.CoreLibrary.G3;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
-    public class CompundFont
+    public class CompoundFont
     {
         public G3Font Font { get; set; }
         public G3Color FontColor { get; set; }
         public G3Color HaloColor { get; set; }
 
-        public CompundFont(G3Font font, G3Color fontColor, G3Color haloColor)
+        public CompoundFont(G3Font font, G3Color fontColor, G3Color haloColor)
         {
             this.Font = font;
             this.FontColor = fontColor;

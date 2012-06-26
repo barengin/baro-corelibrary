@@ -17,7 +17,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public string Text { get; set; }
 
-        public CompundFont FontStyle { get; set; }
+        public CompoundFont FontStyle { get; set; }
 
         public Gradient Gradient { get; set; }
         public Border Border { get; set; }
@@ -25,7 +25,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public GradientButton()
             : base()
         {
-            this.FontStyle = new CompundFont(null, G3Color.GRAY, G3Color.WHITE);
+            this.FontStyle = new CompoundFont(null, G3Color.GRAY, G3Color.WHITE);
 
             MaskImageColor = G3Color.FromRGB(238, 28, 36);
 

@@ -9,7 +9,7 @@ namespace Baro.CoreLibrary.UI.Controls
     public class GradientLabel : UIElement
     {
         public string Text { get; set; }
-        public CompundFont FontStyle { get; set; }
+        public CompoundFont FontStyle { get; set; }
 
         public Border Border { get; set; }
         public Gradient Gradient { get; set; }
@@ -17,7 +17,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public GradientLabel()
             : base()
         {
-            this.FontStyle = new CompundFont(null, G3Color.WHITE, G3Color.BLACK);
+            this.FontStyle = new CompoundFont(null, G3Color.WHITE, G3Color.BLACK);
             Border = new Border() { Color = G3Color.GRAY, Enabled = false };
             Gradient = new Gradient();
         }
