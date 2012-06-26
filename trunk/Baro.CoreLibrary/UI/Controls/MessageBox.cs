@@ -11,7 +11,7 @@ namespace Baro.CoreLibrary.UI.Controls
     {
         public string Text { get; set; }
         public string Title { get; set; }
-        
+
         public G3Font TitleFont { get; set; }
         public G3Font Font { get; set; }
 
@@ -46,7 +46,7 @@ namespace Baro.CoreLibrary.UI.Controls
                 ToColor = new G3Color(37, 111, 158),
                 UseAlpha = false
             };
-            
+
             int w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 5 * 3;
             int h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 2;
 
@@ -78,16 +78,13 @@ namespace Baro.CoreLibrary.UI.Controls
             this.TitleGradient.Draw(g, x, y, w, 30);
 
             // Title Text
-            g.DrawTextCenter(Title, UICanvas.Encoding, TitleFont, x + (w / 2), y + (30 / 2), 0, 
-                G3Color.BLACK, G3Color.WHITE);
+            g.DrawText(Title, UICanvas.Encoding, TitleFont, G3Color.BLACK, G3Color.WHITE, TextAlign.Center,
+                new Rectangle(x, y, x + (w / 2), y + (30 / 2)));
 
             // Message Text
-            g.DrawTextRect(Text, UICanvas.Encoding, Font, 
-                new Rectangle(x, y + 30, w, h), G3Color.GRAY, G3Color.WHITE, TextAlign.Left);
+            g.DrawText(Text, UICanvas.Encoding, Font, G3Color.GRAY, G3Color.WHITE, TextAlign.Left,
+                new Rectangle(x, y + 30, w, h));
 
-            //g.DrawTextCenter(Text, UICanvas.Encoding, 
-            //    Font, x + (w / 2), y + 60, 0, G3Color.BLACK, G3Color.BLACK);
-            
             // Border
             g.Rectangle(x, y, w, h + 30, G3Color.GRAY);
 
