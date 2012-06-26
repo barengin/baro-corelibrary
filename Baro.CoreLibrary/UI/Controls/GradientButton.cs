@@ -16,10 +16,8 @@ namespace Baro.CoreLibrary.UI.Controls
         public G3Color MaskImageColor { get; set; }
 
         public string Text { get; set; }
-        public G3Font Font { get; set; }
 
-        public G3Color FontColor { get; set; }
-        public G3Color HaloColor { get; set; }
+        public CompundFont FontStyle { get; set; }
 
         public Gradient Gradient { get; set; }
         public Border Border { get; set; }
@@ -27,8 +25,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public GradientButton()
             : base()
         {
-            FontColor = G3Color.GRAY;
-            HaloColor = G3Color.WHITE;
+            this.FontStyle = new CompundFont(null, G3Color.GRAY, G3Color.WHITE);
 
             MaskImageColor = G3Color.FromRGB(238, 28, 36);
 
@@ -78,8 +75,8 @@ namespace Baro.CoreLibrary.UI.Controls
 
             if (MaskImage != null)
             {
-                using (Graphics gx = g.Surface.WindowsGraphics)
                 {
+                    Graphics gx = g.Surface.WindowsGraphics;
                     gx.DrawImageTransparent(MaskImage, this.Bound, MaskImageColor.WindowsColor);
                 }
             }
@@ -91,9 +88,8 @@ namespace Baro.CoreLibrary.UI.Controls
                 if (Border.Enabled)
                     Border.Draw(g, this.Bound);
 
-                g.DrawTextCenter(Text, UICanvas.Encoding, Font, Location.X + (Size.Width / 2),
-                                                          Location.Y + (Size.Height / 2), 0,
-                                                          FontColor, HaloColor);
+                g.DrawText(Text, UICanvas.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
+                     TextAlign.Center, this.Bound);
 
                 g.EndDrawing();
             }
