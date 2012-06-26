@@ -8,7 +8,7 @@ namespace Baro.CoreLibrary.G3
 {
     public enum TextAlign
     {
-        Left, Center
+        Center, Left, Right, UpperLeft, BottomLeft, TopCenter, BottomCenter, UpperRight, BottomRight
     }
 
     public unsafe sealed class G3Canvas : IDisposable
@@ -17,7 +17,7 @@ namespace Baro.CoreLibrary.G3
         private readonly int m_ClipWidth, m_ClipHeight;
         private readonly int SurfaceWidth, SurfaceHeight;
 
-        public G3Surface Surface { get; internal set; }
+        public G3Surface Surface { get; private set; }
 
         #region ctor
         public G3Canvas(int width, int height, G3Surface s)
@@ -372,146 +372,189 @@ namespace Baro.CoreLibrary.G3
             }
         }
 
-        public void DrawTextUL(byte[] txt, G3Font font, int X1, int Y1,
+        public void _DrawTextC(byte[] encodedByteCharArray, G3Font font, int X1, int Y1,
             G3Color fontColor, G3Color haloColor)
         {
-            X1 += (font.TextWidth(txt) / 2);
-            Y1 += (font.FontHeight / 2);
-
-            DrawTextCenter(txt, font, X1, Y1, 0, fontColor, haloColor);
-        }
-
-        public void DrawTextUL(string txt, Encoding encoding, G3Font font, int X1, int Y1,
-            G3Color fontColor, G3Color haloColor)
-        {
-            if (string.IsNullOrEmpty(txt) || font == null)
+            if (encodedByteCharArray == null || font == null)
                 return;
 
-            byte[] chars = encoding.GetBytes(txt);
+            // half width
+            float offset = X1 - (font.TextWidth(encodedByteCharArray) / 2f);
 
-            X1 += (font.TextWidth(chars) / 2);
-            Y1 += (font.FontHeight / 2);
+            for (int k = 0; k < encodedByteCharArray.Length; k++)
+            {
+                byte byteChar = encodedByteCharArray[k];
 
-            DrawTextCenter(chars, font, X1, Y1, 0, fontColor, haloColor);
+                if (k == 0)
+                {
+                    offset += (font.Chars[byteChar].width / 2f);
+                }
+                else
+                {
+                    offset += (font.Chars[encodedByteCharArray[k - 1]].width / 2f);
+                    offset += ((font.Chars[byteChar].width + font.SpaceBetweenChars) / 2f);
+                }
+
+                if (byteChar != 32)
+                    PutChar0(byteChar, (int)offset, Y1, font, fontColor, haloColor);
+            }
         }
 
-        public void DrawTextRect(byte[] encodedByteCharArray, G3Font font, Rectangle r,
-            G3Color fontColor, G3Color haloColor, TextAlign align)
+        public void DrawText(string text, Encoding encoding, G3Font font, G3Color fontColor, G3Color haloColor,
+            TextAlign align, Rectangle r)
         {
-            // Font yoksa,
-            // Width 20'dan küçükse,
-            // Eğer içine çizim yapacağımız RECT yüksekliği FONT yüksekliğinden küçükse kafadan çık.
-            if (font == null || r.Height < font.FontHeight || r.Width < 20)
+            if (text == null || string.IsNullOrEmpty(text) || font == null)
                 return;
 
+            byte[] chars = encoding.GetBytes(text);
+            IList<byte[]> lines = ClipText(chars, r, font);
+
+            switch (align)
+            {
+                case TextAlign.Center:
+                    DrawTextAlignCenter(lines, r, font, fontColor, haloColor);
+                    break;
+
+                case TextAlign.Left:
+                    DrawTextAlignLeft(lines, r, font, fontColor, haloColor);
+                    break;
+
+                case TextAlign.Right:
+                    DrawTextAlignRight(lines, r, font, fontColor, haloColor);
+                    break;
+
+                case TextAlign.UpperLeft:
+                    throw new NotImplementedException();
+
+                case TextAlign.BottomLeft:
+                    throw new NotImplementedException();
+
+                case TextAlign.TopCenter:
+                    throw new NotImplementedException();
+
+                case TextAlign.BottomCenter:
+                    throw new NotImplementedException();
+
+                case TextAlign.UpperRight:
+                    throw new NotImplementedException();
+
+                case TextAlign.BottomRight:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private void DrawTextAlignRight(IList<byte[]> lines, Rectangle r,
+            G3Font font, G3Color fontColor, G3Color haloColor)
+        {
+            int x = r.X + r.Width - 1;
+            int y = r.Y + (r.Height / 2);
+
+            y = y - ((font.FontHeight * lines.Count) / 2);
+            y = y + (font.FontHeight / 2);
+
+            foreach (var l in lines)
+            {
+                int w = font.TextWidth(l) / 2;
+
+                if (r.Contains(x, y - (font.FontHeight / 2)) && r.Contains(x, y + (font.FontHeight / 2)))
+                    _DrawTextC(l, font, x - w - 1, y, fontColor, haloColor);
+
+                y = y + font.FontHeight;
+            }
+        }
+
+        private void DrawTextAlignLeft(IList<byte[]> lines, Rectangle r,
+            G3Font font, G3Color fontColor, G3Color haloColor)
+        {
+            int x = r.X;
+            int y = r.Y + (r.Height / 2);
+
+            y = y - ((font.FontHeight * lines.Count) / 2);
+            y = y + (font.FontHeight / 2);
+
+            foreach (var l in lines)
+            {
+                int w = font.TextWidth(l) / 2;
+
+                if (r.Contains(x, y - (font.FontHeight / 2)) && r.Contains(x, y + (font.FontHeight / 2)))
+                    _DrawTextC(l, font, x + w, y, fontColor, haloColor);
+
+                y = y + font.FontHeight;
+            }
+        }
+
+        private void DrawTextAlignCenter(IList<byte[]> lines, Rectangle r,
+            G3Font font, G3Color fontColor, G3Color haloColor)
+        {
+            int x = r.X + (r.Width / 2);
+            int y = r.Y + (r.Height / 2);
+
+            y = y - ((font.FontHeight * lines.Count) / 2);
+            y = y + (font.FontHeight / 2);
+
+            foreach (var l in lines)
+            {
+                if (r.Contains(x, y - (font.FontHeight / 2)) && r.Contains(x, y + (font.FontHeight / 2)))
+                    _DrawTextC(l, font, x, y, fontColor, haloColor);
+
+                y = y + font.FontHeight;
+            }
+        }
+
+        private IList<byte[]> ClipText(byte[] encodedByteCharArray, Rectangle r, G3Font font)
+        {
+            IList<byte[]> list = new List<byte[]>();
             int x = r.Left, y = r.Top;
-            int lastS = 0, last = -1;
-            int i = 0, w = 0;
+            int Start = 0, End = -1, lastSpace = -1;
+            int i = 0, totalWidth = 0;
 
             while (i < encodedByteCharArray.Length)
             {
                 // en son rastlanılan SPACE !!!
                 if (encodedByteCharArray[i] == 32)
                 {
-                    last = i;
+                    lastSpace = i;
                 }
 
-                int charWidth = font.Chars[encodedByteCharArray[i]].width;
+                totalWidth += font.Chars[encodedByteCharArray[i]].width;
 
-                // Bu karakter ile beraber r.W'den büyükse
-                if (w + charWidth >= (r.Width - 5))
+                if (totalWidth > r.Width)
                 {
-                    // Daha önce hiç SPACE bulunmamış
-                    if (last == -1)
+                    if (lastSpace != -1)
                     {
-                        last = i;
+                        End = lastSpace - 1;
+
+                        list.Add(encodedByteCharArray.Clone(Start, End - Start + 1));
+
+                        // Reset
+                        lastSpace = -1;
+                        totalWidth = 0;
+                        Start = End + 2;
+                        i = End + 1;
                     }
+                    else
+                    {
+                        End = i - 1;
 
-                    // DrawText
-                    DrawTextUL(encodedByteCharArray.Clone(lastS, last - lastS), font, x, y, fontColor, haloColor);
+                        list.Add(encodedByteCharArray.Clone(Start, End - Start + 1));
 
-                    // Alt satıra in.
-                    y += font.FontHeight;
-                    
-                    // Önceki satırları atlamak için
-                    lastS = last;
-
-                    w = 0;
-                    i = last;
-
-                    last = -1;
-                }
-                else
-                {
-                    // karakter genişliği
-                    w += charWidth;
+                        // Reset
+                        lastSpace = -1;
+                        totalWidth = 0;
+                        Start = End + 1;
+                        i = End;
+                    }
                 }
 
                 i++;
             }
 
-            if (i != lastS)
+            if (Start < encodedByteCharArray.Length)
             {
-                DrawTextUL(encodedByteCharArray.Clone(lastS, i - lastS), font, x, y, fontColor, haloColor);
+                list.Add(encodedByteCharArray.Clone(Start, encodedByteCharArray.Length - Start));
             }
-        }
 
-        public void DrawTextRect(string txt, Encoding encoding, G3Font font, Rectangle r,
-            G3Color fontColor, G3Color haloColor, TextAlign align)
-        {
-            if (!string.IsNullOrEmpty(txt))
-                DrawTextRect(encoding.GetBytes(txt), font, r, fontColor, haloColor, align);
-        }
-
-        public void DrawTextCenter(string txt, Encoding encoding, G3Font font, int X1, int Y1, int angle,
-            G3Color fontColor, G3Color haloColor)
-        {
-            if (!string.IsNullOrEmpty(txt))
-                DrawTextCenter(encoding.GetBytes(txt), font, X1, Y1, angle, fontColor, haloColor);
-        }
-
-        public void DrawTextCenter(byte[] encodedByteCharArray, G3Font font, int X1, int Y1, int angle,
-            G3Color fontColor, G3Color haloColor)
-        {
-            if (encodedByteCharArray == null || font == null)
-                return;
-
-            int w = font.TextWidth(encodedByteCharArray) / 2;
-
-            int PosX = X1 << 11;
-            int PosY = Y1 << 11;
-
-            PosX -= (SinCos11.cos[angle] * w);
-            PosY -= (SinCos11.sin[angle] * w);
-
-            int cw1, cw2;
-
-            for (int k = 0; k < encodedByteCharArray.Length; k++)
-            {
-                byte bb = encodedByteCharArray[k];
-
-                if (k != 0)
-                {
-                    cw1 = font.Chars[encodedByteCharArray[k - 1]].width;
-                    cw2 = font.Chars[bb].width + font.SpaceBetweenChars;
-
-                    PosX += (SinCos11.cos[angle] * cw1) >> 1;
-                    PosY += (SinCos11.sin[angle] * cw1) >> 1;
-
-                    PosX += (SinCos11.cos[angle] * cw2) >> 1;
-                    PosY += (SinCos11.sin[angle] * cw2) >> 1;
-                }
-                else
-                {
-                    cw2 = font.Chars[bb].width;
-
-                    PosX += (SinCos11.cos[angle] * cw2) >> 1;
-                    PosY += (SinCos11.sin[angle] * cw2) >> 1;
-                }
-
-                if (cw2 != 0 && bb != 32)
-                    PutChar(bb, angle, PosX >> 11, PosY >> 11, font, fontColor, haloColor);
-            }
+            return list;
         }
 
         #endregion
