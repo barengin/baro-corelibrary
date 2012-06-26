@@ -14,10 +14,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public Image Image { get; set; }
         public string Text { get; set; }
-        public G3Font Font { get; set; }
-
-        public G3Color FontColor { get; set; }
-        public G3Color HaloColor { get; set; }
+        public CompundFont FontStyle { get; set; }
 
         internal override void MouseDown(System.Drawing.Point p)
         {
@@ -40,26 +37,27 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public override void Render(G3Canvas g)
         {
-            Graphics gx = g.Surface.WindowsGraphics;
-
-            if (Image != null)
             {
-                gx.DrawImageTransparent(Image, this.Bound);
+                Graphics gx = g.Surface.WindowsGraphics;
+
+                if (Image != null)
+                {
+                    gx.DrawImageTransparent(Image, this.Bound);
+                }
             }
 
             if (!string.IsNullOrEmpty(Text) || _pressed)
             {
                 g.BeginDrawing();
 
-                g.DrawTextCenter(Text, UICanvas.Encoding, Font, Location.X + (Size.Width / 2),
-                                                          Location.Y + (Size.Height / 2), 0,
-                                                          FontColor, HaloColor);
+                g.DrawText(Text, UICanvas.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
+                    TextAlign.Center, this.Bound);
 
                 if (_pressed)
                 {
                     g.DarkBox(Location.X, Location.Y, Size.Width, Size.Height, 9);
                 }
-                
+
                 g.EndDrawing();
             }
         }
