@@ -14,7 +14,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public Image Image { get; set; }
         public string Text { get; set; }
-        public CompundFont FontStyle { get; set; }
+        public CompoundFont FontStyle { get; set; }
 
         internal override void MouseDown(System.Drawing.Point p)
         {

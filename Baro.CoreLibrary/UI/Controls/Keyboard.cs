@@ -30,7 +30,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public Gradient AlfanumericButtonsGradient { get; set; }
         public Gradient ControlButtonsGradient { get; set; }
-        public CompundFont FontStyle { get; set; }
+        public CompoundFont FontStyle { get; set; }
 
         #region Events
         public event KeyboardCharPressedDelegate OnCharPressedEvent;
@@ -106,7 +106,7 @@ namespace Baro.CoreLibrary.UI.Controls
                 UseAlpha = false
             };
 
-            this.FontStyle = new CompundFont(null, G3Color.WHITE, G3Color.BLACK);
+            this.FontStyle = new CompoundFont(null, G3Color.WHITE, G3Color.BLACK);
         }
 
         internal override void MouseDown(System.Drawing.Point p)
