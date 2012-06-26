@@ -13,16 +13,12 @@ namespace Baro.CoreLibrary.UI.Controls
         public bool Focused { get; set; }
         public string Text { get; set; }
 
-        public G3Font Font { get; set; }
-        public G3Color FontColor { get; set; }
-        public G3Color HaloColor { get; set; }
+        public CompoundFont FontStyle { get; set; }
 
         public Textbox()
             : base()
         {
-            FontColor = G3Color.BLACK;
-            HaloColor = G3Color.WHITE;
-
+            this.FontStyle = new CompoundFont(null, G3Color.BLACK, G3Color.WHITE);
             Text = string.Empty;
         }
 
@@ -115,10 +111,10 @@ namespace Baro.CoreLibrary.UI.Controls
 
             chars = CropText(chars, Size.Width);
 
-            g.DrawTextUL(chars, Font,
+            g._DrawTextC(chars, FontStyle.Font,
                 Location.X + 2,
-                Location.Y + ((Size.Height - Font.FontHeight) / 2),
-                FontColor, HaloColor);
+                Location.Y + ((Size.Height - FontStyle.Font.FontHeight) / 2),
+                FontStyle.FontColor, FontStyle.HaloColor);
 
             g.EndDrawing();
         }
@@ -128,12 +124,12 @@ namespace Baro.CoreLibrary.UI.Controls
             if (chars == null || chars.Length == 1)
                 return chars;
 
-            int width = Font.TextWidth(chars);
+            int width = FontStyle.Font.TextWidth(chars);
 
             while (width >= (w - 3))
             {
                 chars = chars.Clone(1, chars.Length - 1);
-                width = Font.TextWidth(chars);
+                width = FontStyle.Font.TextWidth(chars);
             }
 
             return chars;
