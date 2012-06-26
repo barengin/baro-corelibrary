@@ -7,15 +7,14 @@ using Baro.CoreLibrary.G3;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
-    public class Checkbox: UIElement
+    public class Checkbox : UIElement
     {
         public Image CheckedImage { get; set; }
         public Image UncheckedImage { get; set; }
+
         public string Text { get; set; }
 
-        public G3Font Font { get; set; }
-        public G3Color FontColor { get; set; }
-        public G3Color HaloColor { get; set; }
+        public CompundFont FontStyle { get; set; }
 
         public bool Checked { get; set; }
 
@@ -25,8 +24,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public Checkbox()
             : base()
         {
-            FontColor = G3Color.WHITE;
-            HaloColor = G3Color.BLACK;
+            this.FontStyle = new CompundFont(null, G3Color.WHITE, G3Color.BLACK);
         }
 
         internal override void MouseDown(System.Drawing.Point p)
@@ -51,25 +49,33 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public override void Render(G3Canvas g)
         {
-            Graphics gx = g.Surface.WindowsGraphics;
-
-            if (this.Checked)
             {
-                if (CheckedImage != null)
+                Graphics gx = g.Surface.WindowsGraphics;
+                
+                if (this.Checked)
                 {
-                    gx.DrawImage(CheckedImage, Location.X, Location.Y + ((Size.Height - CheckedImage.Height) / 2));
+                    if (CheckedImage != null)
+                    {
+                        gx.DrawImage(CheckedImage, Location.X, Location.Y + ((Size.Height - CheckedImage.Height) / 2));
+                    }
                 }
-            }
-            else
-            {
-                if (UncheckedImage != null)
+                else
                 {
-                    gx.DrawImage(UncheckedImage, Location.X, Location.Y + ((Size.Height - UncheckedImage.Height) / 2));
+                    if (UncheckedImage != null)
+                    {
+                        gx.DrawImage(UncheckedImage, Location.X, Location.Y + ((Size.Height - UncheckedImage.Height) / 2));
+                    }
                 }
             }
 
             g.BeginDrawing();
-            g.DrawTextUL(Text, UICanvas.Encoding, Font, Location.X + CheckedImage.Width + 2, Location.Y + ((Size.Height - Font.FontHeight) / 2), FontColor, HaloColor);
+
+            Rectangle r = this.Bound;
+            r.Offset(CheckedImage.Width, 0);
+
+            g.DrawText(Text, UICanvas.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
+                 TextAlign.Left, r);
+
             g.EndDrawing();
         }
 
