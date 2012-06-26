@@ -8,11 +8,8 @@ namespace Baro.CoreLibrary.UI.Controls
 {
     public class GradientLabel : UIElement
     {
-        public G3Font Font { get; set; }
         public string Text { get; set; }
-
-        public G3Color FontColor { get; set; }
-        public G3Color HaloColor { get; set; }
+        public CompundFont FontStyle { get; set; }
 
         public Border Border { get; set; }
         public Gradient Gradient { get; set; }
@@ -20,9 +17,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public GradientLabel()
             : base()
         {
-            FontColor = G3Color.WHITE;
-            HaloColor = G3Color.BLACK;
-
+            this.FontStyle = new CompundFont(null, G3Color.WHITE, G3Color.BLACK);
             Border = new Border() { Color = G3Color.GRAY, Enabled = false };
             Gradient = new Gradient();
         }
@@ -44,9 +39,8 @@ namespace Baro.CoreLibrary.UI.Controls
             if (Border.Enabled)
                 Border.Draw(g, this.Bound);
 
-            g.DrawTextCenter(Text, UICanvas.Encoding, Font,
-                Location.X + Size.Width / 2, Location.Y + Size.Height / 2, 0,
-                FontColor, HaloColor);
+            g.DrawText(Text, UICanvas.Encoding, FontStyle.Font,
+                 FontStyle.FontColor, FontStyle.HaloColor, TextAlign.Center, this.Bound);
 
             g.EndDrawing();
         }
