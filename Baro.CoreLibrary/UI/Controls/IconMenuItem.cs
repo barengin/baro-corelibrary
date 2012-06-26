@@ -33,19 +33,16 @@ namespace Baro.CoreLibrary.UI.Controls
                 gx.DrawImageTransparentUnstreched(Image, this.Center);
             }
 
-            if (!string.IsNullOrEmpty(Text) || _pressed)
+            if (_pressed)
             {
                 g.BeginDrawing();
 
-                g.DrawTextCenter(Text, UICanvas.Encoding, Font, Location.X + (Size.Width / 2),
-                                                          Location.Y + (Size.Height / 2), 0,
-                                                          G3Color.GRAY, G3Color.WHITE);
+                //g.DrawTextCenter(Text, UICanvas.Encoding, FontStyle.Font, Location.X + (Size.Width / 2),
+                //                                          Location.Y + (Size.Height / 2), 0,
+                //                                          G3Color.GRAY,
+                //                                          G3Color.WHITE);
 
-                if (_pressed)
-                {
-                    g.DarkBox(Location.X, Location.Y, Size.Width, Size.Height, 9);
-                }
-
+                g.DarkBox(Location.X, Location.Y, Size.Width, Size.Height, 9);
                 g.EndDrawing();
             }
         }
