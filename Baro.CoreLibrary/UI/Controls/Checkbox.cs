@@ -14,7 +14,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public string Text { get; set; }
 
-        public CompundFont FontStyle { get; set; }
+        public CompoundFont FontStyle { get; set; }
 
         public bool Checked { get; set; }
 
@@ -24,7 +24,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public Checkbox()
             : base()
         {
-            this.FontStyle = new CompundFont(null, G3Color.WHITE, G3Color.BLACK);
+            this.FontStyle = new CompoundFont(null, G3Color.WHITE, G3Color.BLACK);
         }
 
         internal override void MouseDown(System.Drawing.Point p)
