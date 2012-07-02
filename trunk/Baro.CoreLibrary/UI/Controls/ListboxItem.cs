@@ -75,15 +75,14 @@ namespace Baro.CoreLibrary.UI.Controls
 
                 byte[] chars = UICanvas.Encoding.GetBytes(Text1);                
                 chars = CropText(chars, r1.Width, Text1Style);
-                
-                g._DrawTextC(chars, Text1Style.Font,
-                    r1.X + 2 + (Text1Style.Font.TextWidth(chars) / 2),
-                    r1.Y + (r1.Height / 2),
-                    Text1Style.FontColor, Text1Style.HaloColor);
 
-                //g.DrawText(Text1, UICanvas.Encoding,
-                //    Text1Style.Font, Text1Style.FontColor, Text1Style.HaloColor,
-                //    TextAlign.Left, r1);
+                if (chars != null)
+                {
+                    g._DrawTextC(chars, Text1Style.Font,
+                        r1.X + 2 + (Text1Style.Font.TextWidth(chars) / 2),
+                        r1.Y + (r1.Height / 2),
+                        Text1Style.FontColor, Text1Style.HaloColor);
+                }
 
                 r1.Offset(0, r1.Height);
                 
@@ -92,10 +91,13 @@ namespace Baro.CoreLibrary.UI.Controls
                 chars = UICanvas.Encoding.GetBytes(Text2);
                 chars = CropText(chars, r1.Width, Text2Style);
 
-                g._DrawTextC(chars, Text2Style.Font,
-                    r1.X + 2 + (Text2Style.Font.TextWidth(chars) / 2),
-                    r1.Y + (r1.Height / 2),
-                    Text2Style.FontColor, Text2Style.HaloColor);
+                if (chars != null)
+                {
+                    g._DrawTextC(chars, Text2Style.Font,
+                        r1.X + 2 + (Text2Style.Font.TextWidth(chars) / 2),
+                        r1.Y + (r1.Height / 2),
+                        Text2Style.FontColor, Text2Style.HaloColor);
+                }
 
                 //g.DrawText(Text2, UICanvas.Encoding,
                 //    Text2Style.Font, Text2Style.FontColor, Text2Style.HaloColor,
@@ -118,28 +120,26 @@ namespace Baro.CoreLibrary.UI.Controls
                 byte[] chars = UICanvas.Encoding.GetBytes(Text1);
                 chars = CropText(chars, r1.Width, Text1Style);
 
-                g._DrawTextC(chars, Text1Style.Font,
-                    r1.X + 2 + (Text1Style.Font.TextWidth(chars) / 2),
-                    r1.Y + (r1.Height / 2),
-                    Text1Style.FontColor, Text1Style.HaloColor);
-
-                //g.DrawText(Text1, UICanvas.Encoding,
-                //    Text1Style.Font, Text1Style.FontColor, Text1Style.HaloColor,
-                //    TextAlign.Left, r1);
+                if (chars != null)
+                {
+                    g._DrawTextC(chars, Text1Style.Font,
+                        r1.X + 2 + (Text1Style.Font.TextWidth(chars) / 2),
+                        r1.Y + (r1.Height / 2),
+                        Text1Style.FontColor, Text1Style.HaloColor);
+                }
 
                 r1.Offset(0, r1.Height);
 
                 chars = UICanvas.Encoding.GetBytes(Text2);
                 chars = CropText(chars, r1.Width, Text2Style);
 
-                g._DrawTextC(chars, Text2Style.Font,
-                    r1.X + 2 + (Text2Style.Font.TextWidth(chars) / 2),
-                    r1.Y + (r1.Height / 2),
-                    Text2Style.FontColor, Text2Style.HaloColor);
-
-                //g.DrawText(Text2, UICanvas.Encoding,
-                //    Text2Style.Font, Text2Style.FontColor, Text2Style.HaloColor,
-                //    TextAlign.Left, r1);
+                if (chars != null)
+                {
+                    g._DrawTextC(chars, Text2Style.Font,
+                        r1.X + 2 + (Text2Style.Font.TextWidth(chars) / 2),
+                        r1.Y + (r1.Height / 2),
+                        Text2Style.FontColor, Text2Style.HaloColor);
+                }
 
                 g.EndDrawing();
             }
