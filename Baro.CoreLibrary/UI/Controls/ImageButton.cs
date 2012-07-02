@@ -16,6 +16,12 @@ namespace Baro.CoreLibrary.UI.Controls
         public string Text { get; set; }
         public CompoundFont FontStyle { get; set; }
 
+        public ImageButton()
+            : base()
+        {
+            this.FontStyle = new CompoundFont(null, G3Color.BLACK, G3Color.WHITE);
+        }
+
         internal override void MouseDown(System.Drawing.Point p)
         {
             if (HitTest(p))
