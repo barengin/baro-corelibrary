@@ -12,6 +12,7 @@ namespace Baro.CoreLibrary.UI.Controls
         internal G3Color ItemColor { get; set; }
         internal G3Color SelectedItemColor { get; set; }
         internal ListboxItemList BelongList { get; set; }
+        internal G3Color BorderColor { get; set; }
 
         public Image Image { get; set; }
 
@@ -55,11 +56,11 @@ namespace Baro.CoreLibrary.UI.Controls
             
             if (Selected)
             {
-                gx.DrawRoundedRectangle(new Pen(Color.Red), this.SelectedItemColor.WindowsColor, this.Bound, new Size(10, 10));
+                gx.DrawRoundedRectangle(new Pen(BorderColor.WindowsColor), this.SelectedItemColor.WindowsColor, this.Bound, new Size(10, 10));
             }
             else
             {
-                gx.DrawRoundedRectangle(new Pen(Color.Red), this.ItemColor.WindowsColor, this.Bound, new Size(10, 10));
+                gx.DrawRoundedRectangle(new Pen(BorderColor.WindowsColor), this.ItemColor.WindowsColor, this.Bound, new Size(10, 10));
             }
 
             if (this.Image == null)
@@ -69,18 +70,36 @@ namespace Baro.CoreLibrary.UI.Controls
                 Rectangle r1 = this.Bound;
                 r1.Height = r1.Height / 2;
                 r1.Offset(2, 0);
-                // g.Rectangle(r1, G3Color.BLUE);
+                
+                // DEBUG: g.Rectangle(r1, G3Color.BLUE);
 
-                g.DrawText(Text1, UICanvas.Encoding,
-                    Text1Style.Font, Text1Style.FontColor, Text1Style.HaloColor,
-                    TextAlign.Left, r1);
+                byte[] chars = UICanvas.Encoding.GetBytes(Text1);                
+                chars = CropText(chars, r1.Width, Text1Style);
+                
+                g._DrawTextC(chars, Text1Style.Font,
+                    r1.X + 2 + (Text1Style.Font.TextWidth(chars) / 2),
+                    r1.Y + (r1.Height / 2),
+                    Text1Style.FontColor, Text1Style.HaloColor);
+
+                //g.DrawText(Text1, UICanvas.Encoding,
+                //    Text1Style.Font, Text1Style.FontColor, Text1Style.HaloColor,
+                //    TextAlign.Left, r1);
 
                 r1.Offset(0, r1.Height);
-                // g.Rectangle(r1, G3Color.GREEN);
+                
+                // DEBUG: g.Rectangle(r1, G3Color.GREEN);
 
-                g.DrawText(Text2, UICanvas.Encoding,
-                    Text2Style.Font, Text2Style.FontColor, Text2Style.HaloColor,
-                    TextAlign.Left, r1);
+                chars = UICanvas.Encoding.GetBytes(Text2);
+                chars = CropText(chars, r1.Width, Text2Style);
+
+                g._DrawTextC(chars, Text2Style.Font,
+                    r1.X + 2 + (Text2Style.Font.TextWidth(chars) / 2),
+                    r1.Y + (r1.Height / 2),
+                    Text2Style.FontColor, Text2Style.HaloColor);
+
+                //g.DrawText(Text2, UICanvas.Encoding,
+                //    Text2Style.Font, Text2Style.FontColor, Text2Style.HaloColor,
+                //    TextAlign.Left, r1);
 
                 g.EndDrawing();
             }
@@ -94,19 +113,52 @@ namespace Baro.CoreLibrary.UI.Controls
                 Rectangle r1 = this.Bound;
                 r1.Height = r1.Height / 2;
                 r1.Offset(this.Size.Height, 0);
+                r1.Width = r1.Width - this.Size.Height;
 
-                g.DrawText(Text1, UICanvas.Encoding,
-                    Text1Style.Font, Text1Style.FontColor, Text1Style.HaloColor,
-                    TextAlign.Left, r1);
+                byte[] chars = UICanvas.Encoding.GetBytes(Text1);
+                chars = CropText(chars, r1.Width, Text1Style);
+
+                g._DrawTextC(chars, Text1Style.Font,
+                    r1.X + 2 + (Text1Style.Font.TextWidth(chars) / 2),
+                    r1.Y + (r1.Height / 2),
+                    Text1Style.FontColor, Text1Style.HaloColor);
+
+                //g.DrawText(Text1, UICanvas.Encoding,
+                //    Text1Style.Font, Text1Style.FontColor, Text1Style.HaloColor,
+                //    TextAlign.Left, r1);
 
                 r1.Offset(0, r1.Height);
 
-                g.DrawText(Text2, UICanvas.Encoding,
-                    Text2Style.Font, Text2Style.FontColor, Text2Style.HaloColor,
-                    TextAlign.Left, r1);
+                chars = UICanvas.Encoding.GetBytes(Text2);
+                chars = CropText(chars, r1.Width, Text2Style);
+
+                g._DrawTextC(chars, Text2Style.Font,
+                    r1.X + 2 + (Text2Style.Font.TextWidth(chars) / 2),
+                    r1.Y + (r1.Height / 2),
+                    Text2Style.FontColor, Text2Style.HaloColor);
+
+                //g.DrawText(Text2, UICanvas.Encoding,
+                //    Text2Style.Font, Text2Style.FontColor, Text2Style.HaloColor,
+                //    TextAlign.Left, r1);
 
                 g.EndDrawing();
             }
+        }
+
+        private static byte[] CropText(byte[] chars, int w, CompoundFont FontStyle)
+        {
+            if (chars == null || chars.Length == 1)
+                return chars;
+
+            int width = FontStyle.Font.TextWidth(chars);
+
+            while (width >= (w - 3))
+            {
+                chars = chars.Clone(1, chars.Length - 1);
+                width = FontStyle.Font.TextWidth(chars);
+            }
+
+            return chars;
         }
 
         protected override void Dispose(bool disposing)

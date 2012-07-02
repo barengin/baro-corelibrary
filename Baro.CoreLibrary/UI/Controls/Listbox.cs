@@ -19,6 +19,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public G3Color BackgroundColor { get; set; }
         public G3Color SelectedItemColor { get; set; }
         public G3Color ItemColor { get; set; }
+        public G3Color ItemBorderColor { get; set; }
 
         public int StartIndex { get; set; }
         public int SelectedIndex { get; set; }
@@ -31,6 +32,7 @@ namespace Baro.CoreLibrary.UI.Controls
             this.Border = new Border() { Color = G3Color.GRAY, Enabled = false };
             this.SelectedItemColor = G3Color.GRAY;
             this.ItemColor = G3Color.WHITE;
+            this.ItemBorderColor = G3Color.RED;
         }
 
         internal override void MouseDown(System.Drawing.Point p)
