@@ -69,19 +69,21 @@ namespace Baro.CoreLibrary.UI.Controls
 
         private void CreateMenu()
         {
-            int w = IconSize.Width;
-            int h = IconSize.Height;
+            int hw = IconSize.Width;
+            int hh = IconSize.Height;
+            int k = 0;
 
-            for (int k = 0; k < (Width * Height); k++)
+            for (int w = 0; w < Width; w++)
             {
-                if (k < Items.Count)
+                for (int h = 0; h < Height; h++)
                 {
-                    Items[k].Size = new System.Drawing.Size(w, h);
+                    if (k < Items.Count)
+                    {
+                        Items[k].Size = new System.Drawing.Size(hw, hh);
+                        Items[k].Location = new System.Drawing.Point((w * hw) + Location.X, (h * hh) + Location.Y);
+                    }
 
-                    int x = (w * (k % Width)) + Location.X;
-                    int y = (h * (k / (Height == 1 ? 2 : Height))) + Location.Y;
-
-                    Items[k].Location = new System.Drawing.Point(x, y);
+                    k++;
                 }
             }
         }
