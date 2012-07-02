@@ -139,6 +139,7 @@ namespace Baro.CoreLibrary.UI.Controls
                 {
                     this[k].SelectedItemColor = listbox.SelectedItemColor;
                     this[k].ItemColor = listbox.ItemColor;
+                    this[k].BorderColor = listbox.ItemBorderColor;
 
                     this[k].Render(g);
                 }
