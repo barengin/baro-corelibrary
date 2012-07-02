@@ -145,18 +145,29 @@ namespace Baro.CoreLibrary.UI.Controls
             }
         }
 
-        private static byte[] CropText(byte[] chars, int w, CompoundFont FontStyle)
+        private static byte[] CropText(byte[] chars, int width, CompoundFont FontStyle)
         {
             if (chars == null || chars.Length == 1)
                 return chars;
 
-            int width = FontStyle.Font.TextWidth(chars);
+            int tw = 0;
 
-            while (width >= (w - 3))
+            for (int r = 0; r < chars.Length; r++)
             {
-                chars = chars.Clone(1, chars.Length - 1);
-                width = FontStyle.Font.TextWidth(chars);
+                tw += FontStyle.Font.Chars[chars[r]].width;
+
+                if (tw > width - 3)
+                {
+                    chars = chars.Clone(0, r);
+                    break;
+                }
             }
+
+            //while (width >= (w - 3))
+            //{
+            //    chars = chars.Clone(1, chars.Length - 1);
+            //    width = FontStyle.Font.TextWidth(chars);
+            //}
 
             return chars;
         }
