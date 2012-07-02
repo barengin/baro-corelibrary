@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using Baro.CoreLibrary.G3;
+using System.Windows.Forms;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
@@ -12,18 +14,11 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public ListboxItemList Items { get; private set; }
         public Size ItemSize { get { return new Size(this.Size.Width, this.Size.Height / RowCount); } }
-
-        public override Size Size
-        {
-            get
-            {
-                return base.Size;
-            }
-            set
-            {
-                // base.Size = value;
-            }
-        }
+        public Border Border { get; set; }
+        
+        public G3Color BackgroundColor { get; set; }
+        public G3Color SelectedItemColor { get; set; }
+        public G3Color ItemColor { get; set; }
 
         public int StartIndex { get; set; }
         public int SelectedIndex { get; set; }
@@ -33,25 +28,39 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             this.RowCount = rowCountInView;
             this.Items = new ListboxItemList();
+            this.Border = new Border() { Color = G3Color.GRAY, Enabled = false };
+            this.SelectedItemColor = G3Color.GRAY;
+            this.ItemColor = G3Color.WHITE;
         }
 
         internal override void MouseDown(System.Drawing.Point p)
         {
-            Items.MouseDown(new System.Windows.Forms.MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 1, p.X, p.Y, 0));
+            Items.MouseDown(new MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 1, p.X, p.Y, 0));
         }
 
         internal override void MouseUp(System.Drawing.Point p)
         {
-            Items.MouseUp(new System.Windows.Forms.MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 1, p.X, p.Y, 0));
+            Items.MouseUp(new MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 1, p.X, p.Y, 0));
         }
 
         internal override void MouseMove(System.Drawing.Point p)
         {
-            Items.MouseMove(new System.Windows.Forms.MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 1, p.X, p.Y, 0));            
+            Items.MouseMove(new MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 1, p.X, p.Y, 0));
         }
 
-        public override void Render(Baro.CoreLibrary.G3.G3Canvas g)
+        public override void Render(G3Canvas g)
         {
+            g.BeginDrawing();
+
+            g.FillRectangle(this.Bound, this.BackgroundColor);
+
+            if (Border.Enabled)
+            {
+                Border.Draw(g, this.Bound);
+            }
+            
+            g.EndDrawing();
+
             Items.Render(g, this);
         }
 

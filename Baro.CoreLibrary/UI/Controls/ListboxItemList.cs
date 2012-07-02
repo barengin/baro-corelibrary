@@ -3,10 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Baro.CoreLibrary.G3;
+using System.Drawing;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
-    public class ListboxItemList: IList<ListboxItem>
+    public class ListboxItemList : IList<ListboxItem>
     {
         private UICanvas _canvas = new UICanvas();
         internal bool Modified { get; set; }
@@ -25,6 +26,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public void Insert(int index, ListboxItem item)
         {
+            item.BelongList = this;
             _canvas.Insert(index, item);
             Modified = true;
         }
@@ -43,6 +45,7 @@ namespace Baro.CoreLibrary.UI.Controls
             }
             set
             {
+                value.BelongList = this;
                 _canvas[index] = value;
                 Modified = true;
             }
@@ -54,6 +57,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public void Add(ListboxItem item)
         {
+            item.BelongList = this;
             _canvas.Add(item);
             Modified = true;
         }
@@ -127,20 +131,53 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal void Render(G3Canvas g, Listbox listbox)
         {
-            ListboxItem l = listbox.Items[0];
-            l.Size = listbox.ItemSize;
-            l.Location = listbox.Location;
+            Calculate(listbox);
 
-            l.Render(g);
+            for (int k = listbox.StartIndex; k < (listbox.StartIndex + listbox.RowCount); k++)
+            {
+                if (k < this.Count)
+                {
+                    this[k].SelectedItemColor = listbox.SelectedItemColor;
+                    this[k].ItemColor = listbox.ItemColor;
 
-            //int k = listbox.StartIndex;
-            //int h = listbox.ItemSize.Height;
+                    this[k].Render(g);
+                }
+            }
+        }
 
-            //while (k < _canvas.Count && k < listbox.RowCount)
-            //{
+        private void Calculate(Listbox listbox)
+        {
+            int h = listbox.Size.Height / listbox.RowCount;
+            int t = 0;
 
-            //    k++;
-            //}
+            for (int k = listbox.StartIndex; k < (listbox.StartIndex + listbox.RowCount); k++)
+            {
+                if (k < this.Count)
+                {
+                    this[k].Location = new Point(listbox.Location.X, (h * t) + listbox.Location.Y);
+                    this[k].Size = new Size(listbox.Size.Width, h - 2);
+                }
+
+                t++;
+            }
+        }
+
+        internal void UnselectAll()
+        {
+            for (int k = 0; k < this.Count; k++)
+            {
+                this[k].Selected = false;
+            }
+        }
+
+        public void SetSelected(int index)
+        {
+            for (int k = 0; k < this.Count; k++)
+            {
+                this[k].Selected = false;
+            }
+
+            this[index].Selected = true;
         }
     }
 }
