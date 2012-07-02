@@ -112,8 +112,8 @@ namespace Baro.CoreLibrary.UI.Controls
             chars = CropText(chars, Size.Width);
 
             g._DrawTextC(chars, FontStyle.Font,
-                Location.X + 2,
-                Location.Y + ((Size.Height - FontStyle.Font.FontHeight) / 2),
+                Location.X + 2 + (FontStyle.Font.TextWidth(chars) / 2),
+                Location.Y + (Size.Height / 2),
                 FontStyle.FontColor, FontStyle.HaloColor);
 
             g.EndDrawing();
