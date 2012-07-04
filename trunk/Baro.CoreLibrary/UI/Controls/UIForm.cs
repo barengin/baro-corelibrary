@@ -24,6 +24,7 @@ namespace Baro.CoreLibrary.UI.Controls
             {
                 _mainActivity = value;
                 _canvas.Clear();
+                _canvas.IncRefCounter();
 
                 if (_mainActivity != null)
                 {
