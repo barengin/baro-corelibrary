@@ -32,6 +32,22 @@ namespace Baro.CoreLibrary.UI.Controls
             }
         }
 
+        public void DisableAll()
+        {
+            foreach (var item in this)
+            {
+                item.Enable = false;
+            }
+        }
+
+        public void EnableAll()
+        {
+            foreach (var item in this)
+            {
+                item.Enable = true;
+            }
+        }
+
         public new void Clear()
         {
             foreach (var e in this)

@@ -59,6 +59,10 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public override void Render(G3Canvas g)
         {
+            // TODO: Bu kod UIElement içine yapılacak bir eklenti ile BeforeAdd ve AfterRemove işlemleri
+            // içerisine taşınacak.
+            UICanvas.DisableAll();
+
             g.BeginDrawing();
 
             g.DarkBox(0, 0,
@@ -79,10 +83,10 @@ namespace Baro.CoreLibrary.UI.Controls
 
             // Title Text
             g.DrawText(Title, UICanvas.Encoding, TitleFont, G3Color.BLACK, G3Color.WHITE, TextAlign.Center,
-                new Rectangle(x, y, x + (w / 2), y + (30 / 2)));
+                new Rectangle(x, y, w, 30));
 
             // Message Text
-            g.DrawText(Text, UICanvas.Encoding, Font, G3Color.GRAY, G3Color.WHITE, TextAlign.Left,
+            g.DrawText(Text, UICanvas.Encoding, Font, G3Color.GRAY, G3Color.WHITE, TextAlign.Center,
                 new Rectangle(x, y + 30, w, h));
 
             // Border
