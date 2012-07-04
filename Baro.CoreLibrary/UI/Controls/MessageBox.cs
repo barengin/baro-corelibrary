@@ -62,6 +62,7 @@ namespace Baro.CoreLibrary.UI.Controls
             // TODO: Bu kod UIElement içine yapılacak bir eklenti ile BeforeAdd ve AfterRemove işlemleri
             // içerisine taşınacak.
             UICanvas.DisableAll();
+            this.Enable = true;
 
             g.BeginDrawing();
 
