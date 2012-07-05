@@ -12,5 +12,7 @@ namespace Baro.CoreLibrary.UI.Activities
         public abstract void Create(UIForm form);
 
         public abstract void ExecuteOnce(UIForm form);
+
+        public abstract void ExecuteExit(UIForm form);
     }
 }
