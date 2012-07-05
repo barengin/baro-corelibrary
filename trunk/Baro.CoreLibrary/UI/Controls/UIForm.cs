@@ -22,6 +22,11 @@ namespace Baro.CoreLibrary.UI.Controls
             get { return _mainActivity; }
             set
             {
+                if (_mainActivity != null)
+                {
+                    _mainActivity.ExecuteExit(this);
+                }
+
                 _mainActivity = value;
                 _canvas.Clear();
                 _canvas.IncRefCounter();
