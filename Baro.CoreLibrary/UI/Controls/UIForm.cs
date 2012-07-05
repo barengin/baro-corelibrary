@@ -12,10 +12,20 @@ namespace Baro.CoreLibrary.UI.Controls
 {
     public partial class UIForm : Form
     {
+        private int _refCounter = 0;
+        private int _refMouseHolder = 0;
+
         private G3Canvas _offScreen;
-        private readonly UICanvas _canvas = new UICanvas();
+        private UICanvas _canvas = new UICanvas();
         private Activity _mainActivity;
         private bool _activityExecuted = false;
+
+        public bool NewActivityLoaded { get { return _refCounter != _refMouseHolder; } }
+
+        public void BreakAllOtherEvents()
+        {
+            _refCounter++;
+        }
 
         public Activity Activity
         {
@@ -29,7 +39,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
                 _mainActivity = value;
                 _canvas.Clear();
-                _canvas.IncRefCounter();
+                _refCounter++;
 
                 if (_mainActivity != null)
                 {
@@ -50,6 +60,8 @@ namespace Baro.CoreLibrary.UI.Controls
         public UIForm()
         {
             InitializeComponent();
+
+            this.UICanvas.Parent = this;
         }
 
         public Image BackgroundImage { get; set; }
@@ -110,18 +122,26 @@ namespace Baro.CoreLibrary.UI.Controls
 
         private void UIForm_MouseDown(object sender, MouseEventArgs e)
         {
+            _refMouseHolder = _refCounter;
+
             this.UICanvas.MouseDown(e);
             this.Invalidate();
         }
 
         private void UIForm_MouseUp(object sender, MouseEventArgs e)
         {
+            if (this.NewActivityLoaded)
+                return;
+
             this.UICanvas.MouseUp(e);
             this.Invalidate();
         }
 
         private void UIForm_MouseMove(object sender, MouseEventArgs e)
         {
+            if (this.NewActivityLoaded)
+                return;
+
             this.UICanvas.MouseMove(e);
             this.Invalidate();
         }

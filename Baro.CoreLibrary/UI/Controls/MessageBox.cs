@@ -23,6 +23,7 @@ namespace Baro.CoreLibrary.UI.Controls
             if (HitTest(p))
             {
                 OnClick(EventArgs.Empty);
+                this.UICanvas.Parent.BreakAllOtherEvents();
             }
         }
 

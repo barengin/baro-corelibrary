@@ -9,13 +9,9 @@ namespace Baro.CoreLibrary.UI.Controls
 {
     public class UICanvas : List<UIElement>
     {
-        private int _RefCounter = 0;
         private static Encoding _encoding;
 
-        internal void IncRefCounter()
-        {
-            _RefCounter++;
-        }
+        internal UIForm Parent { get; set; }
 
         public Encoding Encoding
         {
@@ -79,7 +75,6 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal void MouseDown(System.Windows.Forms.MouseEventArgs e)
         {
-            int rc = _RefCounter;
             Point p = new Point(e.X, e.Y);
 
             for (int i = this.Count - 1; i >= 0; i--)
@@ -92,7 +87,7 @@ namespace Baro.CoreLibrary.UI.Controls
                     {
                         m.MouseDown(p);
 
-                        if (rc != _RefCounter)
+                        if (this.Parent != null && this.Parent.NewActivityLoaded)
                             break;
                     }
                 }
@@ -101,7 +96,6 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal void MouseUp(System.Windows.Forms.MouseEventArgs e)
         {
-            int rc = _RefCounter;
             Point p = new Point(e.X, e.Y);
 
             for (int i = this.Count - 1; i >= 0; i--)
@@ -114,7 +108,7 @@ namespace Baro.CoreLibrary.UI.Controls
                     {
                         m.MouseUp(p);
 
-                        if (rc != _RefCounter)
+                        if (this.Parent != null && this.Parent.NewActivityLoaded)
                             break;
                     }
                 }
@@ -123,7 +117,6 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal void MouseMove(System.Windows.Forms.MouseEventArgs e)
         {
-            int rc = _RefCounter;
             Point p = new Point(e.X, e.Y);
 
             for (int i = this.Count - 1; i >= 0; i--)
@@ -135,8 +128,8 @@ namespace Baro.CoreLibrary.UI.Controls
                     if (m.Visible && m.Enable)
                     {
                         m.MouseMove(p);
-                        
-                        if (rc != _RefCounter)
+
+                        if (this.Parent != null && this.Parent.NewActivityLoaded)
                             break;
                     }
                 }
