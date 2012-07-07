@@ -7,6 +7,8 @@ namespace Baro.CoreLibrary.UI.Activities
 {
     public abstract class Activity
     {
+        public TransitionEffects Transition { get; set; }
+
         public UIForm Form { get; internal set; }
 
         public abstract void Create(UIForm form);
