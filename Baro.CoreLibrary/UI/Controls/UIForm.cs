@@ -7,6 +7,7 @@ using Baro.CoreLibrary;
 using Baro.CoreLibrary.Extensions;
 using Baro.CoreLibrary.UI.Activities;
 using Baro.CoreLibrary.G3;
+using System.Threading;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
@@ -39,7 +40,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
                 _mainActivity = value;
                 _canvas.Clear();
-                _refCounter++;
+                BreakAllOtherEvents();
 
                 if (_mainActivity != null)
                 {
@@ -100,17 +101,98 @@ namespace Baro.CoreLibrary.UI.Controls
             // Render
             _canvas.Render(_offScreen);
 
-            // Ekrana çiz
-            _offScreen.Surface.DrawCanvas(e.Graphics, e.ClipRectangle);
-
             // ExecuteOnce
-            if (Activity != null)
+            // Activity varsa ve Execute edilmemişse.
+            if (Activity != null && !_activityExecuted)
             {
-                if (!_activityExecuted)
+                if (Activity.Transition != TransitionEffects.None)
                 {
-                    Activity.ExecuteOnce(this);
-                    _activityExecuted = true;
+                    // Transition here
+                    MakeTransition(Activity.Transition, e.Graphics);
                 }
+                else
+                {
+                    // Ekrana çiz
+                    _offScreen.Surface.DrawCanvas(e.Graphics, e.ClipRectangle);
+                }
+
+                _activityExecuted = true;
+                Activity.ExecuteOnce(this);
+            }
+            else
+            {
+                // Ekrana çiz
+                _offScreen.Surface.DrawCanvas(e.Graphics, e.ClipRectangle);
+            }
+        }
+
+        private void MakeTransition(TransitionEffects transitionEffects, Graphics g)
+        {
+            switch (transitionEffects)
+            {
+                case TransitionEffects.None:
+                    _offScreen.Surface.DrawCanvas(g, 0, 0);
+                    break;
+
+                case TransitionEffects.FromBottom:
+                    {
+                        int h = Screen.PrimaryScreen.Bounds.Height;
+
+                        for (int k = h; k > 0; k = k - 10)
+                        {
+                            _offScreen.Surface.DrawCanvas(g, 0, k);
+                            Thread.Sleep(2);
+                        }
+
+                        _offScreen.Surface.DrawCanvas(g, 0, 0);
+                    }
+                    break;
+                
+                case TransitionEffects.FromTop:
+                    {
+                        int h = Screen.PrimaryScreen.Bounds.Height;
+
+                        for (int k = -h; k < 0; k = k + 10)
+                        {
+                            _offScreen.Surface.DrawCanvas(g, 0, k);
+                            Thread.Sleep(2);
+                        }
+
+                        _offScreen.Surface.DrawCanvas(g, 0, 0);
+                    }
+                    break;
+                
+                case TransitionEffects.FromLeft:
+                    {
+                        int w = Screen.PrimaryScreen.Bounds.Width;
+
+                        for (int k = -w; k < 0; k = k + 10)
+                        {
+                            _offScreen.Surface.DrawCanvas(g, k, 0);
+                            Thread.Sleep(2);
+                        }
+
+                        _offScreen.Surface.DrawCanvas(g, 0, 0);
+                    }
+                    break;
+                
+                case TransitionEffects.FromRight:
+                    {
+                        int w = Screen.PrimaryScreen.Bounds.Width;
+
+                        for (int k = w; k > 0; k = k - 10)
+                        {
+                            _offScreen.Surface.DrawCanvas(g, k, 0);
+                            Thread.Sleep(2);
+                        }
+
+                        _offScreen.Surface.DrawCanvas(g, 0, 0);
+                    }
+                    break;
+                
+                default:
+                    _offScreen.Surface.DrawCanvas(g, 0, 0);
+                    break;
             }
         }
 
