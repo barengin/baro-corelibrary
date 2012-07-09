@@ -9,25 +9,16 @@ namespace Baro.CoreLibrary.Media
     {
         // Fields
         private byte[] mBuffer;
-        private string mSoundLocation;
+        private string mSoundLocation = string.Empty;
         private Stream mStream;
-        private object mTag;
-
-        // Methods
-        public SoundPlayer()
-        {
-            this.mSoundLocation = "";
-        }
 
         public SoundPlayer(Stream stream)
         {
-            this.mSoundLocation = "";
             this.Stream = stream;
         }
 
         public SoundPlayer(string soundLocation)
         {
-            this.mSoundLocation = "";
             this.SoundLocation = soundLocation;
         }
 
@@ -91,6 +82,7 @@ namespace Baro.CoreLibrary.Media
             set
             {
                 this.mStream = value;
+
                 if (value == null)
                 {
                     this.mBuffer = null;
@@ -105,16 +97,6 @@ namespace Baro.CoreLibrary.Media
             }
         }
 
-        public object Tag
-        {
-            get
-            {
-                return this.mTag;
-            }
-            set
-            {
-                this.mTag = value;
-            }
-        }
+        public object Tag { get; set; }
     }
 }
