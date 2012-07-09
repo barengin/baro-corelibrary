@@ -8,6 +8,7 @@ using Baro.CoreLibrary.Extensions;
 using Baro.CoreLibrary.UI.Activities;
 using Baro.CoreLibrary.G3;
 using System.Threading;
+using Baro.CoreLibrary.Core;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
@@ -141,7 +142,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = h; k > 0; k = k - 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, 0, k);
-                            Thread.Sleep(2);
+                            SynchSleep.Go(2);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
@@ -155,7 +156,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = -h; k < 0; k = k + 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, 0, k);
-                            Thread.Sleep(2);
+                            SynchSleep.Go(2);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
@@ -169,7 +170,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = -w; k < 0; k = k + 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, k, 0);
-                            Thread.Sleep(2);
+                            SynchSleep.Go(2);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
@@ -183,7 +184,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = w; k > 0; k = k - 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, k, 0);
-                            Thread.Sleep(2);
+                            SynchSleep.Go(2);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
