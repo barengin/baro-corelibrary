@@ -11,11 +11,13 @@ namespace Baro.CoreLibrary.UI.Controls
     {
         public string Text { get; set; }
         public CompoundFont FontStyle { get; set; }
+        public TextAlign TextAlign { get; set; }
 
         public StaticLabel()
             : base()
         {
             this.FontStyle = new CompoundFont(null, G3Color.BLACK, G3Color.WHITE);
+            this.TextAlign = TextAlign.Left;
         }
 
         internal override void MouseDown(System.Drawing.Point p)
@@ -34,7 +36,7 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             g.BeginDrawing();
             g.DrawText(Text, UICanvas.Encoding, FontStyle.Font, FontStyle.FontColor, 
-                FontStyle.HaloColor, TextAlign.Left, this.Bound);
+                FontStyle.HaloColor, this.TextAlign, this.Bound);
             g.EndDrawing();
         }
 
