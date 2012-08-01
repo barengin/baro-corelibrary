@@ -105,6 +105,8 @@
     <Compile Include="Device\HasKeyboard.cs" />
     <Compile Include="Device\UnattendedMode.cs" />
     <Compile Include="Extensions\GDITools.cs" />
+    <Compile Include="Funtoro\FuntoroInternet.cs" />
+    <Compile Include="Funtoro\FuntoroLib.cs" />
     <Compile Include="GdiPlus\BitmapPlus.cs" />
     <Compile Include="GdiPlus\BrushPlus.cs" />
     <Compile Include="GdiPlus\ColorConverter.cs" />
@@ -141,6 +143,28 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GdiPlus\Stubs.cs" />
+    <Compile Include="OpenNETCF\Native\RASCONN.cs" />
+    <Compile Include="OpenNETCF\Native\RASCONNSTATUS.cs" />
+    <Compile Include="OpenNETCF\Native\RASDEVINFO.cs" />
+    <Compile Include="OpenNETCF\Native\RASDIALPARAMS.cs" />
+    <Compile Include="OpenNETCF\Native\RASENTRY.cs" />
+    <Compile Include="OpenNETCF\Ras\AdvancedMarshaler.cs" />
+    <Compile Include="OpenNETCF\Ras\ConnectionOptions.cs" />
+    <Compile Include="OpenNETCF\Ras\ConnectionStatus.cs" />
+    <Compile Include="OpenNETCF\Ras\DeviceInfo.cs" />
+    <Compile Include="OpenNETCF\Ras\LogFile.cs" />
+    <Compile Include="OpenNETCF\Ras\MarshalStructs.cs" />
+    <Compile Include="OpenNETCF\Ras\MessageHook.cs" />
+    <Compile Include="OpenNETCF\Ras\MyMessageWindow.cs" />
+    <Compile Include="OpenNETCF\Ras\Native.cs" />
+    <Compile Include="OpenNETCF\Ras\RAS.cs" />
+    <Compile Include="OpenNETCF\Ras\RasConnection.cs" />
+    <Compile Include="OpenNETCF\Ras\RasConnState.cs" />
+    <Compile Include="OpenNETCF\Ras\RasDialParams.cs" />
+    <Compile Include="OpenNETCF\Ras\RasEntry.cs" />
+    <Compile Include="OpenNETCF\Ras\RasEntryCollection.cs" />
+    <Compile Include="OpenNETCF\Ras\RasEntryName.cs" />
+    <Compile Include="OpenNETCF\Ras\RasError.cs" />
     <Compile Include="UI\Controls\Structs.cs" />
     <Compile Include="UI\Controls\CompoundFont.cs" />
     <Compile Include="UI\Controls\Listbox.cs" />
