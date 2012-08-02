@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Baro.CoreLibrary.Serializer2;
-using System.Runtime.InteropServices;
 
 namespace Baro.CoreLibrary.SockServer
 {
