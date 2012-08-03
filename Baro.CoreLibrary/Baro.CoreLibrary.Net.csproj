@@ -68,6 +68,7 @@
     <Compile Include="CoordSys\CoordSysLambert.cs" />
     <Compile Include="CoordSys\CoordSysMercator.cs" />
     <Compile Include="CoordSys\CoordSysOSGB.cs" />
+    <Compile Include="Core\ConsoleHelper.cs" />
     <Compile Include="Core\DescriptionAttribute.cs" />
     <Compile Include="Core\SystemDLL.cs" />
     <Compile Include="Core\ThreadSafeRandom.cs" />
