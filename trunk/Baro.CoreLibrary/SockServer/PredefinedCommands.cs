@@ -24,30 +24,6 @@ namespace Baro.CoreLibrary.SockServer
             public string password;
         }
 
-        [Description("Diğer kullanıcılardan hangilerinin online/offline olduğunu anlamak için sunucudan istemcilere gönderilir", "OnlineNotification")]
-        [StructLayout(LayoutKind.Sequential)]
-        [MessageAttribute(ID = 11)]
-        public struct OnlineNotification
-        {
-            [Description("Inbox no", "Inbox: {0}")]
-            public ushort userInbox;
-
-            [Description("Online olup olmadığı", "Online: {0}")]
-            public bool online;
-        }
-
-        [Description("Bir kullanıcının online olup olmadığı bilgisinin otomatik gelmesi için sisteme kayıt yapar.", "RegisterForOnlineNotification")]
-        [StructLayout(LayoutKind.Sequential)]
-        [MessageAttribute(ID = 12)]
-        public struct RegisterForOnlineNotification
-        {
-            [Description("Inbox no", "Inbox: {0}")]
-            public ushort registeredInbox;
-
-            [Description("Register", "Register/UnRegister: {0}")]
-            public bool register;
-        }
-
         [Description("Keep-Alive")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 13)]
@@ -57,12 +33,57 @@ namespace Baro.CoreLibrary.SockServer
             public byte dummy;
         }
 
+        [Description("MsgList")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 20)]
+        public struct MsgList
+        {
+            [Description("Query", "Query")]
+            public string Query;
+        }
+
+        [Description("MsgListResult")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 21)]
+        public struct MsgListResult
+        {
+            [Description("QueryResult", "QueryResult")]
+            public string Result;
+        }
+
+        [Description("MsgGet")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 22)]
+        public struct MsgGet
+        {
+            [Description("id", "id")]
+            public string MsgId;
+        }
+
+        [Description("MsgDelete")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 23)]
+        public struct MsgDelete
+        {
+            [Description("id", "id")]
+            public string MsgId;
+        }
+
         public static void Init()
         {
+            Message.UnRegisterMessageType(typeof(Login));
+            Message.UnRegisterMessageType(typeof(KeepAlive));
+            Message.UnRegisterMessageType(typeof(MsgList));
+            Message.UnRegisterMessageType(typeof(MsgListResult));
+            Message.UnRegisterMessageType(typeof(MsgGet));
+            Message.UnRegisterMessageType(typeof(MsgDelete));
+
             Message.RegisterMessageType(typeof(Login));
-            Message.RegisterMessageType(typeof(OnlineNotification));
-            Message.RegisterMessageType(typeof(RegisterForOnlineNotification));
             Message.RegisterMessageType(typeof(KeepAlive));
+            Message.RegisterMessageType(typeof(MsgList));
+            Message.RegisterMessageType(typeof(MsgListResult));
+            Message.RegisterMessageType(typeof(MsgGet));
+            Message.RegisterMessageType(typeof(MsgDelete));
         }
     }
 }
