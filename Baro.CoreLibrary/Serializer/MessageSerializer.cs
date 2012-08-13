@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using Baro.CoreLibrary.Core;
 
 namespace Baro.CoreLibrary.Serializer2
 {
@@ -179,6 +180,13 @@ namespace Baro.CoreLibrary.Serializer2
 
             // Internal header
             MessageInternalHeader iHeader = msgInfo.CreateInternalHeader();
+
+            // Unique ID
+            UniqueID uid = UniqueID.CreateNew();
+            iHeader.UniqueID1 = uid.Data1;
+            iHeader.UniqueID2 = uid.Data2;
+            iHeader.UniqueID3 = uid.Data3;
+            iHeader.UniqueID4 = uid.Data4;
 
             // CommandID
             iHeader.CommandID = MessageAttribute.GetMessageID(command);

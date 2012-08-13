@@ -6,7 +6,34 @@ using System.Text;
 namespace Baro.CoreLibrary
 {
 #if PocketPC || WindowsCE
-    // ThreadSafeRandom CF üzerinde desteklenmiyor!
+    public static class ThreadSafeRandom
+    {
+        private static volatile Random s_global;
+
+        private static Random global
+        {
+            get
+            {
+                return s_global ?? (s_global = new Random());
+            }
+        }
+
+        public static int NextWithNeg()
+        {
+            lock (global) 
+            {
+                return global.Next(int.MinValue, int.MaxValue);
+            }
+        }
+
+        public static int Next()
+        {
+            lock (global) 
+            {
+                return global.Next();
+            }
+        }
+    }
 #else
     public static class ThreadSafeRandom
     {
@@ -35,6 +62,20 @@ namespace Baro.CoreLibrary
             }
 
             inst.NextBytes(buffer);
+        }
+
+        public static int NextWithNeg()
+        {
+            Random inst = _local;
+
+            if (inst == null)
+            {
+                int seed;
+                lock (global) seed = global.Next();
+                _local = inst = new Random(seed);
+            }
+
+            return inst.Next(int.MinValue, int.MaxValue);
         }
 
         public static int Next()
