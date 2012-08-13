@@ -64,6 +64,25 @@ namespace Baro.CoreLibrary
             inst.NextBytes(buffer);
         }
 
+        /// <summary>
+        /// Aynı thread içerisinde kullanılabilir.
+        /// Kesinlikle diğer methodlara parametre geçilmemeli.
+        /// </summary>
+        /// <returns></returns>
+        public static Random ThreadSafeRandomObj()
+        {
+            Random inst = _local;
+
+            if (inst == null)
+            {
+                int seed;
+                lock (global) seed = global.Next();
+                _local = inst = new Random(seed);
+            }
+
+            return inst;
+        }
+
         public static int NextWithNeg()
         {
             Random inst = _local;
