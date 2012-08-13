@@ -74,6 +74,7 @@
     <Compile Include="Core\SystemDLL.cs" />
     <Compile Include="Core\ThreadSafeRandom.cs" />
     <Compile Include="Core\ThreadStaticBuffer.cs" />
+    <Compile Include="Core\UniqueID.cs" />
     <Compile Include="GdiPlus\BitmapPlus.cs" />
     <Compile Include="GdiPlus\BrushPlus.cs" />
     <Compile Include="GdiPlus\ColorConverter.cs" />

@@ -77,27 +77,39 @@ namespace Baro.CoreLibrary.Serializer2
         // Message SIZE
         [Description("Size", "Size: {0}")]
         public Int32 Size;
-        
+
         // Corr-ID
         [Description("CorrelationID", "CorrelationID: {0}")]
-        public Int32 CorrelationID;        
-        
+        public Int32 CorrelationID;
+
         // CmdID
         [Description("CommandID", "CommandID: {0}")]
-        public UInt16 CommandID;           
-        
+        public UInt16 CommandID;
+
         // Serialize as BYTE
         [Description("Structure", "Structure: {0}")]
-        public MessageStructure Structure; 
-        
+        public MessageStructure Structure;
+
         // CRC
         [Description("CRC", "CRC: {0}")]
-        public Int32 CRC;                  
-        
+        public Int32 CRC;
+
         // ToInbox
         [Description("ToInbox", "ToInbox: {0}")]
-        public UInt16 ToInbox;             
-        
+        public UInt16 ToInbox;
+
+        [Description("UniqueID1", "UniqueID1: {0}")]
+        public UInt32 UniqueID1;
+
+        [Description("UniqueID2", "UniqueID2: {0}")]
+        public UInt32 UniqueID2;
+
+        [Description("UniqueID3", "UniqueID3: {0}")]
+        public UInt32 UniqueID3;
+
+        [Description("UniqueID4", "UniqueID4: {0}")]
+        public UInt32 UniqueID4;
+
         // Expire Date
         [Description("ExpireDate", "ExpireDate: {0}")]
         public DateTime ExpireDate;
