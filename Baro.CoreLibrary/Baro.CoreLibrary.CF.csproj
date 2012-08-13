@@ -97,6 +97,7 @@
     <Compile Include="Core\SynchSleep.cs" />
     <Compile Include="Core\SystemDLL.cs" />
     <Compile Include="Core\ThreadSafeRandom.cs" />
+    <Compile Include="Core\UniqueID.cs" />
     <Compile Include="Crc\Crc.cs" />
     <Compile Include="Crc\Crc32.cs" />
     <Compile Include="Device\DeviceID.cs" />
