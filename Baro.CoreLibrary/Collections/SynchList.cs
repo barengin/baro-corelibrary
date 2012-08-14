@@ -8,8 +8,13 @@ namespace Baro.CoreLibrary.Collections
 {
     public sealed class SynchList<T> : IList<T>
     {
-        private ReaderWriterLockSlim m_lock = new ReaderWriterLockSlim();
         private List<T> m_list = new List<T>();
+
+#if PocketPC || WindowsCE
+        private object m_synch = new object();
+#else
+        private ReaderWriterLockSlim m_lock = new ReaderWriterLockSlim();
+#endif
 
         private void WriteLocked(Action f)
         {
@@ -181,6 +186,25 @@ namespace Baro.CoreLibrary.Collections
             WriteLocked(() => { m_list.Add(item); });
         }
 
+#if PocketPC || WindowsCE
+        public bool Dequeue(out T item)
+        {
+            lock (m_synch)
+            {
+                if (m_list.Count == 0)
+                {
+                    item = default(T);
+                    return false;
+                }
+
+                int lastItem = m_list.Count - 1;
+                item = m_list[lastItem];
+                m_list.RemoveAt(lastItem);
+
+                return true;
+            }
+        }
+#else
         public bool Dequeue(out T item)
         {
             m_lock.EnterWriteLock();
@@ -204,5 +228,6 @@ namespace Baro.CoreLibrary.Collections
                 m_lock.ExitWriteLock();
             }
         }
+#endif
     }
 }
