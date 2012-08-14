@@ -81,6 +81,7 @@
     <Compile Include="Collections\PQueueInt.cs" />
     <Compile Include="Collections\SynchBiDictionary.cs" />
     <Compile Include="Collections\SynchDictionary.cs" />
+    <Compile Include="Collections\SynchList.cs" />
     <Compile Include="Configuration\ConfigIni.cs" />
     <Compile Include="Configuration\ConfigIniSection.cs" />
     <Compile Include="Configuration\ConfigRepositoryException.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="OpenNETCF\Ras\RasEntryCollection.cs" />
     <Compile Include="OpenNETCF\Ras\RasEntryName.cs" />
     <Compile Include="OpenNETCF\Ras\RasError.cs" />
+    <Compile Include="SockServer\PredefinedCommands.cs" />
     <Compile Include="UI\Controls\Structs.cs" />
     <Compile Include="UI\Controls\CompoundFont.cs" />
     <Compile Include="UI\Controls\Listbox.cs" />
