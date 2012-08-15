@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using Baro.CoreLibrary.Core;
 
 namespace Baro.CoreLibrary.Serializer2
 {
@@ -70,7 +71,7 @@ namespace Baro.CoreLibrary.Serializer2
 #if PocketPC || WindowsCE
     [StructLayout(LayoutKind.Sequential)]
 #else
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential)]
 #endif
     public struct MessageInternalHeader
     {
@@ -122,6 +123,11 @@ namespace Baro.CoreLibrary.Serializer2
                 ExpireDate = this.ExpireDate,
                 ToInbox = this.ToInbox
             };
+        }
+
+        public UniqueID GetMsgID()
+        {
+            return new UniqueID(UniqueID1, UniqueID2, UniqueID3, UniqueID4);
         }
 
         internal bool isCrcOk()
