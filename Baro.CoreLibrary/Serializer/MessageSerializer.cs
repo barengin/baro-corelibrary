@@ -11,7 +11,7 @@ namespace Baro.CoreLibrary.Serializer2
     {
         public byte[] buf8 = new byte[8];
         public byte[] data = new byte[128];
-        public int size = Marshal.SizeOf(typeof(MessageInternalHeader));
+        public int size = Message.MESSAGE_INTERNAL_HEADER_SIZE;
 
         public void grow(int requiredFreeSize)
         {

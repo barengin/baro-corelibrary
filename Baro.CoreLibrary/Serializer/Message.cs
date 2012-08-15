@@ -8,7 +8,7 @@ namespace Baro.CoreLibrary.Serializer2
 {
     public sealed class Message
     {
-        public readonly static int MESSAGE_INTERNAL_HEADER_SIZE = Marshal.SizeOf(typeof(MessageInternalHeader));
+        public const int MESSAGE_INTERNAL_HEADER_SIZE = 41;
 
         private const int UNCOMPRESS_BUFFER_POOL_SIZE = 32;
         private const int UNCOMPRESS_BUFFER_SIZE = 1024 * 24;
