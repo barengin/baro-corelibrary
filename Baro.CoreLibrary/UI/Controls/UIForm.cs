@@ -50,7 +50,14 @@ namespace Baro.CoreLibrary.UI.Controls
                     _activityExecuted = false;
                 }
 
-                this.Invalidate();
+                if (this.InvokeRequired)
+                {
+                    Action d = delegate() { this.Invalidate(); };
+
+                    this.Invoke(d);
+                }
+                else
+                    this.Invalidate();
             }
         }
 
@@ -148,7 +155,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
                     }
                     break;
-                
+
                 case TransitionEffects.FromTop:
                     {
                         int h = Screen.PrimaryScreen.Bounds.Height;
@@ -162,7 +169,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
                     }
                     break;
-                
+
                 case TransitionEffects.FromLeft:
                     {
                         int w = Screen.PrimaryScreen.Bounds.Width;
@@ -176,7 +183,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
                     }
                     break;
-                
+
                 case TransitionEffects.FromRight:
                     {
                         int w = Screen.PrimaryScreen.Bounds.Width;
@@ -190,7 +197,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
                     }
                     break;
-                
+
                 default:
                     _offScreen.Surface.DrawCanvas(g, 0, 0);
                     break;
