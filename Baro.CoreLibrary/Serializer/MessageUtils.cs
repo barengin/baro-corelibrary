@@ -44,11 +44,32 @@ namespace Baro.CoreLibrary.Serializer2
         public UInt16 ToInbox;
         public DateTime ExpireDate;
 
-        public MessageInfo(DateTime expireDate)
+        public MessageInfo()
         {
-            this.ExpireDate = expireDate;
+            this.ExpireDate = DateTime.Now + new TimeSpan(48, 0, 0);
             this.ToInbox = 0;
             this.CorrelationID = Environment.TickCount;
+        }
+
+        public MessageInfo(ushort toInbox)
+        {
+            this.ExpireDate = DateTime.Now + new TimeSpan(48, 0, 0);
+            this.ToInbox = toInbox;
+            this.CorrelationID = Environment.TickCount;
+        }
+
+        public MessageInfo(ushort toInbox, int hours)
+        {
+            this.ExpireDate = DateTime.Now + new TimeSpan(hours, 0, 0);
+            this.ToInbox = toInbox;
+            this.CorrelationID = Environment.TickCount;
+        }
+
+        public MessageInfo(ushort toInbox, int hours, int correlationID)
+        {
+            this.ExpireDate = DateTime.Now + new TimeSpan(hours, 0, 0);
+            this.ToInbox = toInbox;
+            this.CorrelationID = correlationID;
         }
 
         internal MessageInternalHeader CreateInternalHeader()
