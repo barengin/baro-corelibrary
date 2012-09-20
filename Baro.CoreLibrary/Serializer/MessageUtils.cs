@@ -44,13 +44,6 @@ namespace Baro.CoreLibrary.Serializer2
         public UInt16 ToInbox;
         public DateTime ExpireDate;
 
-        public MessageInfo()
-        {
-            this.ExpireDate = DateTime.Now + new TimeSpan(48, 0, 0);
-            this.ToInbox = 0;
-            this.CorrelationID = Environment.TickCount;
-        }
-
         public MessageInfo(ushort toInbox)
         {
             this.ExpireDate = DateTime.Now + new TimeSpan(48, 0, 0);
