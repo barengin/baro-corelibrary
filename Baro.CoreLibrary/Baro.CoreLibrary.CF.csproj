@@ -95,6 +95,7 @@
     <Compile Include="CoordSys\CoordSysOSGB.cs" />
     <Compile Include="Core\DescriptionAttribute.cs" />
     <Compile Include="Core\MathInt.cs" />
+    <Compile Include="Core\RandomC5.cs" />
     <Compile Include="Core\SynchSleep.cs" />
     <Compile Include="Core\SystemDLL.cs" />
     <Compile Include="Core\ThreadSafeRandom.cs" />
