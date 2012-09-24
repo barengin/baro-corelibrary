@@ -2,7 +2,7 @@
 <users xmlns="http://www.basarsoft.com.tr/schemas/aaav1.xsd">
 
   <!-- TS Servisinin bağlandığı ve sahadaki cihazlara ROTA gönderdiği account -->
-  <user usr="server" pwd="server">
+  <user usr="server" pwd="server" adduser="1" removeuser="1" keyquery="1">
     <keys>
       <attr key="plate" value="ybserver" />
     </keys>
