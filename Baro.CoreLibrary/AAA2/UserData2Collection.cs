@@ -222,5 +222,37 @@ namespace Baro.CoreLibrary.AAA2
                 m_lock.ExitReadLock();
             }
         }
+
+        internal void CreateFromXml(XmlReader xml)
+        {
+            while (xml.Read())
+            {
+                if (xml.NodeType == XmlNodeType.EndElement && xml.Name == "data")
+                {
+                    break;
+                }
+
+                if (xml.NodeType == XmlNodeType.Element && xml.Name == "attr")
+                {
+                    this.Add(xml["key"], xml["value"]);
+                }
+            }
+        }
+
+        internal void CreateKeys(XmlReader xml)
+        {
+            while (xml.Read())
+            {
+                if (xml.NodeType == XmlNodeType.EndElement && xml.Name == "keys")
+                {
+                    break;
+                }
+
+                if (xml.NodeType == XmlNodeType.Element && xml.Name == "attr")
+                {
+                    this.Add("Keys." + xml["key"], xml["value"]);
+                }
+            }
+        }
     }
 }

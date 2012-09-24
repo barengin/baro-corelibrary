@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Collections.Concurrent;
+using System.Xml;
 
 namespace Baro.CoreLibrary.AAA2
 {
@@ -11,6 +12,62 @@ namespace Baro.CoreLibrary.AAA2
     {
         ConcurrentDictionary<string, User2> _users = new ConcurrentDictionary<string, User2>(Environment.ProcessorCount, 20000);
         Keys _keys = new Keys();
+
+        public AAA2Server(string xmlfile)
+        {
+            LoadXml(xmlfile);
+        }
+
+        private void LoadXml(string xmlfile)
+        {
+            XmlReader xml = XmlReader.Create(xmlfile);
+            xml.ReadToFollowing("users"); // root
+
+            try
+            {
+                while (xml.Read())
+                {
+                    if (xml.NodeType == XmlNodeType.EndElement && xml.Name == "users")
+                    {
+                        break;
+                    }
+
+                    if (xml.NodeType == XmlNodeType.Element && xml.Name == "user")
+                    {
+                        User2 user = User2.CreateFromXml(xml);
+
+                        if (!_users.TryAdd(user.Credential.Username, user))
+                        {
+                            throw new ArgumentException("Bu isimde bir kullanıcı zaten sistemde kaytlı. " + user.Credential.Username);
+                        }
+
+                        UserData2[] data = user.Data.Search("Keys.*");
+
+                        foreach (var item in data)
+                        {
+                            string keyName = item.Key.Substring(5);
+
+                            if (!_keys.Contains(keyName))
+                            {
+                                _keys.Add(keyName);
+                            }
+
+                            Key k;
+                            if (_keys.TryGetKey(keyName, out k))
+                            {
+                                k.Add(item.Value, user);
+                            }
+
+                            user.Data.Remove(item.Key);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                xml.Close();
+            }
+        }
 
         private AAA2ErrorCode GetUser(AAA2Credential credential, out User2 user)
         {
