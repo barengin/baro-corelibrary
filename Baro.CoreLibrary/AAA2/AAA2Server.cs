@@ -5,20 +5,39 @@ using System.Text;
 using System.Threading;
 using System.Collections.Concurrent;
 using System.Xml;
+using System.IO;
 
 namespace Baro.CoreLibrary.AAA2
 {
     public sealed class AAA2Server: IAAA2
     {
-        ConcurrentDictionary<string, User2> _users = new ConcurrentDictionary<string, User2>(Environment.ProcessorCount, 20000);
-        Keys _keys = new Keys();
+        private FileSystemWatcher _xmlWatcher = new FileSystemWatcher();
+        private volatile ConcurrentDictionary<string, User2> _users = new ConcurrentDictionary<string, User2>(Environment.ProcessorCount, 20000);
+        private Keys _keys = new Keys();
 
         public AAA2Server(string xmlfile)
         {
-            LoadXml(xmlfile);
+            LoadXml(xmlfile, _users);
+
+            _xmlWatcher.Filter = Path.GetFileName(xmlfile);
+            _xmlWatcher.IncludeSubdirectories = false;
+            _xmlWatcher.NotifyFilter = NotifyFilters.Size;
+            _xmlWatcher.Path = Path.GetDirectoryName(xmlfile);
+            _xmlWatcher.EnableRaisingEvents = true;
+
+            _xmlWatcher.Changed += new FileSystemEventHandler(_xmlWatcher_Changed);
         }
 
-        private void LoadXml(string xmlfile)
+        void _xmlWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            ConcurrentDictionary<string, User2> u = new ConcurrentDictionary<string, User2>(Environment.ProcessorCount, 20000);
+
+            LoadXml(e.FullPath, u);
+
+            _users = u;
+        }
+
+        private void LoadXml(string xmlfile, ConcurrentDictionary<string, User2> dict)
         {
             XmlReader xml = XmlReader.Create(xmlfile);
             xml.ReadToFollowing("users"); // root
@@ -36,7 +55,7 @@ namespace Baro.CoreLibrary.AAA2
                     {
                         User2 user = User2.CreateFromXml(xml);
 
-                        if (!_users.TryAdd(user.Credential.Username, user))
+                        if (!dict.TryAdd(user.Credential.Username, user))
                         {
                             throw new ArgumentException("Bu isimde bir kullanıcı zaten sistemde kaytlı. " + user.Credential.Username);
                         }
