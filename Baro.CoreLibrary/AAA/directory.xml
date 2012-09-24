@@ -1,13 +1,57 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <users>
-  <user usr="engin" pwd="1">
+  <!-- TS Servisinin bağlandığı ve sahadaki cihazlara ROTA gönderdiği account -->
+  <user usr="server" pwd="server" keyquery="1" removeuser="1" adduser="1">
     <data>
-      <attr key="inbox" value="49" />
+      <attr key="inbox" value="10" />
+      <attr key="plate" value="ybserver" />
     </data>
   </user>
-  <user usr="baris" pwd="1">
+
+  <!-- Sahadaki cihazlara mesaj göndermek için WEB Sayfasının kullandığı account -->
+  <user usr="server11" pwd="server11" keyquery="1">
     <data>
-      <attr key="inbox" value="48" />
+      <attr key="inbox" value="11" />
+      <attr key="plate" value="msgserver" />
+    </data>
+  </user>
+
+  <!-- Yukarıdaki iki değere hiç dokunmayacağız -->
+
+  <!-- Aşağıdaki account'ların inbox değerleri giderek artan sayı olmalı.
+	   Yazılım çalşırken ve durdurulduğu halde inbox değerlerinin değişmemesi gerekiyor.
+	   Çünkü ilgili inbox içinde disk'e kaydedilmiş ve bekleyen mesajlar olabilir.
+	   
+	   Yeni kayıtlar eklenebilir sorunsuzca.
+	   
+	   #...# arasındaki değerler kullanıcı tarafından doldurulmalı.
+  -->
+
+  <user usr="#ip_address#" pwd="#pin_code#">
+    <keys>
+      <attr key="plate" value="06AD5409" />
+    </keys>
+    
+    <data>
+      <attr key="yolbilserver.inbox" value="10005" />
+      <attr key="yolbilserver.data" value="10005" />
+      <attr key="tsservice.plate" value="#araç_plakası#" />
+    </data>
+  </user>
+
+
+  <!-- Aşağıdaki ikisi DEMO için kullanılan account'lardır. Product'a geçildiğinde silinebilir. -->
+  <user usr="t10000" pwd="p10000">
+    <data>
+      <attr key="inbox" value="10000" />
+      <attr key="plate" value="06BS5409" />
+    </data>
+  </user>
+
+  <user usr="t10001" pwd="p10001">
+    <data>
+      <attr key="inbox" value="10001" />
+      <attr key="plate" value="06BS5410" />
     </data>
   </user>
 </users>
