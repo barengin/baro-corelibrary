@@ -58,6 +58,7 @@ namespace Baro.CoreLibrary.AAA2
                                 k.Add(item.Value, user);
                             }
 
+                            // Bu satırı kaldırırsak kullanıcılar kendi KEY'lerini de görebilirler.
                             user.Data.Remove(item.Key);
                         }
                     }

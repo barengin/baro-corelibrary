@@ -41,7 +41,7 @@ namespace Baro.CoreLibrary.AAA2
                 {
                     if (incrementalSearch)
                     {
-                        return string.Compare(x.Key, y.Key.Substring(0, Math.Min(queryStr.Length, y.Key.Length)));
+                        return string.Compare(x.Key.Substring(0, Math.Min(x.Key.Length, y.Key.Length)), y.Key);
                     }
                     else
                     {
