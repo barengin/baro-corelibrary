@@ -33,7 +33,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Release\Baro.CoreLibrary.Net.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -75,7 +76,6 @@
     <Compile Include="Core\DescriptionAttribute.cs" />
     <Compile Include="Core\Disposable.cs" />
     <Compile Include="Core\RandomC5.cs" />
-    <Compile Include="Core\SelfInstaller.cs" />
     <Compile Include="Core\SystemDLL.cs" />
     <Compile Include="Core\ThreadSafeRandom.cs" />
     <Compile Include="Core\ThreadStaticBuffer.cs" />
