@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<users xmlns="http://www.basarsoft.com.tr/schemas/aaav1.xsd">
+
+  <!-- TS Servisinin bağlandığı ve sahadaki cihazlara ROTA gönderdiği account -->
+  <user usr="server" pwd="server">
+    <keys>
+      <attr key="plate" value="ybserver" />
+    </keys>
+
+    <data>
+      <attr key="inbox" value="10" />
+    </data>
+  </user>
+
+  <!-- Sahadaki cihazlara mesaj göndermek için WEB Sayfasının kullandığı account -->
+  <user usr="server11" pwd="server11">
+    <keys>
+      <attr key="plate" value="msgserver" />
+    </keys>
+
+    <data>
+      <attr key="inbox" value="11" />
+    </data>
+  </user>
+
+  <!-- Yukarıdaki iki değere hiç dokunmayacağız -->
+
+  <!-- Aşağıdaki account'ların inbox değerleri giderek artan sayı olmalı.
+	   Yazılım çalşırken ve durdurulduğu halde inbox değerlerinin değişmemesi gerekiyor.
+	   Çünkü ilgili inbox içinde disk'e kaydedilmiş ve bekleyen mesajlar olabilir.
+	   
+	   Yeni kayıtlar eklenebilir sorunsuzca.
+	   
+	   #...# arasındaki değerler kullanıcı tarafından doldurulmalı.
+  -->
+
+  <user usr="#ip_address#" pwd="#pin_code#">
+    <keys>
+      <attr key="plate" value="#araç_plakası#" />
+      <attr key="ip" value="#cihaz_ip_no#" />
+    </keys>
+    
+    <data>
+      <attr key="inbox" value="10005" />
+    </data>
+  </user>
+
+  <!-- Aşağıdaki ikisi DEMO için kullanılan account'lardır. Product'a geçildiğinde silinebilir. -->
+  <user usr="t10000" pwd="p10000">
+    <keys>
+      <attr key="plate" value="06BS5409" />
+    </keys>
+    <data>
+      <attr key="inbox" value="10000" />
+    </data>
+  </user>
+
+  <user usr="t10001" pwd="p10001">
+    <keys>
+      <attr key="plate" value="06BS5410" />
+    </keys>
+    <data>
+      <attr key="inbox" value="10001" />
+    </data>
+  </user>
+
+</users>

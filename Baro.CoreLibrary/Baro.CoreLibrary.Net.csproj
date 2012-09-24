@@ -220,7 +220,13 @@
     <Compile Include="Text\SimpleStringEncryptor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AAA2\users.xml" />
     <Content Include="AAA\directory.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AAA2\aaav1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
