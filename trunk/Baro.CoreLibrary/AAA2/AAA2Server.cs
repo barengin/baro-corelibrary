@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Baro.CoreLibrary.AAA2
 {
-    public sealed class AAA2Server: IAAA2
+    public sealed class AAA2Server : IAAA2
     {
         private FileSystemWatcher _xmlWatcher = new FileSystemWatcher();
         private volatile ConcurrentDictionary<string, User2> _users = new ConcurrentDictionary<string, User2>(Environment.ProcessorCount, 20000);
@@ -61,25 +61,29 @@ namespace Baro.CoreLibrary.AAA2
                         }
 
                         UserData2[] data = user.Data.Search("Keys.*");
-
-                        foreach (var item in data)
+                        
+                        if (data != null)
                         {
-                            string keyName = item.Key.Substring(5);
-
-                            if (!_keys.Contains(keyName))
+                            foreach (var item in data)
                             {
-                                _keys.Add(keyName);
-                            }
+                                string keyName = item.Key.Substring(5);
 
-                            Key k;
-                            if (_keys.TryGetKey(keyName, out k))
-                            {
-                                k.Add(item.Value, user);
-                            }
+                                if (!_keys.Contains(keyName))
+                                {
+                                    _keys.Add(keyName);
+                                }
 
-                            // Bu satırı kaldırırsak kullanıcılar kendi KEY'lerini de görebilirler.
-                            user.Data.Remove(item.Key);
+                                Key k;
+                                if (_keys.TryGetKey(keyName, out k))
+                                {
+                                    k.Add(item.Value, user);
+                                }
+
+                                // Bu satırı kaldırırsak kullanıcılar kendi KEY'lerini de görebilirler.
+                                user.Data.Remove(item.Key);
+                            }
                         }
+
                     }
                 }
             }
@@ -119,7 +123,7 @@ namespace Baro.CoreLibrary.AAA2
                 return error;
 
             data = user.Data.Search(queryString);
-            
+
             return AAA2ErrorCode.OK;
         }
 
@@ -205,7 +209,7 @@ namespace Baro.CoreLibrary.AAA2
 
             if (error != AAA2ErrorCode.OK)
                 return error;
-            
+
             if (!user.AddUser)
                 return AAA2ErrorCode.PermissionRequired;
 
