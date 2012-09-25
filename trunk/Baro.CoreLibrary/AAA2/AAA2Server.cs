@@ -39,7 +39,8 @@ namespace Baro.CoreLibrary.AAA2
 
         private void LoadXml(string xmlfile, ConcurrentDictionary<string, User2> dict)
         {
-            XmlReader xml = XmlReader.Create(xmlfile);
+            FileStream s = new FileStream(xmlfile, FileMode.Open, FileAccess.Read, FileShare.Read);
+            XmlReader xml = XmlReader.Create(s);
             xml.ReadToFollowing("users"); // root
 
             try
@@ -80,7 +81,7 @@ namespace Baro.CoreLibrary.AAA2
                                 }
 
                                 // Bu satırı kaldırırsak kullanıcılar kendi KEY'lerini de görebilirler.
-                                user.Data.Remove(item.Key);
+                                // user.Data.Remove(item.Key);
                             }
                         }
 
@@ -90,6 +91,7 @@ namespace Baro.CoreLibrary.AAA2
             finally
             {
                 xml.Close();
+                s.Close();
             }
         }
 
