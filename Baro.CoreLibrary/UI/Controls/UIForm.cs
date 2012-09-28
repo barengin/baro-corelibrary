@@ -43,21 +43,24 @@ namespace Baro.CoreLibrary.UI.Controls
                 _canvas.Clear();
                 BreakAllOtherEvents();
 
-                if (_mainActivity != null)
+                Action d = delegate()
                 {
-                    _mainActivity.Form = this;
-                    _mainActivity.Create(this);
-                    _activityExecuted = false;
-                }
+                    if (_mainActivity != null)
+                    {
+                        _mainActivity.Form = this;
+                        _mainActivity.Create(this);
+                        _activityExecuted = false;
+                    }
+
+                    this.Invalidate();
+                };
 
                 if (this.InvokeRequired)
                 {
-                    Action d = delegate() { this.Invalidate(); };
-
                     this.Invoke(d);
                 }
                 else
-                    this.Invalidate();
+                    d();
             }
         }
 
