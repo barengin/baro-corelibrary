@@ -74,6 +74,10 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 30)]
         public struct ServerInfoRequest
         {
+            /// <summary>
+            /// 0 - NOP
+            /// 1 - Get date/time
+            /// </summary>
             [Description("InfoRequest", "InfoRequest {0}")]
             public int InfoRequest;
         }

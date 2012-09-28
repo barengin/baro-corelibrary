@@ -30,9 +30,32 @@ namespace Baro.CoreLibrary.AAA2
 
         void _xmlWatcher_Changed(object sender, FileSystemEventArgs e)
         {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object o)
+                {
+                    Thread.Sleep(100);
+                    ReadXml(o);
+                }), e);
+        }
+
+        void ReadXml(object o)
+        {
+            FileSystemEventArgs e = (FileSystemEventArgs)o;
+
             ConcurrentDictionary<string, User2> u = new ConcurrentDictionary<string, User2>(Environment.ProcessorCount, 20000);
 
-            LoadXml(e.FullPath, u);
+            try
+            {
+                LoadXml(e.FullPath, u);
+            }
+            catch
+            {
+                Thread.Sleep(1000);
+                
+                ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object obj)
+                {
+                    ReadXml(obj);
+                }), e);
+            }
 
             _users = u;
         }
