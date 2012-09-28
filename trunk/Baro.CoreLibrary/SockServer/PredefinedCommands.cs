@@ -69,6 +69,24 @@ namespace Baro.CoreLibrary.SockServer
             public string MsgId;
         }
 
+        [Description("Sunucu ile ilgili bazı bilgilerin sorgulanması", "ServerInfoRequest")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 30)]
+        public struct ServerInfoRequest
+        {
+            [Description("InfoRequest", "InfoRequest {0}")]
+            public int InfoRequest;
+        }
+
+        [Description("Sunucu saati", "ServerDateTimeResponse")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 31)]
+        public struct ServerDateTimeResponse
+        {
+            [Description("DateTime", "DateTime: {0}")]
+            public double DateTime;
+        }
+
         public static void Init()
         {
             Message.UnRegisterMessageType(typeof(Login));
