@@ -95,6 +95,8 @@ namespace Baro.CoreLibrary.SockServer
             Message.UnRegisterMessageType(typeof(MsgListResult));
             Message.UnRegisterMessageType(typeof(MsgGet));
             Message.UnRegisterMessageType(typeof(MsgDelete));
+            Message.UnRegisterMessageType(typeof(ServerInfoRequest));
+            Message.UnRegisterMessageType(typeof(ServerDateTimeResponse));
 
             Message.RegisterMessageType(typeof(Login));
             Message.RegisterMessageType(typeof(KeepAlive));
@@ -102,6 +104,8 @@ namespace Baro.CoreLibrary.SockServer
             Message.RegisterMessageType(typeof(MsgListResult));
             Message.RegisterMessageType(typeof(MsgGet));
             Message.RegisterMessageType(typeof(MsgDelete));
+            Message.RegisterMessageType(typeof(ServerInfoRequest));
+            Message.RegisterMessageType(typeof(ServerDateTimeResponse));
         }
     }
 }
