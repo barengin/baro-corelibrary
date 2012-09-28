@@ -33,6 +33,15 @@ namespace Baro.CoreLibrary.SockServer
             public byte dummy;
         }
 
+        [Description("Ack")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 14)]
+        public struct Ack
+        {
+            [Description("MsgID", "MsgID")]
+            public string MsgId;
+        }
+
         [Description("MsgList")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 20)]
@@ -101,6 +110,7 @@ namespace Baro.CoreLibrary.SockServer
             Message.UnRegisterMessageType(typeof(MsgDelete));
             Message.UnRegisterMessageType(typeof(ServerInfoRequest));
             Message.UnRegisterMessageType(typeof(ServerDateTimeResponse));
+            Message.UnRegisterMessageType(typeof(Ack));
 
             Message.RegisterMessageType(typeof(Login));
             Message.RegisterMessageType(typeof(KeepAlive));
@@ -110,6 +120,7 @@ namespace Baro.CoreLibrary.SockServer
             Message.RegisterMessageType(typeof(MsgDelete));
             Message.RegisterMessageType(typeof(ServerInfoRequest));
             Message.RegisterMessageType(typeof(ServerDateTimeResponse));
+            Message.RegisterMessageType(typeof(Ack));
         }
     }
 }
