@@ -17,14 +17,14 @@ namespace Baro.CoreLibrary
         private ushort _second;
         private ushort _miliseconds;
 
-        public ushort Year { get { return _year; } }
-        public ushort Month { get { return _month; } }
+        public ushort Year { get { return _year; } set { _year = value; } }
+        public ushort Month { get { return _month; } set { _month = value; } }
         public ushort DayOfWeek { get { return _dayOfWeek; } }
-        public ushort Day { get { return _day; } }
-        public ushort Hour { get { return _hour; } }
-        public ushort Minute { get { return _minute; } }
-        public ushort Second { get { return _second; } }
-        public ushort Milliseconds { get { return _miliseconds; } }
+        public ushort Day { get { return _day; } set { _day = value; } }
+        public ushort Hour { get { return _hour; } set { _hour = value; } }
+        public ushort Minute { get { return _minute; } set { _minute = value; } }
+        public ushort Second { get { return _second; } set { _second = value; } }
+        public ushort Milliseconds { get { return _miliseconds; } set { _miliseconds = value; } }
 
         [DllImport(SystemDLL.NAME)]
         private static extern void GetLocalTime(ref SystemTime sysTime);
