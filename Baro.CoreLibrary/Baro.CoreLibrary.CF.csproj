@@ -78,6 +78,7 @@
     <Compile Include="Collections\Generics\PQueue.cs" />
     <Compile Include="Collections\Generics\StaticStack.cs" />
     <Compile Include="Collections\Hash\HashFunctions.cs" />
+    <Compile Include="Collections\PCQ.cs" />
     <Compile Include="Collections\PQueueInt.cs" />
     <Compile Include="Collections\SynchBiDictionary.cs" />
     <Compile Include="Collections\SynchDictionary.cs" />
