@@ -284,6 +284,8 @@
     <Compile Include="UI\Controls\UIForm.Designer.cs">
       <DependentUpon>UIForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="YolbilClient\ConnectionSettings.cs" />
+    <Compile Include="YolbilClient\YBClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\Controls\UIForm.resx">
