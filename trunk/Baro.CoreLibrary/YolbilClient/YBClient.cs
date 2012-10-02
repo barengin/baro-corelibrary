@@ -40,6 +40,11 @@ namespace Baro.CoreLibrary.YolbilClient
             this.Settings = settings;
         }
 
+        public bool Connected
+        {
+            get { return _socket != null && _socket.Connected; }
+        }
+
         public ConnectionSettings Settings
         {
             get { return _settings; }
