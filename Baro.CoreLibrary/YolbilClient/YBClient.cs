@@ -63,17 +63,17 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Send(Message msg)
         {
-            AddToSendQueue(msg);
+            AddToSendQueue(msg, true);
         }
 
-        private void AddToSendQueue(Message msg)
+        private void AddToSendQueue(Message msg, bool writeToDisk)
         {
             MessageInternalHeader header = msg.GetMessageHeader();
             UniqueID uid = header.GetMsgID();
             string filename = Path.Combine(_settings.SentFolder, uid.ToString() + ".msg");
 
             // Sunucu tarafını diske yazma.
-            if (msg.GetMessageHeader().CommandID >= 1024)
+            if (writeToDisk && msg.GetMessageHeader().CommandID >= 1024)
             {
                 FileStream fs = File.Create(filename);
                 fs.Write(msg.Data, 0, msg.Size);
@@ -222,7 +222,7 @@ namespace Baro.CoreLibrary.YolbilClient
                 if (st - dt > new TimeSpan(0, 2, 0))
                 {
                     Message m = Message.FromFile(item);
-                    Send(m);
+                    AddToSendQueue(m, false);
                 }
             }
         }
