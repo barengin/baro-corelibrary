@@ -32,6 +32,11 @@ namespace Baro.CoreLibrary
         [DllImport(SystemDLL.NAME)]
         private static extern void SetLocalTime(ref SystemTime sysTime);
 
+        public DateTime ToDateTime()
+        {
+            return new DateTime(this.Year, this.Month, this.Day, this.Hour, this.Minute, this.Second);
+        }
+
         public static void SetLocalTime(SystemTime sysTime)
         {
             SetLocalTime(ref sysTime);
