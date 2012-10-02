@@ -299,7 +299,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void SaveToReceivedMessages(MessageInternalHeader header, object obj)
         {
-            using (StreamWriter sw = new StreamWriter(Path.Combine(_settings.ReceivedFolder, header.GetMsgID().ToString()), true))
+            using (StreamWriter sw = new StreamWriter(Path.Combine(_settings.ReceivedFolder, header.GetMsgID().ToString() + ".msg"), true))
             {
                 sw.WriteLine(DescriptionAttribute.ObjDebugString(obj));
             }
