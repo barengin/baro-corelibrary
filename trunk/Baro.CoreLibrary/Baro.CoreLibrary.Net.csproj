@@ -214,6 +214,8 @@
     <Compile Include="SimpleDB\SimpleDBException.cs" />
     <Compile Include="SimpleDB\SimpleFields.cs" />
     <Compile Include="Text\SimpleStringEncryptor.cs" />
+    <Compile Include="YolbilClient\ConnectionSettings.cs" />
+    <Compile Include="YolbilClient\YBClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AAA2\users.xml" />
