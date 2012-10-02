@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Baro.CoreLibrary.Serializer2
 {
@@ -120,6 +121,17 @@ namespace Baro.CoreLibrary.Serializer2
         public static MessageInternalHeader GetInternalHeader(byte[] data)
         {
             return s_deserializer.GetHeader(data);
+        }
+
+        public static Message FromFile(string filename)
+        {
+            FileStream fs = File.OpenRead(filename);
+            byte[] data = new byte[fs.Length];
+            fs.Read(data, 0, data.Length);
+            fs.Close();
+
+            MessageInternalHeader h = Message.GetInternalHeader(data);
+            return new Message(h, data, h.Size);
         }
     }
 }

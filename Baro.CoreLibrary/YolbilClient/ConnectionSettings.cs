@@ -16,8 +16,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void CheckFolder(string folder)
         {
-            if (!Directory.Exists(ReceivedFolder))
-                Directory.CreateDirectory(ReceivedFolder);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
         }
 
         public ConnectionSettings()
