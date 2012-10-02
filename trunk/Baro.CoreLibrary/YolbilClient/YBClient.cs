@@ -92,7 +92,8 @@ namespace Baro.CoreLibrary.YolbilClient
                 return;
             }
 
-            _socket.BeginSend(msg.Data, 0, msg.Size, SocketFlags.None, new AsyncCallback(SendCallback), null);
+            if (_socket != null)
+                _socket.BeginSend(msg.Data, 0, msg.Size, SocketFlags.None, new AsyncCallback(SendCallback), null);
         }
 
         private void SendCallback(IAsyncResult r)
@@ -265,8 +266,9 @@ namespace Baro.CoreLibrary.YolbilClient
         {
             State state = new State();
 
-            _socket.BeginReceive(state.receiveBuffer, 0, state.receiveBuffer.Length,
-                SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
+            if (_socket != null)
+                _socket.BeginReceive(state.receiveBuffer, 0, state.receiveBuffer.Length,
+                    SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
         }
 
         private void ReceiveCallback(IAsyncResult r)
@@ -297,6 +299,7 @@ namespace Baro.CoreLibrary.YolbilClient
             StartReceive();
         }
 
+        #region ProcessBuffer
         private void SaveToReceivedMessages(MessageInternalHeader header, object obj)
         {
             using (StreamWriter sw = new StreamWriter(Path.Combine(_settings.ReceivedFolder, header.GetMsgID().ToString() + ".msg"), true))
@@ -305,7 +308,6 @@ namespace Baro.CoreLibrary.YolbilClient
             }
         }
 
-        #region ProcessBuffer
         byte[] _tsBuffer = new byte[2048];
 
         private enum ProcessBufferResult
