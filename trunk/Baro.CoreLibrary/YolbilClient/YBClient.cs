@@ -392,7 +392,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
                     if (header.CommandID == MessageAttribute.GetMessageID(typeof(PredefinedCommands.Ack)))
                     {
-                        string filename = Path.Combine(_settings.SentFolder, header.GetMsgID().ToString() + ".msg");
+                        PredefinedCommands.Ack a = (PredefinedCommands.Ack)obj;
+                        string filename = Path.Combine(_settings.SentFolder, a.MsgId + ".msg");
 
                         if (File.Exists(filename))
                             File.Delete(filename);
