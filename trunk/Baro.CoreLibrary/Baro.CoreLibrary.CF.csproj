@@ -286,6 +286,12 @@
     </Compile>
     <Compile Include="YolbilClient\ConnectionSettings.cs" />
     <Compile Include="YolbilClient\YBClient.cs" />
+    <Compile Include="YolbilClient\YolbilCF.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="YolbilClient\YolbilCF.Designer.cs">
+      <DependentUpon>YolbilCF.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\Controls\UIForm.resx">
