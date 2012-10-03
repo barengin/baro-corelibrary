@@ -1,23 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
+using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Baro.CoreLibrary
 {
     public static class App2
     {
-
 #if PocketPC || WindowsCE
         private static readonly string appPath = string.Concat(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase), "\\");
 #else
         private static readonly string appPath = string.Concat(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\");
 #endif
 
+        #region ShowWindowConstants
+        private const int SW_HIDE = 0;
+        private const int SW_SHOWNORMAL = 1;
+        private const int SW_SHOWMAXIMIZED = 3;
+        private const int SW_SHOW = 5;
+        private const int SW_MINIMIZE = 6;
+        private const int SW_RESTORE = 9;
+        #endregion ShowWindowConstants
+
+        #region APIs
+
+        [DllImport(SystemDLL.NAME)]
+        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport(SystemDLL.NAME)]
+        private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
+
+        [DllImport(SystemDLL.NAME)]
+        private static extern bool EnableWindow(IntPtr hwnd, bool enabled);
+
+        [DllImport(SystemDLL.NAME)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        #endregion APIs
+
         public static string AppPath
         {
-            get
+            get { return appPath; }
+        }
+
+        public static bool RunSingleInstance(Form f, string uniqueString)
+        {
+            IntPtr h = FindWindow(null, uniqueString);
+
+            // Uygulama zaten çalışıyosa çalışanı öne getirir ve kendisi kapanır.
+            if (h != IntPtr.Zero)
             {
-                return appPath;
+                ShowWindow(h, SW_SHOW);
+                EnableWindow(h, true);
+                SetForegroundWindow(h);
+                return false;
+            }
+            else
+            {
+                Application.Run(f);
+                return true;
             }
         }
     }
