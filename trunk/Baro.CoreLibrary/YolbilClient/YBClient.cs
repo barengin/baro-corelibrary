@@ -380,7 +380,7 @@ namespace Baro.CoreLibrary.YolbilClient
                 object obj = Message.Parse(_tsBuffer, header, null);
 
 #if DEBUG
-                SaveToReceivedMessages(header, obj);
+         //       SaveToReceivedMessages(header, obj);
 #endif
 
                 // Sunucu tarafı
