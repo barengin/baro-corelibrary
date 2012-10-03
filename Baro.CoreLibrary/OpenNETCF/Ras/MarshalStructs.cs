@@ -17,7 +17,7 @@ namespace OpenNETCF.Net
 
 	}
 
-
+/*
 	internal class RASENTRYNAME : AdvancedMarshaler
 	{
 		public int dwSize;
@@ -36,4 +36,5 @@ namespace OpenNETCF.Net
 			//this.Serialize();
 		}
 	} 
+*/
 }
