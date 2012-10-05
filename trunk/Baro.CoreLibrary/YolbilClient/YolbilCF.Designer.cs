@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.clientTimer = new System.Windows.Forms.Timer();
+            // 
+            // clientTimer
+            // 
+            this.clientTimer.Enabled = true;
+            this.clientTimer.Interval = 15000;
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer clientTimer;
     }
 }
