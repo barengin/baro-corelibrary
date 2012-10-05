@@ -19,5 +19,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
             InitializeComponent();
         }
+
+        public bool Connected { get; set; }
     }
 }

@@ -297,6 +297,9 @@
     <EmbeddedResource Include="UI\Controls\UIForm.resx">
       <DependentUpon>UIForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="YolbilClient\YolbilCF.resx">
+      <DependentUpon>YolbilCF.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="UI\UI Controls.txt" />
