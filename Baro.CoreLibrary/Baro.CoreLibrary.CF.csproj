@@ -284,7 +284,11 @@
     <Compile Include="UI\Controls\UIForm.Designer.cs">
       <DependentUpon>UIForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="YolbilClient\ClientState.cs" />
+    <Compile Include="YolbilClient\ConnectedEventArgs.cs" />
     <Compile Include="YolbilClient\ConnectionSettings.cs" />
+    <Compile Include="YolbilClient\DisconnectedEventArgs.cs" />
+    <Compile Include="YolbilClient\MessageReceivedEventArgs.cs" />
     <Compile Include="YolbilClient\YBClient.cs" />
     <Compile Include="YolbilClient\YolbilCF.cs">
       <SubType>Component</SubType>

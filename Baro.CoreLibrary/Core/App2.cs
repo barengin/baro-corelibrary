@@ -15,16 +15,13 @@ namespace Baro.CoreLibrary
         private static readonly string appPath = string.Concat(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\");
 #endif
 
-        #region ShowWindowConstants
+        #region Show Window API
         private const int SW_HIDE = 0;
         private const int SW_SHOWNORMAL = 1;
         private const int SW_SHOWMAXIMIZED = 3;
         private const int SW_SHOW = 5;
         private const int SW_MINIMIZE = 6;
         private const int SW_RESTORE = 9;
-        #endregion ShowWindowConstants
-
-        #region APIs
 
         [DllImport(SystemDLL.NAME)]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -40,14 +37,20 @@ namespace Baro.CoreLibrary
 
         #endregion APIs
 
+        [DllImport(SystemDLL.NAME, CharSet = CharSet.Unicode, SetLastError = false)]
+        private static extern IntPtr CreateEvent(IntPtr eventAttributes, bool isManualReset, bool initialState, string eventName);
+
+        [DllImport(SystemDLL.NAME, CharSet = CharSet.Unicode, SetLastError = false)]
+        private static extern bool CloseHandle(IntPtr handle);
+
         public static string AppPath
         {
             get { return appPath; }
         }
 
-        public static bool RunSingleInstance(Form f, string uniqueString)
+        public static bool RunSingleInstance(string windowsTitle, Func<Form> createForm)
         {
-            IntPtr h = FindWindow(null, uniqueString);
+            IntPtr h = FindWindow(null, windowsTitle);
 
             // Uygulama zaten çalışıyosa çalışanı öne getirir ve kendisi kapanır.
             if (h != IntPtr.Zero)
@@ -59,6 +62,9 @@ namespace Baro.CoreLibrary
             }
             else
             {
+                Form f = createForm();
+                f.Text = windowsTitle;
+                
                 Application.Run(f);
                 return true;
             }
