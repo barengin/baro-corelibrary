@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Baro.CoreLibrary.Crc
 {
     public sealed class CRC32
     {
         private UInt32[] crc32Table;
-        private const int BUFFER_SIZE = 1024;
+        private const int BUFFER_SIZE = 1024 * 4; // 4kb
 
         public UInt32 GetCrc32(byte[] data)
         {
@@ -22,6 +23,14 @@ namespace Baro.CoreLibrary.Crc
                 }
 
                 return ~crc32Result;
+            }
+        }
+
+        public UInt32 GetFileCrc32(string filename)
+        {
+            using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                return GetCrc32(fs);
             }
         }
 
