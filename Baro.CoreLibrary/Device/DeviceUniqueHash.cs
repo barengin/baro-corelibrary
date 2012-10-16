@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Baro.CoreLibrary.Device
 {
-#if PocketPC || WindowsCE
+#if PocketPC
     public static class DeviceUniqueHash
     {
         /*

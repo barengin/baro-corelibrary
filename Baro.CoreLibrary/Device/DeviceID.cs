@@ -20,11 +20,23 @@ namespace Baro.CoreLibrary.Device
             ((FILE_DEVICE_HAL) << 16) | ((FILE_ANY_ACCESS) << 14)
             | ((21) << 2) | (METHOD_BUFFERED);
 
-        [DllImport(SystemDLL.NAME, SetLastError = true)]
-        private static extern bool KernelIoControl(Int32 dwIoControlCode,
-            IntPtr lpInBuf, Int32 nInBufSize, byte[] lpOutBuf,
-            Int32 nOutBufSize, ref Int32 lpBytesReturned);
         #endregion
+
+        [DllImport("coredll.dll")]
+        private static extern bool KernelIoControl(uint IoControlCode, IntPtr InputBuffer, 
+            Int32 InputBufferSize, byte[] OutputBuffer, Int32 OutputBufferSize, ref Int32 BytesReturned);
+
+        private static uint CTL_CODE(uint DeviceType, uint Function, uint Method, uint Access)
+        {
+            return ((DeviceType << 16) | (Access << 14) | (Function << 2) | Method);
+        }
+
+        public static void SoftReset()
+        {
+            int bytesReturned = 0;
+            uint IOCTL_HAL_REBOOT = CTL_CODE(FILE_DEVICE_HAL, 15, METHOD_BUFFERED, FILE_ANY_ACCESS);
+            KernelIoControl(IOCTL_HAL_REBOOT, IntPtr.Zero, 0, null, 0, ref bytesReturned);
+        }
 
         public static byte[] GetDeviceID()
         {
