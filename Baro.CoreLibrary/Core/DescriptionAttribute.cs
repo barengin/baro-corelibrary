@@ -12,6 +12,7 @@ namespace Baro.CoreLibrary
     public class DescriptionAttribute : Attribute
     {
         private string _longDesc, _shortDesc;
+        private bool _isDateTime;
 
         public DescriptionAttribute(string longDesc)
         {
@@ -24,8 +25,16 @@ namespace Baro.CoreLibrary
             _shortDesc = shortDesc;
         }
 
+        public DescriptionAttribute(string longDesc, string shortDesc, bool isDateTime)
+        {
+            _longDesc = longDesc;
+            _shortDesc = shortDesc;
+            _isDateTime = isDateTime;
+        }
+
         public string Desc { get { return _longDesc; } }
         public string ShortDesc { get { return _shortDesc; } }
+        public bool isDateTime { get { return _isDateTime; } }
 
         public static string GetShortDescriptionOf(Type type)
         {
@@ -48,6 +57,20 @@ namespace Baro.CoreLibrary
                 return da.ShortDesc;
             }
 
+            return null;
+        }
+
+        public static string GetShortDescriptionOf(FieldInfo fi, out bool isDateTime)
+        {
+            object[] atts = fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            foreach (DescriptionAttribute da in atts)
+            {
+                isDateTime = da.isDateTime;
+                return da.ShortDesc;
+            }
+
+            isDateTime = false;
             return null;
         }
 
@@ -76,7 +99,19 @@ namespace Baro.CoreLibrary
             foreach (var item in fi)
             {
                 object fieldValue = item.GetValue(obj);
-                sb.Append("\t"); sb.AppendLine(string.Format(GetShortDescriptionOf(item), fieldValue));
+                
+                bool isDateTime;
+                string sd = GetShortDescriptionOf(item, out isDateTime);
+
+                if (isDateTime && item.FieldType == typeof(double))
+                {
+                    DateTime dt = DateTime.FromOADate((double)fieldValue);
+                    sb.Append("\t"); sb.AppendLine(string.Format(sd, dt.ToString()));
+                }
+                else
+                {
+                    sb.Append("\t"); sb.AppendLine(string.Format(sd, fieldValue));
+                }
             }
 
             return sb.ToString();
