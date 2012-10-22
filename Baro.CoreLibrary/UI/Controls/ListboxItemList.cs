@@ -12,9 +12,10 @@ namespace Baro.CoreLibrary.UI.Controls
         private UICanvas _canvas = new UICanvas();
         internal bool Modified { get; set; }
 
-        public ListboxItemList()
+        public ListboxItemList(UIForm parent)
         {
             Modified = true;
+            _canvas.Parent = parent;
         }
 
         #region IList<ListboxItem> Members

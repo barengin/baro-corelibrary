@@ -39,7 +39,7 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             if (this.AutoConnectFocusedTextbox)
             {
-                foreach (var t in UICanvas)
+                foreach (var t in Parent.UICanvas)
                 {
                     Textbox txt = t as Textbox;
 
@@ -85,6 +85,20 @@ namespace Baro.CoreLibrary.UI.Controls
         private const string keyboardnumber4 = "\u0022\u0020\u0023\u0024";
 
         public int SPACE_BETWEEN_BUTTONS { get; set; }
+
+        public override UIForm Parent
+        {
+            get
+            {
+                return base.Parent;
+            }
+            internal set
+            {
+                _canvasAlfa.Parent = value;
+                _canvasNum.Parent = value;
+                base.Parent = value;
+            }
+        }
 
         public Keyboard()
             : base()

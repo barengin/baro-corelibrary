@@ -39,7 +39,7 @@ namespace Baro.CoreLibrary.UI.Controls
             if (Border.Enabled)
                 Border.Draw(g, this.Bound);
 
-            g.DrawText(Text, UICanvas.Encoding, FontStyle.Font,
+            g.DrawText(Text, Parent.Encoding, FontStyle.Font,
                  FontStyle.FontColor, FontStyle.HaloColor, TextAlign.Center, this.Bound);
 
             g.EndDrawing();

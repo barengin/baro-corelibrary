@@ -35,7 +35,7 @@ namespace Baro.CoreLibrary.UI.Controls
         public override void Render(Baro.CoreLibrary.G3.G3Canvas g)
         {
             g.BeginDrawing();
-            g.DrawText(Text, UICanvas.Encoding, FontStyle.Font, FontStyle.FontColor, 
+            g.DrawText(Text, Parent.Encoding, FontStyle.Font, FontStyle.FontColor, 
                 FontStyle.HaloColor, this.TextAlign, this.Bound);
             g.EndDrawing();
         }

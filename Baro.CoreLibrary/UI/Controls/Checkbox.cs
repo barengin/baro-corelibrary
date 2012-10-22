@@ -73,7 +73,7 @@ namespace Baro.CoreLibrary.UI.Controls
             Rectangle r = this.Bound;
             r.Offset(CheckedImage.Width, 0);
 
-            g.DrawText(Text, UICanvas.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
+            g.DrawText(Text, Parent.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
                  TextAlign.Left, r);
 
             g.EndDrawing();
