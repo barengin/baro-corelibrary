@@ -70,7 +70,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         private void MakeOthersUnFocused()
         {
-            foreach (var e in UICanvas)
+            foreach (var e in Parent.UICanvas)
             {
                 if (e is Textbox)
                 {
@@ -102,11 +102,11 @@ namespace Baro.CoreLibrary.UI.Controls
 
             if (Focused)
             {
-                chars = UICanvas.Encoding.GetBytes(Text + "\u25cf");
+                chars = Parent.Encoding.GetBytes(Text + "\u25cf");
             }
             else
             {
-                chars = UICanvas.Encoding.GetBytes(Text);
+                chars = Parent.Encoding.GetBytes(Text);
             }
 
             chars = CropText(chars, Size.Width);

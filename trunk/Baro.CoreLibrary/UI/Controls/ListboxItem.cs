@@ -73,7 +73,7 @@ namespace Baro.CoreLibrary.UI.Controls
                 
                 // DEBUG: g.Rectangle(r1, G3Color.BLUE);
 
-                byte[] chars = UICanvas.Encoding.GetBytes(Text1);                
+                byte[] chars = Parent.Encoding.GetBytes(Text1);                
                 chars = CropText(chars, r1.Width, Text1Style);
 
                 if (chars != null)
@@ -88,7 +88,7 @@ namespace Baro.CoreLibrary.UI.Controls
                 
                 // DEBUG: g.Rectangle(r1, G3Color.GREEN);
 
-                chars = UICanvas.Encoding.GetBytes(Text2);
+                chars = Parent.Encoding.GetBytes(Text2);
                 chars = CropText(chars, r1.Width, Text2Style);
 
                 if (chars != null)
@@ -117,7 +117,7 @@ namespace Baro.CoreLibrary.UI.Controls
                 r1.Offset(this.Size.Height, 0);
                 r1.Width = r1.Width - this.Size.Height;
 
-                byte[] chars = UICanvas.Encoding.GetBytes(Text1);
+                byte[] chars = Parent.Encoding.GetBytes(Text1);
                 chars = CropText(chars, r1.Width, Text1Style);
 
                 if (chars != null)
@@ -130,7 +130,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
                 r1.Offset(0, r1.Height);
 
-                chars = UICanvas.Encoding.GetBytes(Text2);
+                chars = Parent.Encoding.GetBytes(Text2);
                 chars = CropText(chars, r1.Width, Text2Style);
 
                 if (chars != null)

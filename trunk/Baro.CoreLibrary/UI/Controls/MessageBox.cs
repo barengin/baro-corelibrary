@@ -23,7 +23,7 @@ namespace Baro.CoreLibrary.UI.Controls
             if (HitTest(p))
             {
                 OnClick(EventArgs.Empty);
-                this.UICanvas.Parent.BreakAllOtherEvents();
+                this.Parent.BreakAllOtherEvents();
             }
         }
 
@@ -62,7 +62,7 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             // TODO: Bu kod UIElement içine yapılacak bir eklenti ile BeforeAdd ve AfterRemove işlemleri
             // içerisine taşınacak.
-            UICanvas.DisableAll();
+            Parent.UICanvas.DisableAll();
             this.Enable = true;
 
             g.BeginDrawing();
@@ -84,11 +84,11 @@ namespace Baro.CoreLibrary.UI.Controls
             this.TitleGradient.Draw(g, x, y, w, 30);
 
             // Title Text
-            g.DrawText(Title, UICanvas.Encoding, TitleFont, G3Color.BLACK, G3Color.WHITE, TextAlign.Center,
+            g.DrawText(Title, Parent.Encoding, TitleFont, G3Color.BLACK, G3Color.WHITE, TextAlign.Center,
                 new Rectangle(x, y, w, 30));
 
             // Message Text
-            g.DrawText(Text, UICanvas.Encoding, Font, G3Color.GRAY, G3Color.WHITE, TextAlign.Center,
+            g.DrawText(Text, Parent.Encoding, Font, G3Color.GRAY, G3Color.WHITE, TextAlign.Center,
                 new Rectangle(x, y + 30, w, h));
 
             // Border

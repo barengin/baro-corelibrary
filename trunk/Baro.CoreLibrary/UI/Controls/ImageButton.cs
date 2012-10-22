@@ -56,7 +56,7 @@ namespace Baro.CoreLibrary.UI.Controls
             {
                 g.BeginDrawing();
 
-                g.DrawText(Text, UICanvas.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
+                g.DrawText(Text, Parent.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
                     TextAlign.Center, this.Bound);
 
                 if (_pressed)

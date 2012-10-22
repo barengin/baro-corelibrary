@@ -24,11 +24,23 @@ namespace Baro.CoreLibrary.UI.Controls
         public int StartIndex { get; set; }
         public int SelectedIndex { get; set; }
 
+        public override UIForm Parent
+        {
+            get
+            {
+                return base.Parent;
+            }
+            internal set
+            {
+                this.Items = new ListboxItemList(value);
+                base.Parent = value;
+            }
+        }
+
         public Listbox(int rowCountInView)
             : base()
         {
             this.RowCount = rowCountInView;
-            this.Items = new ListboxItemList();
             this.Border = new Border() { Color = G3Color.GRAY, Enabled = false };
             this.SelectedItemColor = G3Color.GRAY;
             this.ItemColor = G3Color.WHITE;

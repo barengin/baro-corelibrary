@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using Baro.CoreLibrary;
-using Baro.CoreLibrary.Extensions;
-using Baro.CoreLibrary.UI.Activities;
-using Baro.CoreLibrary.G3;
-using System.Threading;
 using Baro.CoreLibrary.Core;
+using Baro.CoreLibrary.Extensions;
+using Baro.CoreLibrary.G3;
+using Baro.CoreLibrary.UI.Activities;
+using Baro.CoreLibrary.Text;
 
 namespace Baro.CoreLibrary.UI.Controls
 {
@@ -19,14 +20,50 @@ namespace Baro.CoreLibrary.UI.Controls
 
         private G3Canvas _offScreen;
         private UICanvas _canvas = new UICanvas();
-        private Activity _mainActivity;
-        private bool _activityExecuted = false;
+        private volatile Activity _mainActivity;
+        private volatile bool _activityExecuted = false;
+        private Encoding _encoding = null;
 
         public bool NewActivityLoaded { get { return _refCounter != _refMouseHolder; } }
+
+        public Encoding Encoding
+        {
+            get
+            {
+                if (_encoding == null)
+                {
+                    _encoding = EncodingFactory.GetEncoding(12542);
+                }
+
+                return _encoding;
+            }
+        }
 
         public void BreakAllOtherEvents()
         {
             _refCounter++;
+        }
+
+        private void setNewActivity(Activity a)
+        {
+            if (_mainActivity != null)
+            {
+                _mainActivity.ExecuteExit(this);
+            }
+
+            _mainActivity = a;
+
+            _canvas.Clear();
+            BreakAllOtherEvents();
+
+            if (_mainActivity != null)
+            {
+                _mainActivity.Form = this;
+                _mainActivity.Create(this);
+                _activityExecuted = false;
+            }
+
+            this.Invalidate();
         }
 
         public Activity Activity
@@ -34,33 +71,14 @@ namespace Baro.CoreLibrary.UI.Controls
             get { return _mainActivity; }
             set
             {
-                if (_mainActivity != null)
-                {
-                    _mainActivity.ExecuteExit(this);
-                }
-
-                _mainActivity = value;
-                _canvas.Clear();
-                BreakAllOtherEvents();
-
-                Action d = delegate()
-                {
-                    if (_mainActivity != null)
-                    {
-                        _mainActivity.Form = this;
-                        _mainActivity.Create(this);
-                        _activityExecuted = false;
-                    }
-
-                    this.Invalidate();
-                };
-
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(d);
+                    this.Invoke(new Action<Activity>(setNewActivity), value);
                 }
                 else
-                    d();
+                {
+                    setNewActivity(value);
+                }
             }
         }
 

@@ -9,22 +9,7 @@ namespace Baro.CoreLibrary.UI.Controls
 {
     public class UICanvas : List<UIElement>
     {
-        private static Encoding _encoding;
-
         internal UIForm Parent { get; set; }
-
-        public Encoding Encoding
-        {
-            get
-            {
-                if (_encoding == null)
-                {
-                    _encoding = EncodingFactory.GetEncoding(12542);
-                }
-
-                return _encoding;
-            }
-        }
 
         public void Render(G3Canvas g)
         {
@@ -62,7 +47,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public new void Add(UIElement e)
         {
-            e.UICanvas = this;
+            e.Parent = this.Parent;
             base.Add(e);
         }
 
