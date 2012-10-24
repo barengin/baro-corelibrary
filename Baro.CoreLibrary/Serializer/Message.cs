@@ -123,7 +123,14 @@ namespace Baro.CoreLibrary.Serializer2
             return s_deserializer.GetHeader(data);
         }
 
-        public static Message FromFile(string filename)
+        public static void SaveToFile(Message m, string filename)
+        {
+            FileStream fs = new FileStream(filename, FileMode.Create);
+            fs.Write(m.Data, 0, m.Size);
+            fs.Close();
+        }
+
+        public static Message LoadFromFile(string filename)
         {
             FileStream fs = File.OpenRead(filename);
             byte[] data = new byte[fs.Length];
