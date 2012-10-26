@@ -149,6 +149,11 @@ namespace Baro.CoreLibrary.Serializer2
             return CRC == (Size ^ Message.CRC_MAGIC_NUMBER);
         }
 
+        public bool isServerSideCommand()
+        {
+            return this.CommandID < 1024;
+        }
+
         public bool isExpired()
         {
             return (DateTime.Now > this.ExpireDate);
