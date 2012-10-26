@@ -83,6 +83,7 @@
     <Compile Include="Collections\SynchBiDictionary.cs" />
     <Compile Include="Collections\SynchDictionary.cs" />
     <Compile Include="Collections\SynchList.cs" />
+    <Compile Include="Collections\SynchQueue.cs" />
     <Compile Include="Configuration\ConfigIni.cs" />
     <Compile Include="Configuration\ConfigIniSection.cs" />
     <Compile Include="Configuration\ConfigRepositoryException.cs" />
@@ -307,25 +308,19 @@
     <Compile Include="WindowsInput\Native\XButton.cs" />
     <Compile Include="WindowsInput\WindowsInputDeviceStateAdaptor.cs" />
     <Compile Include="WindowsInput\WindowsInputMessageDispatcher.cs" />
-    <Compile Include="YolbilClient\ClientState.cs" />
     <Compile Include="YolbilClient\ConnectedEventArgs.cs" />
     <Compile Include="YolbilClient\ConnectionSettings.cs" />
     <Compile Include="YolbilClient\DisconnectedEventArgs.cs" />
+    <Compile Include="YolbilClient\LastActivity.cs" />
     <Compile Include="YolbilClient\MessageReceivedEventArgs.cs" />
+    <Compile Include="YolbilClient\SendQueue.cs" />
+    <Compile Include="YolbilClient\SequenceLog.cs" />
     <Compile Include="YolbilClient\YBClient.cs" />
-    <Compile Include="YolbilClient\YolbilCF.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="YolbilClient\YolbilCF.Designer.cs">
-      <DependentUpon>YolbilCF.cs</DependentUpon>
-    </Compile>
+    <Compile Include="YolbilClient\YBClient2.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\Controls\UIForm.resx">
       <DependentUpon>UIForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="YolbilClient\YolbilCF.resx">
-      <DependentUpon>YolbilCF.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
