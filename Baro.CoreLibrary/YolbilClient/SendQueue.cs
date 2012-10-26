@@ -16,6 +16,7 @@ namespace Baro.CoreLibrary.YolbilClient
         public SendQueue(string folder)
         {
             _folder = folder;
+            Load();
         }
 
         public bool Peek(out Message m)
@@ -25,25 +26,42 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public bool Dequeue(out Message m)
         {
-            return _q.Dequeue(out m);
+            bool r = _q.Dequeue(out m);
+            Save();            
+            return r;
         }
 
         public void Enqueue(Message m)
         {
             _q.Enqueue(m);
+            Message.SaveToFile(m, Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg"));
+            Save();
         }
 
         public void Load()
         {
             lock (_q.SynchLock)
             {
-                using (StreamReader sr = new StreamReader(Path.Combine(_folder, "queue.txt")))
+                if (File.Exists(Path.Combine(_folder, "queue.txt")))
                 {
-                    while (!sr.EndOfStream)
+                    using (StreamReader sr = new StreamReader(Path.Combine(_folder, "queue.txt")))
                     {
-                        string r = sr.ReadLine();
-                        Message m = Message.LoadFromFile(Path.Combine(_folder, r + ".msg"));
-                        _q.Enqueue(m);
+                        while (!sr.EndOfStream)
+                        {
+                            string r = sr.ReadLine();
+                            Message m;
+
+                            try
+                            {
+                                m = Message.LoadFromFile(Path.Combine(_folder, r + ".msg"));
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+
+                            _q.Enqueue(m);
+                        }
                     }
                 }
             }
