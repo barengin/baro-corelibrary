@@ -11,7 +11,7 @@ namespace Baro.CoreLibrary.Collections
         volatile bool _completed = false;
 
         EventWaitHandle _wh = new AutoResetEvent(false);
-        SynchList<T> _list = new SynchList<T>();
+        SynchQueue<T> _list = new SynchQueue<T>();
 
         public void Completed()
         {
