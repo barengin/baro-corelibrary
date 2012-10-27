@@ -105,12 +105,12 @@ namespace Baro.CoreLibrary.Core
 
         public static UniqueID CreateNew()
         {
-            int d1 = ThreadSafeRandom.NextWithNeg();
-            int d2 = ThreadSafeRandom.NextWithNeg();
-            int d3 = ThreadSafeRandom.NextWithNeg();
-            int d4 = ThreadSafeRandom.NextWithNeg();
+            uint d1 = ThreadSafeRandom.Next();
+            uint d2 = ThreadSafeRandom.Next();
+            uint d3 = ThreadSafeRandom.Next();
+            uint d4 = ThreadSafeRandom.Next();
 
-            return new UniqueID((uint)d1, (uint)d2, (uint)d3, (uint)d4);
+            return new UniqueID(d1, d2, d3, d4);
         }
 
         public static UniqueID Parse(string id)
