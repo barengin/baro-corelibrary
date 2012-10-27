@@ -19,14 +19,9 @@ namespace Baro.CoreLibrary.YolbilClient
             _actual = Environment.TickCount;
         }
 
-        public int Peek()
+        public TimeSpan Peek()
         {
-            return Environment.TickCount - _actual;
-        }
-
-        public static explicit operator TimeSpan(LastActivity f)
-        {
-            return new TimeSpan(0, 0, 0, 0, f.Peek());
+            return new TimeSpan(0, 0, 0, 0, Environment.TickCount - _actual);
         }
     }
 }
