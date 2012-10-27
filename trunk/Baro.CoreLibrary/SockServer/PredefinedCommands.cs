@@ -48,16 +48,16 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 15)]
         public struct Ack2
         {
-            [Description("uid1", "uid1: {0}")]
+            [Description("uid1", "uid1: {0:x8}")]
             public uint uid1;
 
-            [Description("uid2", "uid2: {0}")]
+            [Description("uid2", "uid2: {0:x8}")]
             public uint uid2;
 
-            [Description("uid3", "uid3: {0}")]
+            [Description("uid3", "uid3: {0:x8}")]
             public uint uid3;
 
-            [Description("uid4", "uid4: {0}")]
+            [Description("uid4", "uid4: {0:x8}")]
             public uint uid4;
 
             public UniqueID CreateUniqueID()
@@ -81,7 +81,7 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 20)]
         public struct MsgList
         {
-            [Description("Query", "Query")]
+            [Description("Query", "Query: {0}")]
             public string Query;
         }
 
@@ -90,7 +90,7 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 21)]
         public struct MsgListResult
         {
-            [Description("QueryResult", "QueryResult")]
+            [Description("QueryResult", "QueryResult: {0}")]
             public string Result;
         }
 
@@ -99,7 +99,7 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 22)]
         public struct MsgGet
         {
-            [Description("id", "id")]
+            [Description("id", "id: {0}")]
             public string MsgId;
         }
 
@@ -108,7 +108,7 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 23, SaveToQueue = true)] // Save: Client tarafında silme işlemi sunucuya gönderilmeden önce kaydedilmeli. Bağlantı kopabilir.
         public struct MsgDelete
         {
-            [Description("id", "id")]
+            [Description("id", "id: {0}")]
             public string MsgId;
         }
 
