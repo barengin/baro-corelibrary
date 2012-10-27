@@ -10,8 +10,13 @@ namespace Baro.CoreLibrary.YolbilClient
 {
     public sealed class SendQueue
     {
-        private SynchQueue<Message> _q = new SynchQueue<Message>();
-        private string _folder;
+        private readonly SynchQueue<Message> _q = new SynchQueue<Message>();
+        private readonly string _folder;
+
+        public EventHandler OnEnqueue;
+        public EventHandler OnDequeue;
+
+        public int Count { get { return _q.Count; } }
 
         public SendQueue(string folder)
         {
@@ -27,7 +32,11 @@ namespace Baro.CoreLibrary.YolbilClient
         public bool Dequeue(out Message m)
         {
             bool r = _q.Dequeue(out m);
-            Save();            
+            Save();
+
+            if (OnDequeue != null)
+                OnDequeue(this, EventArgs.Empty);
+
             return r;
         }
 
@@ -36,6 +45,9 @@ namespace Baro.CoreLibrary.YolbilClient
             _q.Enqueue(m);
             Message.SaveToFile(m, Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg"));
             Save();
+            
+            if (OnEnqueue != null)
+                OnEnqueue(this, EventArgs.Empty);
         }
 
         public void Load()
