@@ -36,12 +36,12 @@ namespace Baro.CoreLibrary.Core
 
 
         /// <summary>
-        /// Get a new random System.Int32 value
+        /// Get a new random value
         /// </summary>
-        /// <returns>The random int</returns>
-        public int Next()
+        /// <returns>The random</returns>
+        public uint Next()
         {
-            return (int)Cmwc();
+            return Cmwc();
         }
 
         /// <summary>
