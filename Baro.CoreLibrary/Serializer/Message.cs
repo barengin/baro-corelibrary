@@ -103,7 +103,7 @@ namespace Baro.CoreLibrary.Serializer2
 #if PocketPC || WindowsCE
         public static object Parse(byte[] data, out MessageHeader header, MessageKey key)
 #else
-        public static object Parse(byte[] data, out MessageInternalHeader header, MessageKey key = null)
+        public static object Parse(byte[] data, out MessageHeader header, MessageKey key = null)
 #endif
         {
             return s_deserializer.Deserialize(data, out header, key);
@@ -112,7 +112,7 @@ namespace Baro.CoreLibrary.Serializer2
 #if PocketPC || WindowsCE
         public static object Parse(byte[] data, MessageHeader header, MessageKey key)
 #else
-        public static object Parse(byte[] data, MessageInternalHeader header, MessageKey key = null)
+        public static object Parse(byte[] data, MessageHeader header, MessageKey key = null)
 #endif
         {
             return s_deserializer.Deserialize(header, data, key);
