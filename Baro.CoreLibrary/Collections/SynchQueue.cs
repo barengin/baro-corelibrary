@@ -114,6 +114,28 @@ namespace Baro.CoreLibrary.Collections
                 return true;
             }
         }
+#else
+        public bool Dequeue(out T value)
+        {
+            T insideValue = default(T);
+            bool r = true;
+
+            WriteLocked(() =>
+                {
+                    // Kuyrukta birşey yok
+                    if (_queue.Count == 0)
+                    {
+                        r = false;
+                        return;
+                    }
+
+                    // İlk nesneyi al
+                    insideValue = _queue.Dequeue();
+                });
+
+            value = insideValue;
+            return r;
+        }
 #endif
 
         public T Dequeue()
