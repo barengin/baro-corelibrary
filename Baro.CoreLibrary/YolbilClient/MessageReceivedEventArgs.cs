@@ -8,7 +8,7 @@ namespace Baro.CoreLibrary.YolbilClient
 {
     public class MessageReceivedEventArgs: EventArgs
     {
-        public MessageInternalHeader Header { get; internal set; }
+        public MessageHeader Header { get; internal set; }
         public object Message { get; internal set; }
     }
 }
