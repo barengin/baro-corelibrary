@@ -145,6 +145,7 @@ namespace Baro.CoreLibrary.SockServer
             Message.UnRegisterMessageType(typeof(ServerInfoRequest));
             Message.UnRegisterMessageType(typeof(ServerDateTimeResponse));
             Message.UnRegisterMessageType(typeof(Ack));
+            Message.UnRegisterMessageType(typeof(Ack2));
 
             Message.RegisterMessageType(typeof(Login));
             Message.RegisterMessageType(typeof(KeepAlive));
@@ -155,6 +156,7 @@ namespace Baro.CoreLibrary.SockServer
             Message.RegisterMessageType(typeof(ServerInfoRequest));
             Message.RegisterMessageType(typeof(ServerDateTimeResponse));
             Message.RegisterMessageType(typeof(Ack));
+            Message.RegisterMessageType(typeof(Ack2));
         }
     }
 }
