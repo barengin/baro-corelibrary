@@ -45,11 +45,12 @@ namespace Baro.CoreLibrary.YolbilClient
             _q.Enqueue(m);
             Message.SaveToFile(m, Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg"));
             Save();
-            
+
             if (OnEnqueue != null)
                 OnEnqueue(this, EventArgs.Empty);
         }
 
+#if PocketPC || WindowsCE
         public void Load()
         {
             lock (_q.SynchLock)
@@ -95,5 +96,64 @@ namespace Baro.CoreLibrary.YolbilClient
                 }
             }
         }
+#else
+        public void Load()
+        {
+            _q.SynchLock.EnterWriteLock();
+            
+            try
+            {
+                if (File.Exists(Path.Combine(_folder, "queue.txt")))
+                {
+                    using (StreamReader sr = new StreamReader(Path.Combine(_folder, "queue.txt")))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            string r = sr.ReadLine();
+                            Message m;
+
+                            try
+                            {
+                                m = Message.LoadFromFile(Path.Combine(_folder, r + ".msg"));
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+
+                            _q.Enqueue(m);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                _q.SynchLock.ExitWriteLock();
+            }
+        }
+
+        public void Save()
+        {
+            _q.SynchLock.EnterWriteLock();
+            
+            try
+            {
+                Message[] m = _q.ToArray();
+
+                using (StreamWriter sw = new StreamWriter(Path.Combine(_folder, "queue.txt")))
+                {
+                    for (int i = 0; i < m.Length; i++)
+                    {
+                        string s = m[i].GetMessageHeader().GetMsgID().ToString();
+                        sw.WriteLine(s);
+                    }
+                }
+            }
+            finally
+            {
+                _q.SynchLock.ExitWriteLock();
+            }
+        }
+#endif
     }
 }
