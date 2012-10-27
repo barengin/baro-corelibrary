@@ -30,8 +30,8 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 13)]
         public struct KeepAlive
         {
-            [Description("KeepAlive", "KeepAlive")]
-            public byte dummy;
+            [Description("Seq", "Seq: {0}")]
+            public byte seq;
         }
 
         [Description("Ack")]
