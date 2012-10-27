@@ -71,7 +71,7 @@ namespace Baro.CoreLibrary.SockServer
 
         [Description("MsgDelete")]
         [StructLayout(LayoutKind.Sequential)]
-        [MessageAttribute(ID = 23)]
+        [MessageAttribute(ID = 23, SaveToQueue = true)] // Save: Client tarafında silme işlemi sunucuya gönderilmeden önce kaydedilmeli. Bağlantı kopabilir.
         public struct MsgDelete
         {
             [Description("id", "id")]
@@ -96,7 +96,7 @@ namespace Baro.CoreLibrary.SockServer
         [MessageAttribute(ID = 31)]
         public struct ServerDateTimeResponse
         {
-            [Description("DateTime", "DateTime: {0}")]
+            [Description("DateTime", "DateTime: {0}", true)]
             public double DateTime;
         }
 

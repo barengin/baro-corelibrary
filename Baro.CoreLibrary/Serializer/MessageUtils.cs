@@ -11,14 +11,16 @@ namespace Baro.CoreLibrary.Serializer2
     public sealed class MessageAttribute : Attribute
     {
         public UInt16 ID { get; set; }
+        
+        public bool SaveToQueue { get; set; }
 
-        public static UInt16 GetMessageID(Type t)
+        public static MessageAttribute GetMessageAttribute(Type t)
         {
             object[] attr = t.GetCustomAttributes(typeof(MessageAttribute), true);
 
             if (attr == null || attr.Length == 0)
             {
-                throw new Exception("Bu struct CommandAttribute ile işaretlenmemiş!");
+                throw new Exception("Bu struct MessageAttribute ile işaretlenmemiş!");
             }
 
 #if PocketPC || WindowsCE
@@ -29,12 +31,22 @@ namespace Baro.CoreLibrary.Serializer2
             }
 #endif
 
-            return (attr[0] as MessageAttribute).ID;
+            return (attr[0] as MessageAttribute);
+        }
+
+        public static MessageAttribute GetMessageAttribute(object o)
+        {
+            return GetMessageAttribute(o.GetType());
+        }
+
+        public static UInt16 GetMessageID(Type t)
+        {
+            return GetMessageAttribute(t).ID;
         }
 
         public static UInt16 GetMessageID(object o)
         {
-            return GetMessageID(o.GetType());
+            return GetMessageAttribute(o).ID;
         }
     }
 
