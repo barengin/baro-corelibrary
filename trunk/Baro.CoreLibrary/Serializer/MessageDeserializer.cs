@@ -131,9 +131,9 @@ namespace Baro.CoreLibrary.Serializer2
             return r;
         }
 
-        internal MessageInternalHeader GetHeader(byte[] obj)
+        internal MessageHeader GetHeader(byte[] obj)
         {
-            MessageInternalHeader h = (MessageInternalHeader)GetStruct(obj, typeof(MessageInternalHeader), 0);
+            MessageHeader h = (MessageHeader)GetStruct(obj, typeof(MessageHeader), 0);
 
             if (!h.isCrcOk())
                 throw new MessageCrcException("Mesaj CRC hatası. Muhtemel veri kaybı...");
@@ -157,7 +157,7 @@ namespace Baro.CoreLibrary.Serializer2
             }
         }
 
-        public unsafe object Deserialize(MessageInternalHeader header, byte[] obj, MessageKey key)
+        public unsafe object Deserialize(MessageHeader header, byte[] obj, MessageKey key)
         {
             Type t = Message.GetTypeFromID(header.CommandID);
 
@@ -178,7 +178,7 @@ namespace Baro.CoreLibrary.Serializer2
             }
         }
 
-        public unsafe object Deserialize(byte[] obj, out MessageInternalHeader header, MessageKey key)
+        public unsafe object Deserialize(byte[] obj, out MessageHeader header, MessageKey key)
         {
             header = GetHeader(obj);
             return Deserialize(header, obj, key);

@@ -26,16 +26,16 @@ namespace Baro.CoreLibrary.Serializer2
         // Support for ZLib
         // internal static UncompressBufferPool UncompressBufferPool { get { return s_uncompressBufferPool; } }
 
-        private readonly MessageInternalHeader m_header;
+        private readonly MessageHeader m_header;
         private readonly byte[] m_data;
         private readonly int m_size;
 
         public int Size { get { return m_size; } }
         public byte[] Data { get { return m_data; } }
-        public MessageInfo GetMessageInfo() { return m_header.CreateMessageInfo(); }
-        public MessageInternalHeader GetMessageHeader() { return m_header; }
+        // public MessageInfo GetMessageInfo() { return m_header.CreateMessageInfo(); }
+        public MessageHeader GetMessageHeader() { return m_header; }
 
-        internal Message(MessageInternalHeader header, byte[] data, int size)
+        internal Message(MessageHeader header, byte[] data, int size)
         {
             m_data = data;
             m_header = header;
@@ -101,7 +101,7 @@ namespace Baro.CoreLibrary.Serializer2
         }
 
 #if PocketPC || WindowsCE
-        public static object Parse(byte[] data, out MessageInternalHeader header, MessageKey key)
+        public static object Parse(byte[] data, out MessageHeader header, MessageKey key)
 #else
         public static object Parse(byte[] data, out MessageInternalHeader header, MessageKey key = null)
 #endif
@@ -110,7 +110,7 @@ namespace Baro.CoreLibrary.Serializer2
         }
 
 #if PocketPC || WindowsCE
-        public static object Parse(byte[] data, MessageInternalHeader header, MessageKey key)
+        public static object Parse(byte[] data, MessageHeader header, MessageKey key)
 #else
         public static object Parse(byte[] data, MessageInternalHeader header, MessageKey key = null)
 #endif
@@ -118,7 +118,7 @@ namespace Baro.CoreLibrary.Serializer2
             return s_deserializer.Deserialize(header, data, key);
         }
 
-        public static MessageInternalHeader GetInternalHeader(byte[] data)
+        public static MessageHeader GetInternalHeader(byte[] data)
         {
             return s_deserializer.GetHeader(data);
         }
@@ -137,7 +137,7 @@ namespace Baro.CoreLibrary.Serializer2
             fs.Read(data, 0, data.Length);
             fs.Close();
 
-            MessageInternalHeader h = Message.GetInternalHeader(data);
+            MessageHeader h = Message.GetInternalHeader(data);
             return new Message(h, data, h.Size);
         }
     }

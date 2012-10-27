@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Baro.CoreLibrary.Serializer2;
+using Baro.CoreLibrary.Core;
 
 namespace Baro.CoreLibrary.SockServer
 {
@@ -40,6 +41,39 @@ namespace Baro.CoreLibrary.SockServer
         {
             [Description("MsgID", "MsgID")]
             public string MsgId;
+        }
+
+        [Description("Ack2")]
+        [StructLayout(LayoutKind.Sequential)]
+        [MessageAttribute(ID = 15)]
+        public struct Ack2
+        {
+            [Description("uid1", "uid1: {0}")]
+            public uint uid1;
+
+            [Description("uid2", "uid2: {0}")]
+            public uint uid2;
+
+            [Description("uid3", "uid3: {0}")]
+            public uint uid3;
+
+            [Description("uid4", "uid4: {0}")]
+            public uint uid4;
+
+            public UniqueID CreateUniqueID()
+            {
+                return new UniqueID(uid1, uid2, uid3, uid4);
+            }
+
+            public static Ack2 CreateFrom(UniqueID u)
+            {
+                return new Ack2() { uid1 = u.Data1, uid2 = u.Data2, uid3 = u.Data3, uid4 = u.Data4 };
+            }
+
+            public static Ack2 CreateAck2(MessageHeader h)
+            {
+                return CreateFrom(h.GetMsgID());
+            }
         }
 
         [Description("MsgList")]

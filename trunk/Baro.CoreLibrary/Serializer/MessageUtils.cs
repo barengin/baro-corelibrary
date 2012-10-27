@@ -77,9 +77,9 @@ namespace Baro.CoreLibrary.Serializer2
             this.CorrelationID = correlationID;
         }
 
-        internal MessageInternalHeader CreateInternalHeader()
+        internal MessageHeader CreateInternalHeader()
         {
-            return new MessageInternalHeader()
+            return new MessageHeader()
             {
                 CorrelationID = this.CorrelationID,
                 ToInbox = this.ToInbox,
@@ -93,13 +93,13 @@ namespace Baro.CoreLibrary.Serializer2
     /// 
     /// Aşağıdaki yapıda SIZE alanı hiçbir zaman değişmeyecek ve ilk eleman olarak kalacaktır.
     /// </summary>
-    [Description("MessageInternalHeader", "Header")]
+    [Description("MessageHeader", "Header")]
 #if PocketPC || WindowsCE
     [StructLayout(LayoutKind.Sequential)]
 #else
     [StructLayout(LayoutKind.Sequential)]
 #endif
-    public struct MessageInternalHeader
+    public struct MessageHeader
     {
         // Message SIZE
         [Description("Size", "Size: {0}")]
@@ -141,15 +141,15 @@ namespace Baro.CoreLibrary.Serializer2
         [Description("ExpireDate", "ExpireDate: {0}")]
         public DateTime ExpireDate;
 
-        internal MessageInfo CreateMessageInfo()
-        {
-            return new MessageInfo()
-            {
-                CorrelationID = this.CorrelationID,
-                ExpireDate = this.ExpireDate,
-                ToInbox = this.ToInbox
-            };
-        }
+        //internal MessageInfo CreateMessageInfo()
+        //{
+        //    return new MessageInfo()
+        //    {
+        //        CorrelationID = this.CorrelationID,
+        //        ExpireDate = this.ExpireDate,
+        //        ToInbox = this.ToInbox
+        //    };
+        //}
 
         public UniqueID GetMsgID()
         {
