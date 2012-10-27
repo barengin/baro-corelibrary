@@ -25,7 +25,7 @@ namespace Baro.CoreLibrary.SockServer
             public string password;
         }
 
-        [Description("Keep-Alive")]
+        [Description("Keep-Alive", "Keep-Alive")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 13)]
         public struct KeepAlive
@@ -34,7 +34,7 @@ namespace Baro.CoreLibrary.SockServer
             public byte seq;
         }
 
-        [Description("Ack")]
+        [Description("Ack", "Ack")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 14)]
         public struct Ack
@@ -43,7 +43,7 @@ namespace Baro.CoreLibrary.SockServer
             public string MsgId;
         }
 
-        [Description("Ack2")]
+        [Description("Ack2", "Ack2")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 15)]
         public struct Ack2
@@ -76,7 +76,7 @@ namespace Baro.CoreLibrary.SockServer
             }
         }
 
-        [Description("MsgList")]
+        [Description("MsgList", "MsgList")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 20)]
         public struct MsgList
@@ -85,7 +85,7 @@ namespace Baro.CoreLibrary.SockServer
             public string Query;
         }
 
-        [Description("MsgListResult")]
+        [Description("MsgListResult", "MsgListResult")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 21)]
         public struct MsgListResult
@@ -94,7 +94,7 @@ namespace Baro.CoreLibrary.SockServer
             public string Result;
         }
 
-        [Description("MsgGet")]
+        [Description("MsgGet", "MsgGet")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 22)]
         public struct MsgGet
@@ -103,7 +103,7 @@ namespace Baro.CoreLibrary.SockServer
             public string MsgId;
         }
 
-        [Description("MsgDelete")]
+        [Description("MsgDelete", "MsgDelete")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 23, SaveToQueue = true)] // Save: Client tarafında silme işlemi sunucuya gönderilmeden önce kaydedilmeli. Bağlantı kopabilir.
         public struct MsgDelete
