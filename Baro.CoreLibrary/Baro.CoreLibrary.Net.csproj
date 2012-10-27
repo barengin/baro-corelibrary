@@ -63,6 +63,7 @@
     <Compile Include="Collections\SynchDictionary.cs" />
     <Compile Include="Collections\SynchHashSet.cs" />
     <Compile Include="Collections\SynchList.cs" />
+    <Compile Include="Collections\SynchQueue.cs" />
     <Compile Include="Configuration\ConfigIni.cs" />
     <Compile Include="Configuration\ConfigIniSection.cs" />
     <Compile Include="Configuration\ConfigRepositoryException.cs" />
