@@ -13,11 +13,6 @@ namespace Baro.CoreLibrary.YolbilClient
     {
         private readonly SynchQueue<Message> _q = new SynchQueue<Message>();
         private readonly string _folder;
-        private readonly AutoResetEvent _event = new AutoResetEvent(false);
-        private volatile bool _closed = false;
-
-        public bool Closed { get { return _closed; } }
-        public AutoResetEvent WaitForEvent { get { return _event; } } 
 
         public EventHandler OnEnqueue;
         public EventHandler OnDequeue;
@@ -39,15 +34,18 @@ namespace Baro.CoreLibrary.YolbilClient
         {
             bool r = _q.Dequeue(out m);
 
-            string f = Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg");
+            if (r)
+            {
+                string f = Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg");
 
-            if (File.Exists(f))
-                File.Delete(f);
+                if (File.Exists(f))
+                    File.Delete(f);
 
-            Save();
+                Save();
 
-            if (OnDequeue != null)
-                OnDequeue(this, EventArgs.Empty);
+                if (OnDequeue != null)
+                    OnDequeue(this, EventArgs.Empty);
+            }
 
             return r;
         }
@@ -64,8 +62,6 @@ namespace Baro.CoreLibrary.YolbilClient
 
             if (OnEnqueue != null)
                 OnEnqueue(this, EventArgs.Empty);
-
-            _event.Set();
         }
 
 #if PocketPC || WindowsCE
@@ -173,17 +169,5 @@ namespace Baro.CoreLibrary.YolbilClient
             }
         }
 #endif
-
-        public void Close()
-        {
-            _closed = true;
-            _event.Set();
-        }
-
-        public void Open()
-        {
-            _closed = false;
-            _event.Set();
-        }
     }
 }
