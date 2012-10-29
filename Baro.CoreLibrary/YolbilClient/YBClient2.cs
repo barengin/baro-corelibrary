@@ -262,6 +262,9 @@ namespace Baro.CoreLibrary.YolbilClient
         {
             while (true)
             {
+                if (_queue.Closed)
+                    return;
+
                 if (_socket != null && _socket.Connected)
                 {
                     _queue.WaitForEvent.WaitOne();
