@@ -173,5 +173,11 @@ namespace Baro.CoreLibrary.YolbilClient
             _closed = true;
             _event.Set();
         }
+
+        public void Open()
+        {
+            _closed = false;
+            _event.Set();
+        }
     }
 }
