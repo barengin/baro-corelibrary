@@ -298,14 +298,15 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void StartReceive()
         {
-            // Log("StartReceive()");
-
-            if (_socket != null)
+            lock (_synch)
             {
-                State state = new State() { _s = _socket };
+                if (_socket != null)
+                {
+                    State state = new State() { _s = _socket };
 
-                _socket.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
-                    SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
+                    _socket.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
+                        SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
+                }
             }
         }
 
@@ -358,7 +359,7 @@ namespace Baro.CoreLibrary.YolbilClient
             lock (_synch)
             {
                 if (_socket != null)
-                    throw new InvalidOperationException("Bu nesne ile daha önce bir bağlantı kurulmuş. Bu nesneyi dispose edip yeni bir YBClient yaratın.");
+                    return;
 
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
             }
@@ -374,7 +375,6 @@ namespace Baro.CoreLibrary.YolbilClient
                 return;
             }
 
-            FireOnConnect(new ConnectedEventArgs());
             StartReceive();
 
             if (SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false, null)))
@@ -389,9 +389,11 @@ namespace Baro.CoreLibrary.YolbilClient
             else
             {
                 DisconnectInternal();
-                FireOnDisconnect(new DisconnectedEventArgs());
+                // Burada disconnect event yok. Çünkü receive bizim için fırlatıyor.
                 return;
             }
+
+            FireOnConnect(new ConnectedEventArgs());
         }
 
         private bool SendAndWaitForAck(Message message)
@@ -413,22 +415,20 @@ namespace Baro.CoreLibrary.YolbilClient
                 // Gönder
                 _socket.Send(message.Data, message.Size, SocketFlags.None);
             }
-            catch (Exception ex)
+            catch
             {
                 DisconnectInternal();
-                FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = ex });
                 return false;
             }
 
             // Bekle
-            if (_waitForEvent.WaitOne(120000, false))
+            if (_waitForEvent.WaitOne(90000, false))
             {
                 return true;
             }
             else
             {
                 DisconnectInternal();
-                FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = new TimeoutException("Timeout for ACK") });
                 return false;
             }
         }
