@@ -39,6 +39,17 @@ namespace Baro.CoreLibrary.YolbilClient
                 _logger.Log(l);
         }
 
+        public bool Connected
+        {
+            get
+            {
+                lock (_synch)
+                {
+                    return _socket != null && _socket.Connected;
+                }
+            }
+        }
+
         #region Process Buffer
         private enum ProcessBufferResult
         {
@@ -300,7 +311,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void ReceiveCallback(IAsyncResult r)
         {
-            // Log("ReceiveCB()");
+            Log("ReceiveCB()");
 
             State state = (State)r.AsyncState;
             int readed;
@@ -334,6 +345,12 @@ namespace Baro.CoreLibrary.YolbilClient
 
             _lastActivity.Reset();
             StartReceive();
+        }
+
+        public void RemoveFromServer(MessageHeader header)
+        {
+            PredefinedCommands.MsgDelete delete = new PredefinedCommands.MsgDelete() { MsgId = header.GetMsgID().ToString() };
+            Send(Message.Create(new MessageInfo(), delete, false, null));
         }
 
         public void Connect()
@@ -450,7 +467,7 @@ namespace Baro.CoreLibrary.YolbilClient
             lock (_synch)
             {
                 _queue.Close();
-                
+
                 if (_sendThread != null)
                     _sendThread.Join();
 
