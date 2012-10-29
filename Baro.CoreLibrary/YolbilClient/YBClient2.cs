@@ -360,7 +360,7 @@ namespace Baro.CoreLibrary.YolbilClient
             FireOnConnect(new ConnectedEventArgs());
             StartReceive();
 
-            if (SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false)))
+            if (SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false, null)))
             {
                 _queue.Open();
 
@@ -372,7 +372,7 @@ namespace Baro.CoreLibrary.YolbilClient
             else
             {
                 DisconnectInternal();
-                FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = ex });
+                FireOnDisconnect(new DisconnectedEventArgs());
                 return;
             }
         }
@@ -404,7 +404,7 @@ namespace Baro.CoreLibrary.YolbilClient
             }
 
             // Bekle
-            if (_waitForEvent.WaitOne(120000))
+            if (_waitForEvent.WaitOne(120000, false))
             {
                 return true;
             }
