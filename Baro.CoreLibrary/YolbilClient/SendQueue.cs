@@ -38,6 +38,12 @@ namespace Baro.CoreLibrary.YolbilClient
         public bool Dequeue(out Message m)
         {
             bool r = _q.Dequeue(out m);
+
+            string f = Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg");
+
+            if (File.Exists(f))
+                File.Delete(f);
+
             Save();
 
             if (OnDequeue != null)
