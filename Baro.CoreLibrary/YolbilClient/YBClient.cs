@@ -33,7 +33,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public event Action<YBClient> OnConnected;
         public event Action<YBClient, Exception> OnDisconnected;
-        public event Action<YBClient, MessageInternalHeader, object> OnMessageReceived;
+        public event Action<YBClient, MessageHeader, object> OnMessageReceived;
 
         public YBClient(ConnectionSettings settings)
         {
@@ -54,7 +54,7 @@ namespace Baro.CoreLibrary.YolbilClient
             }
         }
 
-        public void RemoveMsgFromServer(MessageInternalHeader header)
+        public void RemoveMsgFromServer(MessageHeader header)
         {
             PredefinedCommands.MsgDelete delete = new PredefinedCommands.MsgDelete() { MsgId = header.GetMsgID().ToString() };
             Message msg_delete = Message.Create(new MessageInfo(), delete, false, null);
@@ -68,12 +68,13 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void AddToSendQueue(Message msg, bool writeToDisk)
         {
-            MessageInternalHeader header = msg.GetMessageHeader();
+            MessageHeader header = msg.GetMessageHeader();
             UniqueID uid = header.GetMsgID();
             string filename = Path.Combine(_settings.SentFolder, uid.ToString() + ".msg");
 
             // Sunucu tarafını diske yazma.
-            if (writeToDisk && msg.GetMessageHeader().CommandID >= 1024)
+            if ((msg.GetMessageHeader().CommandID == 23) || // Delete ise kaydet disk'e
+                writeToDisk && msg.GetMessageHeader().CommandID >= 1024)
             {
                 FileStream fs = File.Create(filename);
                 fs.Write(msg.Data, 0, msg.Size);
@@ -222,7 +223,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
                 if (st - dt > new TimeSpan(0, 2, 0))
                 {
-                    Message m = Message.FromFile(item);
+                    Message m = Message.LoadFromFile(item);
                     AddToSendQueue(m, false);
                 }
             }
@@ -300,7 +301,7 @@ namespace Baro.CoreLibrary.YolbilClient
         }
 
         #region ProcessBuffer
-        private void SaveToReceivedMessages(MessageInternalHeader header, object obj)
+        private void SaveToReceivedMessages(MessageHeader header, object obj)
         {
             using (StreamWriter sw = new StreamWriter(Path.Combine(_settings.ReceivedFolder, header.GetMsgID().ToString() + ".msg"), true))
             {
@@ -364,7 +365,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private ProcessBufferResult ProcessMessage(int size)
         {
-            MessageInternalHeader header;
+            MessageHeader header;
 
             try
             {
