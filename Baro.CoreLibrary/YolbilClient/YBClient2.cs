@@ -243,10 +243,6 @@ namespace Baro.CoreLibrary.YolbilClient
         {
             _settings = settings;
             _queue = new SendQueue(settings.SentFolder);
-            _sendThread = new Thread(new ThreadStart(_send));
-            _sendThread.IsBackground = true;
-            _sendThread.Name = "YBClient Send Thread";
-            _sendThread.Start();
         }
 
         #endregion
@@ -278,9 +274,6 @@ namespace Baro.CoreLibrary.YolbilClient
                         }
                         else
                         {
-                            // Kuyruğun içinde halen bekleyen mesajlar var.
-                            // Thread'i bloke etmeyelim.
-                            _queue.WaitForEvent.Set();
                             break;
                         }
                     }
@@ -345,11 +338,6 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Connect()
         {
-            if (_queue.Closed)
-            {
-                throw new InvalidOperationException("You need to create a new YBClient object");
-            }
-
             lock (_synch)
             {
                 if (_socket != null)
@@ -372,7 +360,21 @@ namespace Baro.CoreLibrary.YolbilClient
             FireOnConnect(new ConnectedEventArgs());
             StartReceive();
 
-            SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false));
+            if (SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false)))
+            {
+                _queue.Open();
+
+                _sendThread = new Thread(new ThreadStart(_send));
+                _sendThread.IsBackground = true;
+                _sendThread.Name = "YBClient Send Thread";
+                _sendThread.Start();
+            }
+            else
+            {
+                DisconnectInternal();
+                FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = ex });
+                return;
+            }
         }
 
         private bool SendAndWaitForAck(Message message)
@@ -440,7 +442,6 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Disconnect()
         {
-            _queue.Close();
             DisconnectInternal();
         }
 
@@ -448,6 +449,11 @@ namespace Baro.CoreLibrary.YolbilClient
         {
             lock (_synch)
             {
+                _queue.Close();
+                
+                if (_sendThread != null)
+                    _sendThread.Join();
+
                 if (_socket != null)
                 {
                     _socket.Close();
