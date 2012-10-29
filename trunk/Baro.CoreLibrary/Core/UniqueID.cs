@@ -52,6 +52,52 @@ namespace Baro.CoreLibrary.Core
             return ToString(UniqueIDFormat.Hex);
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is UniqueID)
+            {
+                UniqueID u = (UniqueID)obj;
+                return u == this;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public static bool operator !=(UniqueID id1, UniqueID id2)
+        {
+            if (id1.Data1 != id2.Data1 ||
+                id1.Data2 != id2.Data2 ||
+                id1.Data3 != id2.Data3 ||
+                id1.Data4 != id2.Data4)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool operator ==(UniqueID id1, UniqueID id2)
+        {
+            if (id1.Data1 == id2.Data1 &&
+                id1.Data2 == id2.Data2 &&
+                id1.Data3 == id2.Data3 &&
+                id1.Data4 == id2.Data4)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public string ToString(UniqueIDFormat format)
         {
             switch (format)

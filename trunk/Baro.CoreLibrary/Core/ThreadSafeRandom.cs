@@ -9,25 +9,14 @@ namespace Baro.CoreLibrary
 #if PocketPC || WindowsCE
     public static class ThreadSafeRandom
     {
-        private static volatile Random s_global;
+        private static volatile RandomC5 s_global;
 
-        private static Random global
+        private static RandomC5 global
         {
-            get
-            {
-                return s_global ?? (s_global = new Random());
-            }
+            get { return s_global ?? (s_global = new RandomC5()); }
         }
 
-        public static int NextWithNeg()
-        {
-            lock (global) 
-            {
-                return global.Next(int.MinValue, int.MaxValue);
-            }
-        }
-
-        public static int Next()
+        public static uint Next()
         {
             lock (global) 
             {
