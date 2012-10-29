@@ -6,6 +6,7 @@ using System.Threading;
 using Baro.CoreLibrary.Collections;
 using Baro.CoreLibrary.Serializer2;
 using Baro.CoreLibrary.SockServer;
+using Baro.CoreLibrary.Core;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
@@ -18,17 +19,19 @@ namespace Baro.CoreLibrary.YolbilClient
         }
 
         private object _synch = new object();
+        private System.Windows.Forms.Control _synchContext;
+
         private SequenceLog _logger;
 
-        private System.Threading.Timer _timer;
         private volatile Socket _socket;
-        private System.Windows.Forms.Control _synchContext;
 
         private ArraySegmentSeamlessBuffer<byte> _buffer = new ArraySegmentSeamlessBuffer<byte>();
         private byte[] _tsBuffer = new byte[4096];
 
         private LastActivity _lastActivity = new LastActivity();
         private ConnectionSettings _settings;
+        private SendQueue _queue;
+        private Thread _sendThread;
 
         private void Log(string l)
         {
@@ -60,11 +63,60 @@ namespace Baro.CoreLibrary.YolbilClient
             // Değilse normal komut kategorisinde devam et
             object obj = Message.Parse(_tsBuffer, header, null);
 
-            // On Message Received
-            FireOnMessageReceived(new MessageReceivedEventArgs() { Header = header, Message = obj });
+            bool handled;
+            MessageListener(header, obj, out handled);
+
+            if (!handled)
+            {
+                // On Message Received
+                FireOnMessageReceived(new MessageReceivedEventArgs() { Header = header, Message = obj });
+            }
 
             // No problem
             return ProcessBufferResult.OK;
+        }
+
+        private readonly int MSG_ACK2 = MessageAttribute.GetMessageID(typeof(PredefinedCommands.Ack2));
+        private readonly int KEEP_ALIVE = MessageAttribute.GetMessageID(typeof(PredefinedCommands.KeepAlive));
+
+        private AutoResetEvent _waitForEvent = new AutoResetEvent(false);
+        private object _waitFor;
+
+        private void MessageListener(MessageHeader header, object obj, out bool handled)
+        {
+            handled = false;
+
+            // Henüz işlenmemiş ise kapat
+            if (_waitFor == null)
+                return;
+
+            if (_waitFor is PredefinedCommands.Ack2 && header.CommandID == MSG_ACK2)
+            {
+                PredefinedCommands.Ack2 a = (PredefinedCommands.Ack2)obj;
+                PredefinedCommands.Ack2 w = (PredefinedCommands.Ack2)_waitFor;
+
+                if (a.CreateUniqueID() == w.CreateUniqueID())
+                {
+                    Log("Ack2");
+                    _waitForEvent.Set();
+                }
+
+                handled = true;
+                _waitFor = null;
+
+                return;
+            }
+
+            if (_waitFor is PredefinedCommands.KeepAlive && header.CommandID == KEEP_ALIVE)
+            {
+                Log("Ack2: Keep_alive");
+                _waitForEvent.Set();
+
+                handled = true;
+                _waitFor = null;
+
+                return;
+            }
         }
 
         private ProcessBufferResult ProcessBufferList()
@@ -122,8 +174,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void FireOnMessageReceived(MessageReceivedEventArgs m)
         {
-            Log("Received:" + m.Header.GetMsgID().ToString());
-            Log("ObjValue:" + DescriptionAttribute.ObjDebugString(m.Message));
+            Log("Received: " + m.Header.GetMsgID().ToString());
+            Log(DescriptionAttribute.ObjDebugString(m.Message));
 
             if (OnMessageReceived != null)
             {
@@ -189,33 +241,65 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public YBClient2(ConnectionSettings settings)
         {
-            _timer = new System.Threading.Timer(new TimerCallback(checkState), null, 10000, 120000);
             _settings = settings;
+            _queue = new SendQueue(settings.SentFolder);
+            _sendThread = new Thread(new ThreadStart(_send));
+            _sendThread.IsBackground = true;
+            _sendThread.Name = "YBClient Send Thread";
+            _sendThread.Start();
         }
 
         #endregion
 
-        // Başka bir thread tarafından çağırılıyor. Bu yüzden Timer.Dispose'dan sonra bile çalışmaya devam
-        // edecektir.
-        private void checkState(object s)
+        private void _send()
         {
-            lock (_synch)
+            while (true)
             {
-                if (_socket == null)
-                    return;
+                if (_socket != null && _socket.Connected)
+                {
+                    _queue.WaitForEvent.WaitOne();
 
-                // TODO:
+                    // Kuyruk kapatılmış. Yani Client artık kapalı.
+                    if (_queue.Closed)
+                    {
+                        // Çık git, thread kapansın.
+                        return;
+                    }
+
+                    // Messsage send process
+                    Message m;
+
+                    while (!_queue.Closed && _queue.Peek(out m))
+                    {
+                        if (SendAndWaitForAck(m))
+                        {
+                            // Herşey yolunda göndermeye devam et
+                            _queue.Dequeue(out m);
+                        }
+                        else
+                        {
+                            // Kuyruğun içinde halen bekleyen mesajlar var.
+                            // Thread'i bloke etmeyelim.
+                            _queue.WaitForEvent.Set();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
             }
         }
 
         private void StartReceive()
         {
-            Log("StartReceive()");
+            // Log("StartReceive()");
 
             if (_socket != null)
             {
                 State state = new State() { _s = _socket };
-                
+
                 _socket.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
                     SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
             }
@@ -223,7 +307,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void ReceiveCallback(IAsyncResult r)
         {
-            Log("ReceiveCB()");
+            // Log("ReceiveCB()");
 
             State state = (State)r.AsyncState;
             int readed;
@@ -261,6 +345,11 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Connect()
         {
+            if (_queue.Closed)
+            {
+                throw new InvalidOperationException("You need to create a new YBClient object");
+            }
+
             lock (_synch)
             {
                 if (_socket != null)
@@ -277,23 +366,81 @@ namespace Baro.CoreLibrary.YolbilClient
             {
                 DisconnectInternal();
                 FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = ex });
+                return;
             }
 
             FireOnConnect(new ConnectedEventArgs());
             StartReceive();
-            
-            Send(Message.Create(new MessageInfo(), _settings.Login, false));
+
+            SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false));
         }
 
-        public void Send(Message message)
+        private bool SendAndWaitForAck(Message message)
         {
-            Log("Send: " + message.GetMessageHeader().CommandID + "@" + message.GetMessageHeader().GetMsgID().ToString());
-            _socket.Send(message.Data, message.Size, SocketFlags.None);
+            Log("SendAndWaitForACK2: " + message.GetMessageHeader().CommandID + "," + message.GetMessageHeader().GetMsgID().ToString());
+
+            // Gönderilen mesaj keep-alive ise onu bekle, aksi her durumda ACK2 bekle
+            if (message.GetMessageHeader().CommandID == KEEP_ALIVE)
+            {
+                _waitFor = new PredefinedCommands.KeepAlive();
+            }
+            else
+            {
+                _waitFor = PredefinedCommands.Ack2.CreateAck2(message.GetMessageHeader());
+            }
+
+            try
+            {
+                // Gönder
+                _socket.Send(message.Data, message.Size, SocketFlags.None);
+            }
+            catch (Exception ex)
+            {
+                DisconnectInternal();
+                FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = ex });
+                return false;
+            }
+
+            // Bekle
+            if (_waitForEvent.WaitOne(120000))
+            {
+                return true;
+            }
+            else
+            {
+                DisconnectInternal();
+                FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = new TimeoutException("Timeout for ACK") });
+                return false;
+            }
+        }
+
+        public void Send(Message m)
+        {
+            MessageHeader h = m.GetMessageHeader();
+
+            // Sunucu tarafı ise
+            if (h.isServerSideCommand())
+            {
+                // Sunucu tarafı ama disk'e yaz işaretli.
+                if (MessageAttribute.GetMessageAttribute(Message.GetTypeFromID(h.CommandID)).SaveToQueue)
+                {
+                    _queue.Enqueue(m, true);
+                }
+                else
+                {
+                    _queue.Enqueue(m, false);
+                }
+            }
+            else
+            {
+                // Kullanıcı tarafı
+                _queue.Enqueue(m, true);
+            }
         }
 
         public void Disconnect()
         {
-            _timer.Dispose();
+            _queue.Close();
             DisconnectInternal();
         }
 

@@ -5,6 +5,7 @@ using System.Text;
 using Baro.CoreLibrary.Serializer2;
 using Baro.CoreLibrary.Collections;
 using System.IO;
+using System.Threading;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
@@ -12,6 +13,11 @@ namespace Baro.CoreLibrary.YolbilClient
     {
         private readonly SynchQueue<Message> _q = new SynchQueue<Message>();
         private readonly string _folder;
+        private readonly AutoResetEvent _event = new AutoResetEvent(false);
+        private volatile bool _closed = false;
+
+        public bool Closed { get { return _closed; } }
+        public AutoResetEvent WaitForEvent { get { return _event; } } 
 
         public EventHandler OnEnqueue;
         public EventHandler OnDequeue;
@@ -40,14 +46,20 @@ namespace Baro.CoreLibrary.YolbilClient
             return r;
         }
 
-        public void Enqueue(Message m)
+        public void Enqueue(Message m, bool saveToDisk)
         {
             _q.Enqueue(m);
-            Message.SaveToFile(m, Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg"));
-            Save();
+            
+            if (saveToDisk)
+            {
+                Message.SaveToFile(m, Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg"));
+                Save();
+            }
 
             if (OnEnqueue != null)
                 OnEnqueue(this, EventArgs.Empty);
+
+            _event.Set();
         }
 
 #if PocketPC || WindowsCE
@@ -134,12 +146,12 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Save()
         {
+            Message[] m = _q.ToArray();
+
             _q.SynchLock.EnterWriteLock();
             
             try
             {
-                Message[] m = _q.ToArray();
-
                 using (StreamWriter sw = new StreamWriter(Path.Combine(_folder, "queue.txt")))
                 {
                     for (int i = 0; i < m.Length; i++)
@@ -155,5 +167,11 @@ namespace Baro.CoreLibrary.YolbilClient
             }
         }
 #endif
+
+        public void Close()
+        {
+            _closed = true;
+            _event.Set();
+        }
     }
 }
