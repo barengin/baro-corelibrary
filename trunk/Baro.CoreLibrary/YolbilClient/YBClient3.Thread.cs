@@ -77,7 +77,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void ResumeTimer()
         {
-            _timer.Change(3000, 3000);
+            _timer.Change(60000, 60000);
         }
 
         private void timerLoop(object s)
