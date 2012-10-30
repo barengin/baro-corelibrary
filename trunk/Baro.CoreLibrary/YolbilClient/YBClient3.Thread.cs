@@ -3,44 +3,68 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Net.Sockets;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
     partial class YBClient3
     {
-        private Thread _thread;
-        private volatile bool _threadRunning;
+        private volatile Socket _socket;
 
-        private bool ThreadIsRunning
+        public bool Connected
         {
-            get { return (_thread != null) && _threadRunning; }
+            get { return _socket != null && _socket.Connected; }
         }
 
-        private void threadLoop()
+        private void DisposeSocket(Socket s)
         {
-        }
+            if (s == null)
+                return;
 
-        private void StartThread()
-        {
-            // Çalışıyorsa durdur
-            StopThread();
-
-            // Yenisini başlat
-            _threadRunning = true;
-            _thread = new Thread(new ThreadStart(threadLoop));
-            _thread.Name = "YBClient Thread";
-            _thread.IsBackground = true;
-            _thread.Start();
-        }
-
-        private void StopThread()
-        {
-            // Açıksa durdur.
-            if (_thread != null)
+            try
             {
-                _threadRunning = false;
-                _thread.Join();
+                s.Shutdown(SocketShutdown.Both);
             }
+            catch { }
+
+            s.Close();
+        }
+
+        private void ConnectSocket()
+        {
+            lock (_synch)
+            {
+                DisconnectSocket();
+
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+
+                try
+                {
+                    _socket.Connect(_settings.Address);
+                }
+                catch
+                {
+                    DisconnectSocket();
+                    return;
+                }
+            }
+
+            FireOnConnect(new ConnectedEventArgs());
+        }
+
+        private void DisconnectSocket()
+        {
+            lock (_synch)
+            {
+                DisposeSocket(_socket);
+            }
+            
+            FireOnDisconnect(new DisconnectedEventArgs());
+        }
+
+        private void timerLoop(object s)
+        {
+
         }
     }
 }

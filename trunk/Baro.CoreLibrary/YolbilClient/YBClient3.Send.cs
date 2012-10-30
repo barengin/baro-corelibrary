@@ -7,5 +7,6 @@ namespace Baro.CoreLibrary.YolbilClient
 {
     partial class YBClient3
     {
+
     }
 }

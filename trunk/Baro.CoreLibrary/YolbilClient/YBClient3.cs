@@ -5,6 +5,7 @@ using System.Text;
 using Baro.CoreLibrary.Serializer2;
 using System.Net.Sockets;
 using Baro.CoreLibrary.SockServer;
+using System.Threading;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
@@ -16,10 +17,7 @@ namespace Baro.CoreLibrary.YolbilClient
         private ConnectionSettings _settings;
         private SendQueue _queue;
 
-        public bool Connected
-        {
-            get { throw new NotImplementedException(); }
-        }
+        private Timer _timer;
 
         #region Log
         private SequenceLog _logger;
@@ -150,17 +148,28 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Connect()
         {
+            // Close the socket
+            Disconnect();
+
+            // Start timer
             lock (_synch)
             {
-
+                // Start timer
+                _timer = new Timer(new TimerCallback(timerLoop), null, 1000, 60000);
             }
         }
 
         public void Disconnect()
         {
+            // Close the socket
+            DisconnectSocket();
+
+            // Stop timer
             lock (_synch)
             {
-
+                // Dispose timer
+                _timer.Dispose();
+                _timer = null;
             }
         }
 
