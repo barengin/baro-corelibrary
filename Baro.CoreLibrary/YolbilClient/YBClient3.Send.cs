@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using Baro.CoreLibrary.Serializer2;
 using Baro.CoreLibrary.SockServer;
-using System.Net.Sockets;
-using System.Threading;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
     partial class YBClient3
     {
         private SendQueue _queue;
-
-        private AutoResetEvent _sendEvent = new AutoResetEvent(false);
 
         private bool SendAndWaitForAck(Message message)
         {
@@ -52,50 +50,62 @@ namespace Baro.CoreLibrary.YolbilClient
             }
         }
 
-        private void SendCallback(IAsyncResult r)
+        public void Send(Message msg)
         {
-            State state = (State)r.AsyncState;
+            MessageHeader h = msg.GetMessageHeader();
 
-            try
+            // Sunucu tarafı ise
+            if (h.isServerSideCommand())
             {
-                state._s.EndSend(r);
-            }
-            catch
-            {
-                DisconnectSocket();
-                return;
-            }
-
-            Message m;
-            _queue.Dequeue(out m);
-
-            StartSend(null);
-        }
-
-        private void StartSend(object s)
-        {
-            Message m;
-
-            if (Connected)
-            {
-                if (_queue.Peek(out m))
+                // Sunucu tarafı ama disk'e yaz işaretli.
+                if (MessageAttribute.GetMessageAttribute(Message.GetTypeFromID(h.CommandID)).SaveToQueue)
                 {
-                    State state = new State() { _s = _socket };
-
-                    try
-                    {
-                        _socket.BeginSend(m.Data, 0, m.Size, SocketFlags.None,
-                            new AsyncCallback(SendCallback), state);
-                    }
-                    catch
-                    {
-                        DisconnectSocket();
-                    }
+                    _queue.Enqueue(msg, true);
                 }
                 else
                 {
-                    _sendEvent.WaitOne();
+                    _queue.Enqueue(msg, false);
                 }
+            }
+            else
+            {
+                // Kullanıcı tarafı
+                _queue.Enqueue(msg, true);
+            }
+
+            ThreadPool.QueueUserWorkItem(new WaitCallback(StartSend));
+        }
+
+        private object _sendSynch = new object();
+        private volatile bool _sendRunning = false;
+
+        private void StartSend(object state)
+        {
+            if (_sendRunning)
+                return;
+
+            if (!Connected)
+                return;
+
+            lock (_sendSynch)
+            {
+                _sendRunning = true;
+                Message m;
+
+                while (_queue.Peek(out m))
+                {
+                    if (SendAndWaitForAck(m))
+                    {
+                        // Herşey yolunda göndermeye devam et
+                        _queue.Dequeue(out m);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                _sendRunning = false;
             }
         }
     }
