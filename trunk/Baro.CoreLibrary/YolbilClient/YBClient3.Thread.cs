@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Net.Sockets;
+using Baro.CoreLibrary.Serializer2;
+using Baro.CoreLibrary.SockServer;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
@@ -13,13 +15,13 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public bool Connected
         {
-            get { return _socket != null && _socket.Connected; }
+            get { lock(_synch) { return _socket != null && _socket.Connected; } }
         }
 
-        private void DisposeSocket(Socket s)
+        private bool DisposeSocket(Socket s)
         {
             if (s == null)
-                return;
+                return false;
 
             try
             {
@@ -28,14 +30,16 @@ namespace Baro.CoreLibrary.YolbilClient
             catch { }
 
             s.Close();
+
+            return true;
         }
 
         private void ConnectSocket()
         {
+            DisconnectSocket();
+
             lock (_synch)
             {
-                DisconnectSocket();
-
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
 
                 try
@@ -54,17 +58,54 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void DisconnectSocket()
         {
+            bool r;
+
             lock (_synch)
             {
-                DisposeSocket(_socket);
+                r = DisposeSocket(_socket);
+                _socket = null;
+
+                _sendEvent.Set();
             }
-            
-            FireOnDisconnect(new DisconnectedEventArgs());
+
+            if (r)
+                FireOnDisconnect(new DisconnectedEventArgs());
+        }
+
+        private void PauseTimer()
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
+        }
+
+        private void ResumeTimer()
+        {
+            _timer.Change(3000, 3000);
         }
 
         private void timerLoop(object s)
         {
+            PauseTimer();
 
+            if (Connected)
+            {
+                Send(Message.Create(new MessageInfo(), new PredefinedCommands.KeepAlive(), false, null));
+            }
+            else
+            {
+                ConnectSocket();
+
+                if (Connected)
+                {
+                    StartReceive();
+
+                    Message m = Message.Create(new MessageInfo(), _settings.Login, false, null);
+                    _socket.Send(m.Data, m.Size, SocketFlags.None);
+                    
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(StartSend));
+                }
+            }
+
+            ResumeTimer();
         }
     }
 }

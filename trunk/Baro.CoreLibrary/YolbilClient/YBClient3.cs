@@ -15,8 +15,6 @@ namespace Baro.CoreLibrary.YolbilClient
         private System.Windows.Forms.Control _synchContext;
 
         private ConnectionSettings _settings;
-        private SendQueue _queue;
-
         private Timer _timer;
 
         #region Log
@@ -144,6 +142,9 @@ namespace Baro.CoreLibrary.YolbilClient
                 // Kullanıcı tarafı
                 _queue.Enqueue(msg, true);
             }
+
+            // Trigger to send
+            _sendEvent.Set();
         }
 
         public void Connect()
@@ -155,22 +156,25 @@ namespace Baro.CoreLibrary.YolbilClient
             lock (_synch)
             {
                 // Start timer
-                _timer = new Timer(new TimerCallback(timerLoop), null, 1000, 60000);
+                _timer = new Timer(new TimerCallback(timerLoop), null, 1000, 3000);
             }
         }
 
         public void Disconnect()
         {
-            // Close the socket
-            DisconnectSocket();
-
             // Stop timer
             lock (_synch)
             {
                 // Dispose timer
-                _timer.Dispose();
-                _timer = null;
+                if (_timer != null)
+                {
+                    _timer.Dispose();
+                    _timer = null;
+                }
             }
+            
+            // Close the socket
+            DisconnectSocket();
         }
 
         public void Dispose()

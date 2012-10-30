@@ -6,11 +6,12 @@ using Baro.CoreLibrary.Collections;
 using Baro.CoreLibrary.Serializer2;
 using Baro.CoreLibrary.SockServer;
 using System.Threading;
+using System.Net.Sockets;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
-	partial class YBClient3
-	{
+    partial class YBClient3
+    {
         private ArraySegmentSeamlessBuffer<byte> _buffer = new ArraySegmentSeamlessBuffer<byte>();
         private byte[] _tsBuffer = new byte[4096];
 
@@ -25,6 +26,64 @@ namespace Baro.CoreLibrary.YolbilClient
             OK,
             MessageNotRegistered,
             MessageCRCError
+        }
+
+        private sealed class State
+        {
+            public byte[] _receiveBuffer = new byte[4096];
+            public Socket _s;
+        }
+
+        private void StartReceive()
+        {
+            if (Connected)
+            {
+                State state = new State() { _s = _socket };
+
+                try
+                {
+                    _socket.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
+                        SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
+                }
+                catch
+                {
+                    DisconnectSocket();
+                }
+            }
+        }
+
+        private void ReceiveCallback(IAsyncResult r)
+        {
+            Log("ReceiveCB()");
+
+            State state = (State)r.AsyncState;
+            int readed;
+
+            try
+            {
+                readed = state._s.EndReceive(r);
+            }
+            catch
+            {
+                DisconnectSocket();
+                return;
+            }
+
+            if (readed == 0) // Kapanmış
+            {
+                DisconnectSocket();
+                return;
+            }
+
+            _buffer.Add(new ArraySegment<byte>(state._receiveBuffer, 0, readed));
+
+            if (ProcessBufferList() != ProcessBufferResult.OK)
+            {
+                DisconnectSocket();
+                return;
+            }
+
+            StartReceive();
         }
 
         private ProcessBufferResult ProcessMessage(int size)
@@ -138,5 +197,5 @@ namespace Baro.CoreLibrary.YolbilClient
             // Receive olayına devam. Durmak için bir sebep yok.
             return ProcessBufferResult.OK;
         }
-	}
+    }
 }
