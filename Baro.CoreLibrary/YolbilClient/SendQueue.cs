@@ -53,7 +53,7 @@ namespace Baro.CoreLibrary.YolbilClient
         public void Enqueue(Message m, bool saveToDisk)
         {
             _q.Enqueue(m);
-            
+
             if (saveToDisk)
             {
                 Message.SaveToFile(m, Path.Combine(_folder, m.GetMessageHeader().GetMsgID().ToString() + ".msg"));
@@ -113,36 +113,31 @@ namespace Baro.CoreLibrary.YolbilClient
 #else
         public void Load()
         {
-            _q.SynchLock.EnterWriteLock();
-            
-            try
+            if (File.Exists(Path.Combine(_folder, "queue.txt")))
             {
-                if (File.Exists(Path.Combine(_folder, "queue.txt")))
+                using (StreamReader sr = new StreamReader(Path.Combine(_folder, "queue.txt")))
                 {
-                    using (StreamReader sr = new StreamReader(Path.Combine(_folder, "queue.txt")))
+                    while (!sr.EndOfStream)
                     {
-                        while (!sr.EndOfStream)
+                        string r = sr.ReadLine();
+                        Message m;
+
+                        try
                         {
-                            string r = sr.ReadLine();
-                            Message m;
+                            string filename = Path.Combine(_folder, r + ".msg");
 
-                            try
+                            if (File.Exists(filename))
                             {
-                                m = Message.LoadFromFile(Path.Combine(_folder, r + ".msg"));
+                                m = Message.LoadFromFile(filename);
+                                _q.Enqueue(m);
                             }
-                            catch
-                            {
-                                continue;
-                            }
-
-                            _q.Enqueue(m);
+                        }
+                        catch
+                        {
+                            continue;
                         }
                     }
                 }
-            }
-            finally
-            {
-                _q.SynchLock.ExitWriteLock();
             }
         }
 
@@ -151,7 +146,7 @@ namespace Baro.CoreLibrary.YolbilClient
             Message[] m = _q.ToArray();
 
             _q.SynchLock.EnterWriteLock();
-            
+
             try
             {
                 using (StreamWriter sw = new StreamWriter(Path.Combine(_folder, "queue.txt")))
