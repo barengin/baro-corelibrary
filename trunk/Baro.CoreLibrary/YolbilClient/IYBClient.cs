@@ -6,7 +6,7 @@ using Baro.CoreLibrary.Serializer2;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
-    interface IYBClient
+    interface IYBClient: IDisposable
     {
         /// <summary>
         /// Sunucuya canlı bağlantı olup olmadığını gösterir.
