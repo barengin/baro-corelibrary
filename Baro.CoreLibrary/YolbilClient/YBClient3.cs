@@ -8,10 +8,8 @@ using Baro.CoreLibrary.SockServer;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
-    public sealed class YBClient3: IYBClient
+    public sealed partial class YBClient3: IYBClient
     {
-        private volatile Socket _socket;
-        
         private object _synch = new object();
         private System.Windows.Forms.Control _synchContext;
 
@@ -164,6 +162,11 @@ namespace Baro.CoreLibrary.YolbilClient
             {
 
             }
+        }
+
+        public void Dispose()
+        {
+            Disconnect();
         }
     }
 }
