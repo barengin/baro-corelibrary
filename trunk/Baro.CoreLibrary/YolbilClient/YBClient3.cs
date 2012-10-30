@@ -120,33 +120,6 @@ namespace Baro.CoreLibrary.YolbilClient
             Send(Message.Create(new MessageInfo(), delete, false, null));
         }
 
-        public void Send(Message msg)
-        {
-            MessageHeader h = msg.GetMessageHeader();
-
-            // Sunucu tarafı ise
-            if (h.isServerSideCommand())
-            {
-                // Sunucu tarafı ama disk'e yaz işaretli.
-                if (MessageAttribute.GetMessageAttribute(Message.GetTypeFromID(h.CommandID)).SaveToQueue)
-                {
-                    _queue.Enqueue(msg, true);
-                }
-                else
-                {
-                    _queue.Enqueue(msg, false);
-                }
-            }
-            else
-            {
-                // Kullanıcı tarafı
-                _queue.Enqueue(msg, true);
-            }
-
-            // Trigger to send
-            _sendEvent.Set();
-        }
-
         public void Connect()
         {
             // Close the socket

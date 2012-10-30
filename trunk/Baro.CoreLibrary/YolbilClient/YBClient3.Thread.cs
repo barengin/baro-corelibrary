@@ -64,8 +64,6 @@ namespace Baro.CoreLibrary.YolbilClient
             {
                 r = DisposeSocket(_socket);
                 _socket = null;
-
-                _sendEvent.Set();
             }
 
             if (r)
@@ -97,9 +95,7 @@ namespace Baro.CoreLibrary.YolbilClient
                 if (Connected)
                 {
                     StartReceive();
-
-                    Message m = Message.Create(new MessageInfo(), _settings.Login, false, null);
-                    _socket.Send(m.Data, m.Size, SocketFlags.None);
+                    SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false, null));
                     
                     ThreadPool.QueueUserWorkItem(new WaitCallback(StartSend));
                 }
