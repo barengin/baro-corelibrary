@@ -79,6 +79,7 @@
     <Compile Include="Core\DescriptionAttribute.cs" />
     <Compile Include="Core\Disposable.cs" />
     <Compile Include="Core\RandomC5.cs" />
+    <Compile Include="Core\SerializedTimer.cs" />
     <Compile Include="Core\SystemDLL.cs" />
     <Compile Include="Core\ThreadSafeRandom.cs" />
     <Compile Include="Core\ThreadStaticBuffer.cs" />
