@@ -129,7 +129,7 @@ namespace Baro.CoreLibrary.YolbilClient
             lock (_synch)
             {
                 // Start timer
-                _timer = new Timer(new TimerCallback(timerLoop), null, 1000, 3000);
+                _timer = new Timer(new TimerCallback(timerLoop), null, 1000, 60000);
             }
         }
 
