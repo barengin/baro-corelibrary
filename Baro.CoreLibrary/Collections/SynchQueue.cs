@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Baro.CoreLibrary.Collections
 {
-    public class SynchQueue<T>
+    public class SynchQueue<T>: IEnumerable<T>
     {
         private Queue<T> _queue = new Queue<T>();
 
@@ -172,5 +172,19 @@ namespace Baro.CoreLibrary.Collections
         {
             return ReadLocked<T[]>(() => _queue.ToArray());
         }
+
+        #region IEnumerable Members
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _queue.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return _queue.GetEnumerator();
+        }
+
+        #endregion
     }
 }
