@@ -79,15 +79,6 @@ namespace Baro.CoreLibrary.Collections
 #endif
         }
 
-        public void BeginExclusiveAccess()
-        {
-
-        }
-
-        public void EndExclusiveAccess()
-        {
-        }
-
         public int IndexOf(T item)
         {
             return ReadLocked<int>(() => (m_list.IndexOf(item)));
@@ -173,12 +164,14 @@ namespace Baro.CoreLibrary.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            // return m_list.GetEnumerator();
+            throw new NotSupportedException();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            // return m_list.GetEnumerator();
+            throw new NotSupportedException();
         }
 
         public void Enqueue(T item)
