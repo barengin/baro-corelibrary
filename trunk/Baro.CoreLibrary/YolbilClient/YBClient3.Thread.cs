@@ -23,7 +23,7 @@ namespace Baro.CoreLibrary.YolbilClient
             lock (_synch)
             {
                 _ackList.Completed();
-                // TODO: SendQueue
+                _sendQueue.Completed();
 
                 if (_socket == null)
                     return false;

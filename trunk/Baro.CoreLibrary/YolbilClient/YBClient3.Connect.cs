@@ -45,13 +45,16 @@ namespace Baro.CoreLibrary.YolbilClient
             }
 
             _ackList.UnCompleted();
-            // TODO: SendQueue
+            _sendQueue.MakeUnCompleted();
 
             // StartReceive here!!!
             StartReceive();
 
             // Login here!!!
-            SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false, null));
+            if (LoginAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false, null)))
+            {
+                StartSend();
+            }
 
             // Finish
             e.Set();
@@ -59,7 +62,6 @@ namespace Baro.CoreLibrary.YolbilClient
             if (Connected)
                 FireOnConnect(new ConnectedEventArgs());
         }
-
 
         private WaitHandle StartDisconnect()
         {
