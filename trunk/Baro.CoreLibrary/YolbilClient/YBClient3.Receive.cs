@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using Baro.CoreLibrary.Collections;
 using Baro.CoreLibrary.Serializer2;
 using Baro.CoreLibrary.SockServer;
-using System.Threading;
-using System.Net.Sockets;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
@@ -17,9 +17,6 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private readonly int MSG_ACK2 = MessageAttribute.GetMessageID(typeof(PredefinedCommands.Ack2));
         private readonly int KEEP_ALIVE = MessageAttribute.GetMessageID(typeof(PredefinedCommands.KeepAlive));
-
-        private AutoResetEvent _waitForEvent = new AutoResetEvent(false);
-        private object _waitFor;
 
         private enum ProcessBufferResult
         {
@@ -36,19 +33,16 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void StartReceive()
         {
-            if (Connected)
-            {
-                State state = new State() { _s = _socket };
+            State state = new State() { _s = _socket };
 
-                try
-                {
-                    _socket.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
-                        SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
-                }
-                catch
-                {
-                    DisconnectSocket();
-                }
+            try
+            {
+                _socket.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
+                    SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
+            }
+            catch (Exception ex)
+            {
+                DisconnectSocket(ex);
             }
         }
 
@@ -63,15 +57,15 @@ namespace Baro.CoreLibrary.YolbilClient
             {
                 readed = state._s.EndReceive(r);
             }
-            catch
+            catch (Exception ex)
             {
-                DisconnectSocket();
+                DisconnectSocket(ex);
                 return;
             }
 
             if (readed == 0) // Kapanmış
             {
-                DisconnectSocket();
+                DisconnectSocket(null);
                 return;
             }
 
@@ -79,7 +73,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
             if (ProcessBufferList() != ProcessBufferResult.OK)
             {
-                DisconnectSocket();
+                DisconnectSocket(null);
                 return;
             }
 
@@ -119,35 +113,13 @@ namespace Baro.CoreLibrary.YolbilClient
         {
             handled = false;
 
-            // Henüz işlenmemiş ise kapat
-            if (_waitFor == null)
-                return;
-
-            if (_waitFor is PredefinedCommands.Ack2 && header.CommandID == MSG_ACK2)
+            if (header.CommandID == MSG_ACK2)
             {
                 PredefinedCommands.Ack2 a = (PredefinedCommands.Ack2)obj;
-                PredefinedCommands.Ack2 w = (PredefinedCommands.Ack2)_waitFor;
 
-                if (a.CreateUniqueID() == w.CreateUniqueID())
-                {
-                    Log("Ack2");
-                    _waitForEvent.Set();
-                }
+                _ackList.Add(a);
 
                 handled = true;
-                _waitFor = null;
-
-                return;
-            }
-
-            if (_waitFor is PredefinedCommands.KeepAlive && header.CommandID == KEEP_ALIVE)
-            {
-                Log("Ack2: Keep_alive");
-                _waitForEvent.Set();
-
-                handled = true;
-                _waitFor = null;
-
                 return;
             }
         }
