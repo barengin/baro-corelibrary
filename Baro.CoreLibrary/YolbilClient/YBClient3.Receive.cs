@@ -117,6 +117,7 @@ namespace Baro.CoreLibrary.YolbilClient
             {
                 PredefinedCommands.Ack2 a = (PredefinedCommands.Ack2)obj;
 
+                Log("ACK2 Received: " + a.CreateUniqueID().ToString());
                 _ackList.Add(a);
 
                 handled = true;

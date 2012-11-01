@@ -104,7 +104,7 @@ namespace Baro.CoreLibrary.YolbilClient
         public YBClient3(ConnectionSettings settings)
         {
             _settings = settings;
-            _queue = new SendQueue(settings.SentFolder);
+            _sendQueue = new SendQueue(settings.SentFolder);
         }
 
         #endregion

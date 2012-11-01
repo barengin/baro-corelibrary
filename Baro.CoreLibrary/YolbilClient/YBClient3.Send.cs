@@ -52,17 +52,17 @@ namespace Baro.CoreLibrary.YolbilClient
                 // Sunucu tarafı ama disk'e yaz işaretli.
                 if (MessageAttribute.GetMessageAttribute(Message.GetTypeFromID(h.CommandID)).SaveToQueue)
                 {
-                    _queue.Enqueue(msg, true);
+                    _sendQueue.Enqueue(msg, true);
                 }
                 else
                 {
-                    _queue.Enqueue(msg, false);
+                    _sendQueue.Enqueue(msg, false);
                 }
             }
             else
             {
                 // Kullanıcı tarafı
-                _queue.Enqueue(msg, true);
+                _sendQueue.Enqueue(msg, true);
             }
         }
 
@@ -109,6 +109,8 @@ namespace Baro.CoreLibrary.YolbilClient
                 DisposeSocket();
                 return;
             }
+
+            Log("Send: " + m.GetMessageHeader().GetMsgID().ToString());
 
             if (_ackList.WaitForAck2(PredefinedCommands.Ack2.CreateAck2(m.GetMessageHeader()), 60000))
             {
