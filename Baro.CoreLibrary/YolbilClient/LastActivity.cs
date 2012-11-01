@@ -5,9 +5,12 @@ using System.Text;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
+    /// <summary>
+    /// Kullanım şekli gereği bu sınıf asla Thread-Safe olamaz. Çünkü aynı anda sadece tek bir thread tarafından kullanılabilir.
+    /// </summary>
     public sealed class LastActivity
     {
-        private volatile int _actual;
+        private int _actual;
 
         public LastActivity()
         {
