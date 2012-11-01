@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using Baro.CoreLibrary.Serializer2;
+using System.Linq;
 using System.Net.Sockets;
-using Baro.CoreLibrary.SockServer;
+using System.Text;
 using System.Threading;
+using Baro.CoreLibrary.Serializer2;
+using Baro.CoreLibrary.SockServer;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
     public sealed partial class YBClient3: IYBClient
     {
-        private object _synch = new object();
         private System.Windows.Forms.Control _synchContext;
+        private object _synch = new object();
 
         private ConnectionSettings _settings;
-        private Timer _timer;
 
         #region Log
         private SequenceLog _logger;
@@ -120,34 +119,14 @@ namespace Baro.CoreLibrary.YolbilClient
             Send(Message.Create(new MessageInfo(), delete, false, null));
         }
 
-        public void Connect()
+        public WaitHandle Connect()
         {
-            // Close the socket
-            Disconnect();
-
-            // Start timer
-            lock (_synch)
-            {
-                // Start timer
-                _timer = new Timer(new TimerCallback(timerLoop), null, 1000, 60000);
-            }
+            return StartConnect();
         }
 
-        public void Disconnect()
+        public WaitHandle Disconnect()
         {
-            // Stop timer
-            lock (_synch)
-            {
-                // Dispose timer
-                if (_timer != null)
-                {
-                    _timer.Dispose();
-                    _timer = null;
-                }
-            }
-            
-            // Close the socket
-            DisconnectSocket();
+            return StartDisconnect();
         }
 
         public void Dispose()

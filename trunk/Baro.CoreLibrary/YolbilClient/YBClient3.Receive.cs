@@ -37,7 +37,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
             try
             {
-                _socket.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
+                state._s.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
                     SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
             }
             catch (Exception ex)

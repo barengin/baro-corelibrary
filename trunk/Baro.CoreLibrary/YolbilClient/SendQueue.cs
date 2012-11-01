@@ -9,7 +9,7 @@ using Baro.CoreLibrary.Serializer2;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
-    public sealed class SendQueue
+    public sealed class SendQueue: IEnumerable<Message>
     {
         private readonly SynchQueue<Message> _q = new SynchQueue<Message>();
         private readonly string _folder;
@@ -17,7 +17,61 @@ namespace Baro.CoreLibrary.YolbilClient
         public EventHandler OnEnqueue;
         public EventHandler OnDequeue;
 
+        private volatile bool _completed = false;
+        private EventWaitHandle _wh = new AutoResetEvent(false);
+
         public int Count { get { return _q.Count; } }
+
+        public void Completed()
+        {
+            _completed = true;
+            _wh.Set();
+        }
+
+        public void MakeUnCompleted()
+        {
+            _completed = false;
+            _wh.Set();
+        }
+
+        public bool Dequeue(out Message value)
+        {
+            bool ok;
+
+            do
+            {
+                if (_completed)
+                {
+                    value = null;
+                    return false;
+                }
+
+                ok = DequeueInternal(out value);
+
+                if (ok)
+                {
+                    return true;
+                }
+                else
+                {
+                    _wh.WaitOne();
+                }
+            } while (true);
+        }
+
+        public void Enqueue(Message value, bool saveToDisk)
+        {
+            if (_completed)
+                throw new InvalidOperationException("SendQueue.Completed edilmiş");
+
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            EnqueueInternal(value, saveToDisk);
+            _wh.Set();
+        }
 
         public SendQueue(string folder)
         {
@@ -25,12 +79,32 @@ namespace Baro.CoreLibrary.YolbilClient
             Load();
         }
 
-        public bool Peek(out Message m)
+        public bool Peek(out Message value)
         {
-            return _q.Peek(out m);
+            bool ok;
+
+            do
+            {
+                if (_completed)
+                {
+                    value = null;
+                    return false;
+                }
+
+                ok = _q.Peek(out value);
+
+                if (ok)
+                {
+                    return true;
+                }
+                else
+                {
+                    _wh.WaitOne();
+                }
+            } while (true);
         }
 
-        public bool Dequeue(out Message m)
+        private bool DequeueInternal(out Message m)
         {
             bool r = _q.Dequeue(out m);
 
@@ -50,7 +124,7 @@ namespace Baro.CoreLibrary.YolbilClient
             return r;
         }
 
-        public void Enqueue(Message m, bool saveToDisk)
+        private void EnqueueInternal(Message m, bool saveToDisk)
         {
             _q.Enqueue(m);
 
@@ -164,5 +238,19 @@ namespace Baro.CoreLibrary.YolbilClient
             }
         }
 #endif
+
+        #region IEnumerable<Message> Members
+
+        public IEnumerator<Message> GetEnumerator()
+        {
+            return _q.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return _q.GetEnumerator();
+        }
+
+        #endregion
     }
 }

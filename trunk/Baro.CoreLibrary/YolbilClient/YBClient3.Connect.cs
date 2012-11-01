@@ -19,9 +19,6 @@ namespace Baro.CoreLibrary.YolbilClient
 
             DisposeSocket();
 
-            _ackList.UnCompleted();
-            // TODO: SendQueue
-
             AutoResetEvent connectedEvent = new AutoResetEvent(false);
 
             _socket = new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.IP);
@@ -42,29 +39,33 @@ namespace Baro.CoreLibrary.YolbilClient
             }
             catch
             {
-                DisposeSocket();                
+                DisposeSocket();
                 e.Set();
                 return;
             }
+
+            _ackList.UnCompleted();
+            // TODO: SendQueue
 
             // StartReceive here!!!
             StartReceive();
 
             // Login here!!!
             SendAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false, null));
-            
+
             // Finish
             e.Set();
-            FireOnConnect(new ConnectedEventArgs());
+
+            if (Connected)
+                FireOnConnect(new ConnectedEventArgs());
         }
 
 
         private WaitHandle StartDisconnect()
         {
-            _ackList.Completed();
-            // TODO: SendQueue
+            if (DisposeSocket())
+                FireOnDisconnect(new DisconnectedEventArgs());
 
-            DisposeSocket();
             return new AutoResetEvent(true);
         }
     }
