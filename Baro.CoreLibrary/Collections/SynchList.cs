@@ -121,6 +121,11 @@ namespace Baro.CoreLibrary.Collections
             return ReadLocked<bool>(() => (m_list.Contains(item)));
         }
 
+        public bool Contains(T item, IEqualityComparer<T> eq)
+        {
+            return ReadLocked<bool>(() => (m_list.Contains(item, eq)));
+        }
+
         public void CopyTo(T[] array, int arrayIndex)
         {
             ReadLocked(() => { m_list.CopyTo(array, arrayIndex); });
