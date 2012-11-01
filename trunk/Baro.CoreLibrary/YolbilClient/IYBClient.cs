@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Baro.CoreLibrary.Serializer2;
+using System.Threading;
 
 namespace Baro.CoreLibrary.YolbilClient
 {
@@ -10,7 +11,6 @@ namespace Baro.CoreLibrary.YolbilClient
     {
         /// <summary>
         /// Sunucuya canlı bağlantı olup olmadığını gösterir.
-        /// <remarks>Thread-Safe</remarks>
         /// </summary>
         bool Connected { get; }
         
@@ -21,7 +21,7 @@ namespace Baro.CoreLibrary.YolbilClient
         void DeleteFromServer(MessageHeader header);
         void Send(Message msg);
 
-        void Connect();
-        void Disconnect();
+        WaitHandle Connect();
+        WaitHandle Disconnect();
     }
 }
