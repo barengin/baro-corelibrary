@@ -13,7 +13,7 @@ namespace Baro.CoreLibrary.YolbilClient
         private SynchList<PredefinedCommands.Ack2> _list = new SynchList<PredefinedCommands.Ack2>();
         private AutoResetEvent _event = new AutoResetEvent(false);
         private AckComparer _comparer = new AckComparer();
-        private bool _completed = false;
+        private volatile bool _completed = false;
 
         public void UnCompleted()
         {

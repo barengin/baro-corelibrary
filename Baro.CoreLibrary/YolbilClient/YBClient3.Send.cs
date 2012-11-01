@@ -11,10 +11,10 @@ namespace Baro.CoreLibrary.YolbilClient
 {
     partial class YBClient3
     {
-        private SendQueue _queue;
+        private SendQueue _sendQueue;
         private ACKList _ackList = new ACKList();
 
-        private bool SendAndWaitForAck(Message message)
+        private bool LoginAndWaitForAck(Message message)
         {
             Log("SendAndWaitForACK2: " + message.GetMessageHeader().CommandID + "," + message.GetMessageHeader().GetMsgID().ToString());
 
@@ -63,6 +63,61 @@ namespace Baro.CoreLibrary.YolbilClient
             {
                 // Kullanıcı tarafı
                 _queue.Enqueue(msg, true);
+            }
+        }
+
+        private void StartSend()
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(StartSendInternal));
+        }
+
+        private void StartSendInternal(object s)
+        {
+            if (_sendQueue.isCompleted)
+                return;
+
+            Message m;
+
+            if (_sendQueue.Peek(out m))
+            {
+                try
+                {
+                    _socket.BeginSend(m.Data, 0, m.Size, SocketFlags.None, 
+                                        new AsyncCallback(FinishSend), 
+                                        new Tuple<Socket, Message>(_socket, m));
+                }
+                catch
+                {
+                    DisposeSocket();
+                }
+            }
+        }
+
+        private void FinishSend(IAsyncResult r)
+        {
+            Tuple<Socket, Message> t = (Tuple<Socket, Message>)r.AsyncState;
+            Socket s = t.Item1;
+            Message m = t.Item2;
+
+            try
+            {
+                s.EndSend(r);
+                _sendQueue.Dequeue(out m);
+            }
+            catch
+            {
+                DisposeSocket();
+                return;
+            }
+
+            if (_ackList.WaitForAck2(PredefinedCommands.Ack2.CreateAck2(m.GetMessageHeader()), 60000))
+            {
+                StartSendInternal(null);
+            }
+            else
+            {
+                DisposeSocket();
+                return;
             }
         }
     }

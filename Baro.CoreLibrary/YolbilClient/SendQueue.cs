@@ -252,5 +252,7 @@ namespace Baro.CoreLibrary.YolbilClient
         }
 
         #endregion
+
+        public bool isCompleted { get { return _completed; } }
     }
 }

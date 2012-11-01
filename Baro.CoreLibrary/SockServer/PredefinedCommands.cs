@@ -8,6 +8,19 @@ using Baro.CoreLibrary.Core;
 
 namespace Baro.CoreLibrary.SockServer
 {
+    public sealed class AckComparer : IEqualityComparer<PredefinedCommands.Ack2>
+    {
+        public bool Equals(PredefinedCommands.Ack2 x, PredefinedCommands.Ack2 y)
+        {
+            return x.Equals(y);
+        }
+
+        public int GetHashCode(PredefinedCommands.Ack2 obj)
+        {
+            return obj.GetHashCode();
+        }
+    }
+
     /// <summary>
     /// 0-1023 arası ID'ye sahip komutlar özel komutlardır.
     /// </summary>
@@ -46,7 +59,7 @@ namespace Baro.CoreLibrary.SockServer
         [Description("Ack2", "Ack2")]
         [StructLayout(LayoutKind.Sequential)]
         [MessageAttribute(ID = 15)]
-        public struct Ack2
+        public struct Ack2 : IEquatable<Ack2>
         {
             [Description("uid1", "uid1: {0:x8}")]
             public uint uid1;
@@ -59,6 +72,16 @@ namespace Baro.CoreLibrary.SockServer
 
             [Description("uid4", "uid4: {0:x8}")]
             public uint uid4;
+
+            public Ack2 CreateEmpty()
+            {
+                return new Ack2() { uid1 = 0, uid2 = 0, uid3 = 0, uid4 = 0 };
+            }
+
+            public bool isEmpty
+            {
+                get { return this.uid1 == 0 && this.uid2 == 0 && this.uid3 == 0 && this.uid4 == 0; }
+            }
 
             public UniqueID CreateUniqueID()
             {
@@ -73,6 +96,31 @@ namespace Baro.CoreLibrary.SockServer
             public static Ack2 CreateAck2(MessageHeader h)
             {
                 return CreateFrom(h.GetMsgID());
+            }
+
+            public override int GetHashCode()
+            {
+                return (int)(this.uid1 ^ (this.uid2 << 1) ^ this.uid3 ^ (this.uid4 >> 1));
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj != null && obj is PredefinedCommands.Ack2)
+                {
+                    return Equals((Ack2)obj);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public bool Equals(Ack2 other)
+            {
+                return other.uid1 == this.uid1 &&
+                       other.uid2 == this.uid2 &&
+                       other.uid3 == this.uid3 &&
+                       other.uid4 == this.uid4;
             }
         }
 

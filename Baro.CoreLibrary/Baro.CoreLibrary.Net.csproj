@@ -240,6 +240,7 @@
     <Compile Include="WindowsInput\Native\XButton.cs" />
     <Compile Include="WindowsInput\WindowsInputDeviceStateAdaptor.cs" />
     <Compile Include="WindowsInput\WindowsInputMessageDispatcher.cs" />
+    <Compile Include="YolbilClient\ACKList.cs" />
     <Compile Include="YolbilClient\ConnectedEventArgs.cs" />
     <Compile Include="YolbilClient\ConnectionSettings.cs" />
     <Compile Include="YolbilClient\DisconnectedEventArgs.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="YolbilClient\MessageReceivedEventArgs.cs" />
     <Compile Include="YolbilClient\SendQueue.cs" />
     <Compile Include="YolbilClient\SequenceLog.cs" />
+    <Compile Include="YolbilClient\YBClient3.Connect.cs" />
     <Compile Include="YolbilClient\YBClient3.cs" />
     <Compile Include="YolbilClient\YBClient3.Receive.cs" />
     <Compile Include="YolbilClient\YBClient3.Send.cs" />
