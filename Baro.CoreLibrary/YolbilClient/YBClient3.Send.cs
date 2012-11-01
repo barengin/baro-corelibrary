@@ -16,7 +16,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private bool LoginAndWaitForAck(Message message)
         {
-            Log("SendAndWaitForACK2: " + message.GetMessageHeader().CommandID + "," + message.GetMessageHeader().GetMsgID().ToString());
+            Log("Login: " + message.GetMessageHeader().CommandID + "," + message.GetMessageHeader().GetMsgID().ToString());
 
             try
             {
@@ -102,7 +102,6 @@ namespace Baro.CoreLibrary.YolbilClient
             try
             {
                 s.EndSend(r);
-                _sendQueue.Dequeue(out m);
             }
             catch
             {
@@ -114,6 +113,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
             if (_ackList.WaitForAck2(PredefinedCommands.Ack2.CreateAck2(m.GetMessageHeader()), 60000))
             {
+                _sendQueue.Dequeue(out m);
                 StartSendInternal(null);
             }
             else
