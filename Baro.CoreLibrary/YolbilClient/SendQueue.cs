@@ -61,8 +61,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Enqueue(Message value, bool saveToDisk)
         {
-            if (_completed)
-                throw new InvalidOperationException("SendQueue.Completed edilmiş");
+            //if (_completed)
+            //    throw new InvalidOperationException("SendQueue.Completed edilmiş");
 
             if (value == null)
             {
