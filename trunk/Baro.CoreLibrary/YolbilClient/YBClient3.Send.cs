@@ -16,7 +16,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private bool LoginAndWaitForAck(Message message)
         {
-            Log("Login: " + message.GetMessageHeader().CommandID + "," + message.GetMessageHeader().GetMsgID().ToString());
+            Log("Login: " + message.GetMessageHeader().GetMsgID().ToString());
 
             try
             {
@@ -44,6 +44,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Send(Message msg)
         {
+            Log("Send() " + msg.GetMessageHeader().GetMsgID().ToString());
+
             MessageHeader h = msg.GetMessageHeader();
 
             // Sunucu tarafı ise
@@ -68,6 +70,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void StartSend()
         {
+            Log("StartSend() #THREAD");
             ThreadPool.QueueUserWorkItem(new WaitCallback(StartSendInternal));
         }
 
@@ -82,13 +85,27 @@ namespace Baro.CoreLibrary.YolbilClient
             {
                 try
                 {
+                    Log("BeginSend()");
                     _socket.BeginSend(m.Data, 0, m.Size, SocketFlags.None, 
                                         new AsyncCallback(FinishSend), 
                                         new Tuple<Socket, Message>(_socket, m));
                 }
-                catch
+                catch(Exception ex)
                 {
-                    DisposeSocket();
+                    DisconnectSocket(ex);
+                    return;
+                }
+
+                // ACK2
+                if (_ackList.WaitForAck2(PredefinedCommands.Ack2.CreateAck2(m.GetMessageHeader()), 60000))
+                {
+                    _sendQueue.Dequeue(out m);
+                    StartSendInternal(null);
+                }
+                else
+                {
+                    DisconnectSocket(null);
+                    return;
                 }
             }
         }
@@ -101,26 +118,16 @@ namespace Baro.CoreLibrary.YolbilClient
 
             try
             {
+                Log("EndSend()");
                 s.EndSend(r);
             }
-            catch
+            catch(Exception ex)
             {
-                DisposeSocket();
+                DisconnectSocket(ex);
                 return;
             }
 
-            Log("Send: " + m.GetMessageHeader().GetMsgID().ToString());
-
-            if (_ackList.WaitForAck2(PredefinedCommands.Ack2.CreateAck2(m.GetMessageHeader()), 60000))
-            {
-                _sendQueue.Dequeue(out m);
-                StartSendInternal(null);
-            }
-            else
-            {
-                DisposeSocket();
-                return;
-            }
+            Log("Sent: " + m.GetMessageHeader().GetMsgID().ToString());
         }
     }
 }

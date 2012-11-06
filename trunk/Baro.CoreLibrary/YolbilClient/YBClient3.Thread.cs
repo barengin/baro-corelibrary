@@ -20,6 +20,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private bool DisposeSocket()
         {
+            Log("DisposeSocket()");
+
             lock (_synch)
             {
                 _ackList.Completed();
@@ -43,6 +45,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void DisconnectSocket(Exception ex)
         {
+            Log("DisconnectSocket()");
+
             if (DisposeSocket())
                 FireOnDisconnect(new DisconnectedEventArgs() { DisconnectReason = ex });
         }

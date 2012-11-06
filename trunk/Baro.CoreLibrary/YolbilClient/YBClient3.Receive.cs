@@ -37,6 +37,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
             try
             {
+                Log("BeginReceive()");
                 state._s.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
                     SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
             }
@@ -48,13 +49,12 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void ReceiveCallback(IAsyncResult r)
         {
-            Log("ReceiveCB()");
-
             State state = (State)r.AsyncState;
             int readed;
 
             try
             {
+                Log("EndReceive()");
                 readed = state._s.EndReceive(r);
             }
             catch (Exception ex)

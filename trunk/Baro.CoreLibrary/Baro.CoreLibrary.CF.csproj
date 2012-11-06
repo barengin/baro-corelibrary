@@ -316,7 +316,6 @@
     <Compile Include="YolbilClient\LastActivity.cs" />
     <Compile Include="YolbilClient\MessageReceivedEventArgs.cs" />
     <Compile Include="YolbilClient\SendQueue.cs" />
-    <Compile Include="YolbilClient\SequenceLog.cs" />
     <Compile Include="YolbilClient\Tuple.cs" />
     <Compile Include="YolbilClient\YBClient3.Connect.cs" />
     <Compile Include="YolbilClient\YBClient3.Receive.cs" />
