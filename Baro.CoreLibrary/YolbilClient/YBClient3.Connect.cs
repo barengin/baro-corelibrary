@@ -24,6 +24,8 @@ namespace Baro.CoreLibrary.YolbilClient
             _socket = new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.IP);
             _socket.BeginConnect(_settings.Address, new AsyncCallback(FinishConnect), new Tuple<Socket, AutoResetEvent>(_socket, connectedEvent));
 
+            Log("BeginConnect()");
+
             return connectedEvent;
         }
 
@@ -35,11 +37,12 @@ namespace Baro.CoreLibrary.YolbilClient
 
             try
             {
+                Log("EndConnect");
                 s.EndConnect(r);
             }
             catch
             {
-                DisposeSocket();
+                DisconnectSocket(null);
                 e.Set();
                 return;
             }
@@ -65,6 +68,8 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private WaitHandle StartDisconnect()
         {
+            Log("Disconnect");
+
             if (DisposeSocket())
                 FireOnDisconnect(new DisconnectedEventArgs());
 

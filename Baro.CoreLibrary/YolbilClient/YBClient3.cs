@@ -17,12 +17,16 @@ namespace Baro.CoreLibrary.YolbilClient
         private ConnectionSettings _settings;
 
         #region Log
-        private SequenceLog _logger;
+        private int _logSequence = 0;
+        private Action<string> _logCB;
 
         private void Log(string l)
         {
-            if (_logger != null)
-                _logger.Log(l);
+            if (_logCB != null)
+            {
+                Interlocked.Increment(ref _logSequence);
+                _logCB(string.Format("{0,3}- {1}", _logSequence, l));
+            }
         }
 
         #endregion
@@ -36,8 +40,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void FireOnMessageReceived(MessageReceivedEventArgs m)
         {
-            Log("Received: " + m.Header.GetMsgID().ToString());
-            Log(DescriptionAttribute.ObjDebugString(m.Message));
+            Log("EVENT Receive:" + m.Header.CommandID);
 
             if (OnMessageReceived != null)
             {
@@ -54,7 +57,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void FireOnDisconnect(DisconnectedEventArgs d)
         {
-            Log("Disconnected:");
+            Log("EVENT Disconnected:");
 
             if (OnDisconnect != null)
             {
@@ -71,7 +74,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void FireOnConnect(ConnectedEventArgs c)
         {
-            Log("Connected:");
+            Log("EVENT Connected:");
 
             if (OnConnect != null)
             {
@@ -92,7 +95,7 @@ namespace Baro.CoreLibrary.YolbilClient
         public YBClient3(ConnectionSettings settings, System.Windows.Forms.Control container, Action<string> logCallback)
             : this(settings, container)
         {
-            _logger = new SequenceLog(logCallback);
+            _logCB = logCallback;
         }
 
         public YBClient3(ConnectionSettings settings, System.Windows.Forms.Control container)
@@ -116,6 +119,7 @@ namespace Baro.CoreLibrary.YolbilClient
                 MsgId = header.GetMsgID().ToString() 
             };
 
+            Log("Delete from server: " + header.GetMsgID().ToString());
             Send(Message.Create(new MessageInfo(), delete, false, null));
         }
 

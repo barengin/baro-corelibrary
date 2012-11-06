@@ -26,6 +26,10 @@ namespace Baro.CoreLibrary.UI.Controls
 
         internal override void MouseUp(System.Drawing.Point p)
         {
+            if (HitTest(p))
+            {
+                OnClick(EventArgs.Empty);
+            }
         }
 
         internal override void MouseMove(System.Drawing.Point p)
