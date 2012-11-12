@@ -317,11 +317,7 @@
     <Compile Include="YolbilClient\MessageReceivedEventArgs.cs" />
     <Compile Include="YolbilClient\SendQueue.cs" />
     <Compile Include="YolbilClient\Tuple.cs" />
-    <Compile Include="YolbilClient\YBClient3.Connect.cs" />
-    <Compile Include="YolbilClient\YBClient3.Receive.cs" />
-    <Compile Include="YolbilClient\YBClient3.cs" />
-    <Compile Include="YolbilClient\YBClient3.Send.cs" />
-    <Compile Include="YolbilClient\YBClient3.Thread.cs" />
+    <Compile Include="YolbilClient\YBClient4.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\Controls\UIForm.resx">
@@ -330,6 +326,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="UI\UI Controls.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="YolbilClient\ReusableThread.cs" />
+    <Compile Include="YolbilClient\Tools.cs" />
+    <Compile Include="YolbilClient\YBClient4.Receive.cs" />
+    <Compile Include="YolbilClient\YBClient4.Send.cs" />
+    <Compile Include="YolbilClient\YBClient4.Socket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
