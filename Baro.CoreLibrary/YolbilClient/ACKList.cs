@@ -26,6 +26,11 @@ namespace Baro.CoreLibrary.YolbilClient
             _event.Set();
         }
 
+        public int Count
+        {
+            get { return _list.Count; }
+        }
+
         public void Add(PredefinedCommands.Ack2 ack2)
         {
             _list.Add(ack2);
