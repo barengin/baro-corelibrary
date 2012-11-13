@@ -12,8 +12,7 @@ namespace Baro.CoreLibrary.YolbilClient
 {
     partial class YBClient4
     {
-        private byte[] _tsBuffer = new byte[4096];
-        private ACKList _ackList = new ACKList();
+        private ACKList _ackList;
 
         private ArraySegmentSeamlessBuffer<byte> _buffer = new ArraySegmentSeamlessBuffer<byte>();
 
@@ -27,13 +26,13 @@ namespace Baro.CoreLibrary.YolbilClient
             MessageCRCError
         }
 
-        private ProcessBufferResult ProcessMessage(int size)
+        private ProcessBufferResult ProcessMessage(int size, byte[] buffer)
         {
             MessageHeader header;
 
             try
             {
-                header = Message.GetInternalHeader(_tsBuffer);
+                header = Message.GetInternalHeader(buffer);
             }
             catch (MessageCrcException)
             {
@@ -41,7 +40,7 @@ namespace Baro.CoreLibrary.YolbilClient
             }
 
             // Değilse normal komut kategorisinde devam et
-            object obj = Message.Parse(_tsBuffer, header, null);
+            object obj = Message.Parse(buffer, header, null);
 
             bool handled;
             MessageListener(header, obj, out handled);
@@ -72,6 +71,8 @@ namespace Baro.CoreLibrary.YolbilClient
             }
         }
 
+        private byte[] _lastCmd = new byte[16384];
+
         private ProcessBufferResult ProcessBufferList()
         {
             // todo : _buffer.BufferSize >= Message.MESSAGE_INTERNAL_HEADER_SIZE  bu kısım büyüktür idi,
@@ -81,24 +82,24 @@ namespace Baro.CoreLibrary.YolbilClient
             while (_buffer.BufferSize >= Message.MESSAGE_INTERNAL_HEADER_SIZE)
             {
                 // Header içinde ilk 4 byte daima SIZE verir.
-                _buffer.CopyTo(_tsBuffer, 0, 0, 4);
+                _buffer.CopyTo(_lastCmd, 0, 0, 4);
 
                 // Gelen ilk mesajın büyüklüğü
-                int size = BitConverter.ToInt32(_tsBuffer, 0);
+                int size = BitConverter.ToInt32(_lastCmd, 0);
 
                 // Demek ki yeterince veri gelmiş. MQ'ya gönder.
                 if (_buffer.BufferSize >= size)
                 {
                     // İlk okunacak komut eğer gelmişse, BufferSize >= size, gelen komutu bir array'a kopyala,
                     // çünkü BufferList içinde ArraySegment'ler ile parçalanmış olabilir.
-                    if (size > _tsBuffer.Length)
-                        Array.Resize<byte>(ref _tsBuffer, size);
+                    if (size > _lastCmd.Length)
+                        Array.Resize<byte>(ref _lastCmd, size);
 
-                    _buffer.CopyTo(_tsBuffer, 4, 4, size - 4);
+                    _buffer.CopyTo(_lastCmd, 4, 4, size - 4);
                     _buffer.RemoveFromStart(size);
 
                     // Process regular messages
-                    ProcessBufferResult result = ProcessMessage(size);
+                    ProcessBufferResult result = ProcessMessage(size, _lastCmd);
 
                     // İşler yolunda gitmedi.
                     if (result != ProcessBufferResult.OK)
@@ -126,6 +127,8 @@ namespace Baro.CoreLibrary.YolbilClient
             while (!quit)
             {
                 int readed = 0;
+
+                byte[] _tsBuffer = new byte[4096];
 
                 try
                 {

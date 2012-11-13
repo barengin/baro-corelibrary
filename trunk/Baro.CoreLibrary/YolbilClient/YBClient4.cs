@@ -174,6 +174,11 @@ namespace Baro.CoreLibrary.YolbilClient
 
         public void Connect()
         {
+            if (!_readyToConnect)
+            {
+                throw new Exception("Sistem yeni bir bağlantıya hazır değil");
+            }
+
             TSCreateSocket();
 
             Interlocked.CompareExchange(ref _disconnectEventFired, FALSE, TRUE);
