@@ -328,7 +328,6 @@
     <Content Include="UI\UI Controls.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="YolbilClient\ReusableThread.cs" />
     <Compile Include="YolbilClient\Tools.cs" />
     <Compile Include="YolbilClient\YBClient4.Receive.cs" />
     <Compile Include="YolbilClient\YBClient4.Send.cs" />
