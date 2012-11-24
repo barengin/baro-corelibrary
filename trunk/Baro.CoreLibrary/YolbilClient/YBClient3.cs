@@ -20,7 +20,7 @@ namespace Baro.CoreLibrary.YolbilClient
         private int _logSequence = 0;
         private Action<string> _logCB;
 
-        private void Log(string l)
+        public void Log(string l)
         {
             if (_logCB != null)
             {

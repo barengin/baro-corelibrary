@@ -14,7 +14,7 @@ namespace Baro.CoreLibrary.YolbilClient
         {
             if (Connected)
             {
-                Disconnect().WaitOne();
+                return new AutoResetEvent(true);
             }
 
             DisposeSocket();
@@ -42,7 +42,7 @@ namespace Baro.CoreLibrary.YolbilClient
             }
             catch
             {
-                DisconnectSocket(null);
+                StartDisconnect();
                 e.Set();
                 return;
             }
@@ -57,6 +57,12 @@ namespace Baro.CoreLibrary.YolbilClient
             if (LoginAndWaitForAck(Message.Create(new MessageInfo(), _settings.Login, false, null)))
             {
                 StartSend();
+            }
+            else
+            {
+                StartDisconnect();
+                e.Set();
+                return;
             }
 
             // Finish
