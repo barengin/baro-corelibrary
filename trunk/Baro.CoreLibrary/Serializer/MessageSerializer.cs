@@ -179,7 +179,7 @@ namespace Baro.CoreLibrary.Serializer2
             SerializerDATA data = new SerializerDATA();
 
             // Internal header
-            MessageHeader iHeader = msgInfo.CreateInternalHeader();
+            MessageHeader iHeader = msgInfo.CreateMessageHeader();
 
             // Unique ID
             UniqueID uid = UniqueID.CreateNew();
