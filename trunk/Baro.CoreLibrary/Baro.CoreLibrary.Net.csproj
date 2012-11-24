@@ -249,11 +249,11 @@
     <Compile Include="YolbilClient\MessageReceivedEventArgs.cs" />
     <Compile Include="YolbilClient\SendQueue.cs" />
     <Compile Include="YolbilClient\SequenceLog.cs" />
-    <Compile Include="YolbilClient\YBClient3.Connect.cs" />
-    <Compile Include="YolbilClient\YBClient3.cs" />
-    <Compile Include="YolbilClient\YBClient3.Receive.cs" />
-    <Compile Include="YolbilClient\YBClient3.Send.cs" />
-    <Compile Include="YolbilClient\YBClient3.Thread.cs" />
+    <Compile Include="YolbilClient\Tools.cs" />
+    <Compile Include="YolbilClient\YBClient4.cs" />
+    <Compile Include="YolbilClient\YBClient4.Receive.cs" />
+    <Compile Include="YolbilClient\YBClient4.Send.cs" />
+    <Compile Include="YolbilClient\YBClient4.Socket.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AAA2\users.xml" />
