@@ -50,11 +50,17 @@ namespace Baro.CoreLibrary.Serializer2
         }
     }
 
-    public struct MessageInfo
+    public sealed class MessageInfo
     {
         public Int32 CorrelationID;
         public UInt16 ToInbox;
         public DateTime ExpireDate;
+
+        public MessageInfo()
+        {
+            this.ExpireDate = DateTime.Now + new TimeSpan(48, 0, 0);
+            this.CorrelationID = Environment.TickCount;
+        }
 
         public MessageInfo(ushort toInbox)
         {
@@ -77,7 +83,7 @@ namespace Baro.CoreLibrary.Serializer2
             this.CorrelationID = correlationID;
         }
 
-        internal MessageHeader CreateInternalHeader()
+        internal MessageHeader CreateMessageHeader()
         {
             return new MessageHeader()
             {
