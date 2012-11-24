@@ -12,7 +12,7 @@ namespace Baro.CoreLibrary.YolbilClient
     partial class YBClient3
     {
         private SendQueue _sendQueue;
-        private ACKList _ackList = new ACKList();
+        // private ACKList _ackList = new ACKList();
 
         private bool LoginAndWaitForAck(Message message)
         {
@@ -90,9 +90,9 @@ namespace Baro.CoreLibrary.YolbilClient
                                         new AsyncCallback(FinishSend), 
                                         new Tuple<Socket, Message>(_socket, m));
                 }
-                catch(Exception ex)
+                catch
                 {
-                    DisconnectSocket(ex);
+                    StartDisconnect();
                     return;
                 }
 
@@ -104,7 +104,7 @@ namespace Baro.CoreLibrary.YolbilClient
                 }
                 else
                 {
-                    DisconnectSocket(null);
+                    StartDisconnect();
                     return;
                 }
             }
@@ -121,9 +121,9 @@ namespace Baro.CoreLibrary.YolbilClient
                 Log("EndSend()");
                 s.EndSend(r);
             }
-            catch(Exception ex)
+            catch
             {
-                DisconnectSocket(ex);
+                StartDisconnect();
                 return;
             }
 

@@ -18,6 +18,8 @@ namespace Baro.CoreLibrary.YolbilClient
         private readonly int MSG_ACK2 = MessageAttribute.GetMessageID(typeof(PredefinedCommands.Ack2));
         private readonly int KEEP_ALIVE = MessageAttribute.GetMessageID(typeof(PredefinedCommands.KeepAlive));
 
+        private ACKList _ackList = new ACKList();
+
         private enum ProcessBufferResult
         {
             OK,
@@ -41,9 +43,9 @@ namespace Baro.CoreLibrary.YolbilClient
                 state._s.BeginReceive(state._receiveBuffer, 0, state._receiveBuffer.Length,
                     SocketFlags.None, new AsyncCallback(ReceiveCallback), state);
             }
-            catch (Exception ex)
+            catch
             {
-                DisconnectSocket(ex);
+                StartDisconnect();
             }
         }
 
@@ -57,15 +59,15 @@ namespace Baro.CoreLibrary.YolbilClient
                 Log("EndReceive()");
                 readed = state._s.EndReceive(r);
             }
-            catch (Exception ex)
+            catch
             {
-                DisconnectSocket(ex);
+                StartDisconnect();
                 return;
             }
 
             if (readed == 0) // Kapanmış
             {
-                DisconnectSocket(null);
+                StartDisconnect();
                 return;
             }
 
@@ -73,7 +75,7 @@ namespace Baro.CoreLibrary.YolbilClient
 
             if (ProcessBufferList() != ProcessBufferResult.OK)
             {
-                DisconnectSocket(null);
+                StartDisconnect();
                 return;
             }
 
