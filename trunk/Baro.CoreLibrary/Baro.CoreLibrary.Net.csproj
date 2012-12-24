@@ -57,6 +57,7 @@
     <Compile Include="AAA2\User2.cs" />
     <Compile Include="AAA2\UserData2.cs" />
     <Compile Include="AAA2\UserData2Collection.cs" />
+    <Compile Include="Cache\LruCache.cs" />
     <Compile Include="Collections\ArraySegmentSeamlessBuffer.cs" />
     <Compile Include="Collections\PCQ.cs" />
     <Compile Include="Collections\SynchBiDictionary.cs" />
