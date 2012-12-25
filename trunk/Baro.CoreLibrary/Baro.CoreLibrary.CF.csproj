@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B0D6E9D2-C7C7-4F09-A353-89D962B2F058}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -328,6 +328,7 @@
     <Content Include="UI\UI Controls.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\LruCache.cs" />
     <Compile Include="YolbilClient\Tools.cs" />
     <Compile Include="YolbilClient\YBClient4.Receive.cs" />
     <Compile Include="YolbilClient\YBClient4.Send.cs" />
