@@ -22,6 +22,11 @@ namespace Baro.CoreLibrary.Extensions
             return d.ToString("dd-MM-yyyy HH:mm:ss");
         }
 
+        public static string ToMobilizDate2(this DateTime d)
+        {
+            return d.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
         public static DateTime FromHexString(string value)
         {
             byte[] b = new byte[8];
