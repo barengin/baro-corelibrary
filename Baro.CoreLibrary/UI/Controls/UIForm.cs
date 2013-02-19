@@ -17,6 +17,7 @@ namespace Baro.CoreLibrary.UI.Controls
     {
         private int _refCounter = 0;
         private int _refMouseHolder = 0;
+        private int _transitionMSec = 2;
 
         private G3Canvas _offScreen;
         private UICanvas _canvas = new UICanvas();
@@ -25,6 +26,8 @@ namespace Baro.CoreLibrary.UI.Controls
         private Encoding _encoding = null;
 
         public bool NewActivityLoaded { get { return _refCounter != _refMouseHolder; } }
+
+        public int TransitionMSec { get { return _transitionMSec; } set { _transitionMSec = value; } }
 
         public Encoding Encoding
         {
@@ -170,7 +173,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = h; k > 0; k = k - 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, 0, k);
-                            SynchSleep.Go(2);
+                            SynchSleep.Go(_transitionMSec);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
@@ -184,7 +187,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = -h; k < 0; k = k + 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, 0, k);
-                            SynchSleep.Go(2);
+                            SynchSleep.Go(_transitionMSec);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
@@ -198,7 +201,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = -w; k < 0; k = k + 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, k, 0);
-                            SynchSleep.Go(2);
+                            SynchSleep.Go(_transitionMSec);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
@@ -212,7 +215,7 @@ namespace Baro.CoreLibrary.UI.Controls
                         for (int k = w; k > 0; k = k - 10)
                         {
                             _offScreen.Surface.DrawCanvas(g, k, 0);
-                            SynchSleep.Go(2);
+                            SynchSleep.Go(_transitionMSec);
                         }
 
                         _offScreen.Surface.DrawCanvas(g, 0, 0);
