@@ -29,5 +29,7 @@ namespace Baro.CoreLibrary.Configuration
 
         void RemoveKey(string key);
         bool ContainsKey(string key);
+
+        string this[string key] { get; }
     }
 }

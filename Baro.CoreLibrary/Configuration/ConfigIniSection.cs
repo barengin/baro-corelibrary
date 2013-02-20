@@ -224,5 +224,15 @@ namespace Baro.CoreLibrary.Configuration
                 return defaultValue;
             }
         }
+
+        #region IConfigSection Members
+
+
+        public string this[string key]
+        {
+            get { return AsString(key); }
+        }
+
+        #endregion
     }
 }
