@@ -26,10 +26,9 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>corelib.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -333,6 +332,9 @@
     <Compile Include="YolbilClient\YBClient4.Receive.cs" />
     <Compile Include="YolbilClient\YBClient4.Send.cs" />
     <Compile Include="YolbilClient\YBClient4.Socket.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="corelib.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>
