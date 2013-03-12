@@ -28,5 +28,7 @@ namespace Baro.CoreLibrary.AAA2
         AAA2ErrorCode RemoveAllUsers(AAA2Credential loginCredential);
 
         AAA2ErrorCode CheckUser(AAA2Credential userCredential);
+
+        AAA2ErrorCode GetAllUsers(AAA2Credential userCredential, out User2[] users);
     }
 }

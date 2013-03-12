@@ -309,5 +309,21 @@ namespace Baro.CoreLibrary.AAA2
             User2 user;
             return GetUser(userCredential, out user);
         }
+
+
+        public AAA2ErrorCode GetAllUsers(AAA2Credential userCredential, out User2[] users)
+        {
+            users = null;
+
+            User2 user;
+            AAA2ErrorCode error = GetUser(userCredential, out user);
+
+            if (error != AAA2ErrorCode.OK)
+                return error;
+
+            users = _users.Values.ToArray<User2>();
+
+            return AAA2ErrorCode.OK;
+        }
     }
 }
