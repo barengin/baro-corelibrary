@@ -54,6 +54,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -229,6 +230,7 @@
     <Compile Include="SimpleDB\SimpleDBException.cs" />
     <Compile Include="SimpleDB\SimpleFields.cs" />
     <Compile Include="Text\SimpleStringEncryptor.cs" />
+    <Compile Include="W3\FormsAuthenticationUtil.cs" />
     <Compile Include="WindowsInput\IInputDeviceStateAdaptor.cs" />
     <Compile Include="WindowsInput\IInputMessageDispatcher.cs" />
     <Compile Include="WindowsInput\IInputSimulator.cs" />
