@@ -55,6 +55,8 @@ namespace Baro.CoreLibrary.AAA2
                 {
                     ReadXml(obj);
                 }), e);
+
+                return;
             }
 
             _users = u;
