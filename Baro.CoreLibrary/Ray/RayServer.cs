@@ -8,6 +8,9 @@ namespace Baro.CoreLibrary.Ray
 {
     public sealed class RayServer
     {
+        public RayServer()
+        {
+        }
 
         public RayUser GetUser(string username)
         {
