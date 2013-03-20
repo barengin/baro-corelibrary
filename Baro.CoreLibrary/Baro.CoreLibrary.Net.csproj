@@ -129,6 +129,7 @@
     <Compile Include="GdiPlus\Shapes.cs" />
     <Compile Include="GdiPlus\STATSTG.cs" />
     <Compile Include="GdiPlus\Stubs.cs" />
+    <Compile Include="Ray\DataSource\IRayDataSource.cs" />
     <Compile Include="Ray\IRayQuery.cs" />
     <Compile Include="Ray\RayAliasList.cs" />
     <Compile Include="Ray\RayDataStore.cs" />
