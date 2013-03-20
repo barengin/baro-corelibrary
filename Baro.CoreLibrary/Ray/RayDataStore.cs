@@ -27,6 +27,11 @@ namespace Baro.CoreLibrary.Ray
             return _list.Values;
         }
 
+        public IEnumerable<KeyValuePair<string, string>> StartsWith(string keyValue)
+        {
+            return Utils.StartsWith(_list, keyValue);
+        }
+
         public IEnumerable<string> StartsWith(string value)
         {
             return Utils.StartsWith<string>(_list, value);
