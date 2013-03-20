@@ -14,6 +14,12 @@ namespace Baro.CoreLibrary.Ray
         private RayPermissionList _permissions = new RayPermissionList();
         private RayGroupList _groups = new RayGroupList();
         private RayAliasList _aliases = new RayAliasList();
+        private RayDataStore _dataStore = new RayDataStore();
+
+        public RayDataStore DataStore
+        {
+            get { return _dataStore; }
+        }
 
         public string Username
         {
@@ -92,6 +98,7 @@ namespace Baro.CoreLibrary.Ray
             u._permissions = this.Permissions.Clone();
             u._groups = this.Groups.Clone();
             u._aliases = this.Aliases.Clone();
+            u._dataStore = this.DataStore.Clone();
 
             return u;
         }
