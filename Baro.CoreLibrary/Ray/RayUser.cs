@@ -10,26 +10,90 @@ namespace Baro.CoreLibrary.Ray
     {
         private string _username;
         private string _password;
+
         private RayPermissionList _permissions = new RayPermissionList();
+        private RayGroupList _groups = new RayGroupList();
+        private RayAliasList _aliases = new RayAliasList();
+
+        public string Username
+        {
+            get { return _username; }
+            set { _username = value; }
+        }
+
+        public string Password
+        {
+            get { return _password; }
+            set { _password = value; }
+        }
+
+        public RayGroupList Groups
+        {
+            get { return _groups; }
+        }
+
+        public RayAliasList Aliases
+        {
+            get { return _aliases; }
+        }
 
         public RayPermissionList Permissions
         {
             get { return _permissions; }
         }
 
-        public string Password
+        public RayPermission GetPermission(string permissionKeyValue)
         {
-            get { return _password; }
-        }
+            RayPermission p = new RayPermission(permissionKeyValue);
 
-        public string Username
-        {
-            get { return _username; }
+            // Read Group Permissions:
+            IEnumerable<RayGroup> groups = Groups.SelectAll();
+            foreach (var item in groups)
+            {
+                // Eğer permission bulunamazsa NULL dönecek.
+                RayPermission gp = item.Permissions.GetPermission(permissionKeyValue);
+
+                // Eğer permission bulundu ise
+                if (gp != null)
+                {
+                    // Dikkat en son DENIED update edilmeli.
+                    p.Allowed = p.Allowed || gp.Allowed;
+                    p.Denied = p.Denied || gp.Denied;
+
+                    if (p.Denied)
+                    {
+                        return p;
+                    }
+                }
+            }
+
+            // Read user permissions:
+            // Eğer permission bulunamazsa NULL dönecek.
+            RayPermission up = this.Permissions.GetPermission(permissionKeyValue);
+
+            // Eğer permission bulundu ise
+            if (up != null)
+            {
+                // Dikkat en son DENIED update edilmeli.
+                p.Allowed = p.Allowed || up.Allowed;
+                p.Denied = p.Denied || up.Denied;
+            }
+
+            return p;
         }
 
         public override RayUser Clone()
         {
-            throw new NotImplementedException();
+            RayUser u = new RayUser();
+
+            u._username = this.Username;
+            u.Password = this.Password;
+            
+            u._permissions = this.Permissions.Clone();
+            u._groups = this.Groups.Clone();
+            u._aliases = this.Aliases.Clone();
+
+            return u;
         }
     }
 }

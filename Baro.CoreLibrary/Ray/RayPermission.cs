@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayPermission : RayItem<RayPermission>, IComparable<RayPermission>
+    public class RayPermission : RayItem<RayPermission>, IComparable<RayPermission>, IEquatable<RayPermission>
     {
         private string _key;
         private bool _allowed;
@@ -18,6 +18,11 @@ namespace Baro.CoreLibrary.Ray
             {
                 return x.CompareTo(y);
             }
+        }
+
+        public RayPermission(string keyName)
+        {
+            this._key = keyName;
         }
 
         public bool Inactive
@@ -107,7 +112,7 @@ namespace Baro.CoreLibrary.Ray
 
         public override RayPermission Clone()
         {
-            return new RayPermission() { Allowed = _allowed, Denied = _denied, Key = _key };
+            return new RayPermission(_key) { Allowed = _allowed, Denied = _denied };
         }
 
         public static IComparer<RayPermission> CreateComparer()
@@ -124,5 +129,6 @@ namespace Baro.CoreLibrary.Ray
         {
             return string.Compare(this.Key, other.Key, true);
         }
+
     }
 }

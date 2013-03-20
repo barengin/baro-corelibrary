@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayGroupList: IRayQuery<RayGroup>
+    public class RayGroupList: RayItem<RayGroupList>, IRayQuery<RayGroup>
     {
         private SortedList<string, RayGroup> _list = new SortedList<string, RayGroup>();
 
@@ -52,6 +52,18 @@ namespace Baro.CoreLibrary.Ray
             return from kvp in _list
                    where kvp.Key.Contains(value)
                    select kvp.Value;
+        }
+
+        public override RayGroupList Clone()
+        {
+            RayGroupList l = new RayGroupList();
+
+            foreach (var item in _list)
+            {
+                l._list.Add(item.Key, item.Value);
+            }
+
+            return l;
         }
     }
 }
