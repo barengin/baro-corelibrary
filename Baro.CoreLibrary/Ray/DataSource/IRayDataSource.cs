@@ -8,5 +8,17 @@ namespace Baro.CoreLibrary.Ray.DataSource
 {
     public interface IRayDataSource
     {
+        void InsertUser(RayUser user);
+        void UpdateUser(RayUser user);
+        void DeleteUser(string username);
+        RayUser ReadUser(string username);
+
+        void InsertGroup(RayGroup group);
+        void UpdateGroup(RayGroup group);
+        void DeleteGroup(string groupname);
+        RayGroup ReadGroup(string groupname);
+
+        string[] GetUserList();
+        string[] GetGroupList();
     }
 }
