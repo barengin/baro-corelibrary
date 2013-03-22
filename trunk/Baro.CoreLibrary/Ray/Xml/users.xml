@@ -1,6 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <users>
-  <user>
-    
+  <user usr="" pwd="">
+  
+    <subscribedgroups>
+      <group name="G1" />
+      <group name="G2" />
+    </subscribedgroups>
+
+    <permissions>
+      <permission name="p1" allowed="true" denied="false" />
+      <permission name="p2" allowed="true" denied="false" />
+      <permission name="p3" allowed="true" denied="false" />
+    </permissions>
+
+    <data>
+      <d key="a" value="1" />
+      <d key="b" value="2" />
+      <d key="c" value="3" />
+    </data>
+
+    <aliases>
+      <a name="Alias1" />
+    </aliases>
+
   </user>
 </users>
