@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
@@ -64,6 +65,28 @@ namespace Baro.CoreLibrary.Ray
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return _list.GetEnumerator();
+        }
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
+        {
+            XmlNode n = xmlDoc.CreateElement("data");
+
+            foreach (var item in this)
+            {
+                XmlNode d = xmlDoc.CreateElement("d");
+
+                XmlAttribute a = xmlDoc.CreateAttribute("key");
+                a.Value = item.Key;
+                d.Attributes.Append(a);
+
+                a = xmlDoc.CreateAttribute("value");
+                a.Value = item.Value;
+                d.Attributes.Append(a);
+
+                n.AppendChild(d);
+            }
+
+            return n;
         }
     }
 }

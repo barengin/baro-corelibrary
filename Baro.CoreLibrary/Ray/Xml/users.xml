@@ -2,15 +2,15 @@
 <users>
   <user usr="" pwd="">
   
-    <subscribedgroups>
+    <groups>
       <group name="G1" />
       <group name="G2" />
-    </subscribedgroups>
+    </groups>
 
     <permissions>
-      <permission name="p1" allowed="true" denied="false" />
-      <permission name="p2" allowed="true" denied="false" />
-      <permission name="p3" allowed="true" denied="false" />
+      <permission key="p1" allowed="true" denied="false" />
+      <permission key="p2" allowed="true" denied="false" />
+      <permission key="p3" allowed="true" denied="false" />
     </permissions>
 
     <data>

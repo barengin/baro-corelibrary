@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
@@ -101,6 +102,49 @@ namespace Baro.CoreLibrary.Ray
             u._dataStore = this.DataStore.Clone();
 
             return u;
+        }
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
+        {
+            XmlNode n = xmlDoc.CreateElement("user");
+
+            // Username attribute
+            XmlAttribute a = xmlDoc.CreateAttribute("usr");
+            a.Value = this.Username;
+            n.Attributes.Append(a);
+
+            // Password attribute
+            a = xmlDoc.CreateAttribute("pwd");
+            a.Value = this.Password;
+            n.Attributes.Append(a);
+
+            // Groups element
+            XmlNode mg = xmlDoc.CreateElement("groups");
+
+            foreach (var item in this.Groups)
+            {
+                XmlNode g = xmlDoc.CreateElement("group");
+
+                // Group name attribute
+                a = xmlDoc.CreateAttribute("name");
+                a.Value = item.Name;
+                g.Attributes.Append(a);
+
+                mg.AppendChild(g);
+            }
+
+            n.AppendChild(mg);
+
+            // Permissions element
+            n.AppendChild(this.Groups.CreateXmlNode(xmlDoc));
+
+            // Data element
+            n.AppendChild(this.DataStore.CreateXmlNode(xmlDoc));
+
+            // Aliases
+            n.AppendChild(this.Aliases.CreateXmlNode(xmlDoc));
+
+            return n;
         }
     }
 }

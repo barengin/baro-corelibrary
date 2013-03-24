@@ -130,6 +130,7 @@
     <Compile Include="GdiPlus\STATSTG.cs" />
     <Compile Include="GdiPlus\Stubs.cs" />
     <Compile Include="Ray\DataSource\IRayDataSource.cs" />
+    <Compile Include="Ray\DataSource\RayDataSourceXml.cs" />
     <Compile Include="Ray\IRayQuery.cs" />
     <Compile Include="Ray\RayAliasList.cs" />
     <Compile Include="Ray\RayDataStore.cs" />
@@ -288,12 +289,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AAA2\users.xml" />
+    <Content Include="Ray\Xml\groups.xml" />
+    <Content Include="Ray\Xml\users.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AAA2\aaav1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="corelib.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Ray\DataSource\MongoDB\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

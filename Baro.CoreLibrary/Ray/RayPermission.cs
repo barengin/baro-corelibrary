@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
@@ -130,5 +131,24 @@ namespace Baro.CoreLibrary.Ray
             return string.Compare(this.Key, other.Key, true);
         }
 
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
+        {
+            XmlNode p = xmlDoc.CreateElement("permission");
+
+            XmlAttribute a = xmlDoc.CreateAttribute("name");
+            a.Value = this.Key;
+            p.Attributes.Append(a);
+
+            a = xmlDoc.CreateAttribute("allowed");
+            a.Value = this.Allowed ? "1" : "0";
+            p.Attributes.Append(a);
+
+            a = xmlDoc.CreateAttribute("denied");
+            a.Value = this.Denied ? "1" : "0";
+            p.Attributes.Append(a);
+
+            return p;
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
@@ -35,6 +36,11 @@ namespace Baro.CoreLibrary.Ray
         }
 
         public override RayServer Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
         {
             throw new NotImplementedException();
         }
