@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
@@ -35,6 +36,19 @@ namespace Baro.CoreLibrary.Ray
             g._permissions = this.Permissions.Clone();
 
             return g;
+        }
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
+        {
+            XmlNode n = xmlDoc.CreateElement("group");
+            
+            XmlAttribute a = xmlDoc.CreateAttribute("name");
+            a.Value = this.Name;
+            n.Attributes.Append(a);
+
+            n.AppendChild(this.Permissions.CreateXmlNode(xmlDoc));
+
+            return n;
         }
     }
 }

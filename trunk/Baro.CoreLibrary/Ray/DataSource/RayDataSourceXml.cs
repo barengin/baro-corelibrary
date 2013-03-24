@@ -9,11 +9,18 @@ namespace Baro.CoreLibrary.Ray.DataSource
 {
     public class RayDataSourceXml: IRayDataSource
     {
-        private XmlDocument _xml = new XmlDocument();
+        private readonly string _usersFilename, _GroupsFilename;
 
-        public RayDataSourceXml(string filename)
+        private readonly XmlDocument _users = new XmlDocument();
+        private readonly XmlDocument _groups = new XmlDocument();
+
+        public RayDataSourceXml(string userXmlFilename, string groupXmlFilename)
         {
-            _xml.Load(filename);
+            _usersFilename = userXmlFilename;
+            _users.Load(userXmlFilename);
+
+            _GroupsFilename = groupXmlFilename;
+            _groups.Load(groupXmlFilename);
         }
 
         public void InsertUser(RayUser user)

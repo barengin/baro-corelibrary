@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public sealed class RayPermissionList : RayItem<RayPermissionList>, IRayQuery<RayPermission>
+    public sealed class RayPermissionList : RayItem<RayPermissionList>, IRayQuery<RayPermission>, IEnumerable<RayPermission>
     {
         private SortedList<string, RayPermission> _list = new SortedList<string, RayPermission>();
 
@@ -84,6 +85,28 @@ namespace Baro.CoreLibrary.Ray
             }
 
             return l;
+        }
+
+        public IEnumerator<RayPermission> GetEnumerator()
+        {
+            return _list.Values.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return _list.Values.GetEnumerator();
+        }
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
+        {
+            XmlNode n = xmlDoc.CreateElement("permissions");
+
+            foreach (var item in this)
+            {
+                n.AppendChild(item.CreateXmlNode(xmlDoc));
+            }
+
+            return n;
         }
     }
 }

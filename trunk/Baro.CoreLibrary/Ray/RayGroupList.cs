@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayGroupList: RayItem<RayGroupList>, IRayQuery<RayGroup>
+    public class RayGroupList: RayItem<RayGroupList>, IRayQuery<RayGroup>, IEnumerable<RayGroup>
     {
         private SortedList<string, RayGroup> _list = new SortedList<string, RayGroup>();
 
@@ -64,6 +65,28 @@ namespace Baro.CoreLibrary.Ray
             }
 
             return l;
+        }
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
+        {
+            XmlNode n = xmlDoc.CreateElement("groups");
+
+            foreach (var item in this)
+            {
+                n.AppendChild(item.CreateXmlNode(xmlDoc));
+            }
+
+            return n;
+        }
+
+        public IEnumerator<RayGroup> GetEnumerator()
+        {
+            return _list.Values.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return _list.Values.GetEnumerator();
         }
     }
 }
