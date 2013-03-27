@@ -10,10 +10,10 @@ namespace Baro.CoreLibrary.Ray
     public class RayPermission : RayItem<RayPermission>, IComparable<RayPermission>, IEquatable<RayPermission>
     {
         private string _key;
-        private bool _allowed;
-        private bool _denied;
+        private volatile bool _allowed;
+        private volatile bool _denied;
 
-        public sealed class Comparer : IComparer<RayPermission>
+        internal sealed class Comparer : IComparer<RayPermission>
         {
             public int Compare(RayPermission x, RayPermission y)
             {
@@ -40,8 +40,10 @@ namespace Baro.CoreLibrary.Ray
 
                 if (_allowed)
                 {
-                    _denied = false;
+                    Denied = false;
                 }
+
+                NotifySuccessor(IDU.Update, ObjectHierarchy.Permission, "Allowed", value);
             }
         }
 
@@ -54,8 +56,10 @@ namespace Baro.CoreLibrary.Ray
 
                 if (_denied)
                 {
-                    _allowed = false;
+                    Allowed = false;
                 }
+                
+                NotifySuccessor(IDU.Update, ObjectHierarchy.Permission, "Denied", value);
             }
         }
 
@@ -64,10 +68,6 @@ namespace Baro.CoreLibrary.Ray
             get
             {
                 return _key;
-            }
-            set
-            {
-                _key = Utils.ValidateKey(value);
             }
         }
 
@@ -108,7 +108,9 @@ namespace Baro.CoreLibrary.Ray
 
         public bool Equals(RayPermission other)
         {
-            return other.Key == this.Key && other.Allowed == this.Allowed && other.Denied == this.Denied;
+            return other.Key == this.Key && 
+                   other.Allowed == this.Allowed && 
+                   other.Denied == this.Denied;
         }
 
         public override RayPermission Clone()
@@ -131,7 +133,6 @@ namespace Baro.CoreLibrary.Ray
             return string.Compare(this.Key, other.Key, true);
         }
 
-
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
         {
             XmlNode p = xmlDoc.CreateElement("permission");
@@ -149,6 +150,11 @@ namespace Baro.CoreLibrary.Ray
             p.Attributes.Append(a);
 
             return p;
+        }
+
+        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
+        {
+            throw new NotSupportedException();
         }
     }
 }

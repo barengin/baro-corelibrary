@@ -21,17 +21,33 @@ namespace Baro.CoreLibrary.Ray
 
         public void Add(RayGroup group)
         {
+            group.SetSuccessor(this);
             WriterLock(() => _list.Add(group.Name, group));
+
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.GroupList, null, group);
         }
 
         public void Remove(RayGroup group)
         {
+            group.SetSuccessor(null);
             WriterLock(() => _list.Remove(group.Name));
+
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.GroupList, null, group);
         }
 
         public void Clear()
         {
             WriterLock(() => _list.Clear());
+
+            ReaderLock(() =>
+            {
+                foreach (var item in _list)
+                {
+                    item.Value.SetSuccessor(null);
+                }
+            });
+
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.GroupList, null, null);
         }
 
         public RayGroup this[string index]
@@ -71,7 +87,10 @@ namespace Baro.CoreLibrary.Ray
             {
                 foreach (var item in _list)
                 {
-                    l._list.Add(item.Key, item.Value);
+                    RayGroup g = item.Value.Clone();
+                    g.SetSuccessor(l);
+
+                    l._list.Add(item.Key, g);
                 }
             });
 
@@ -101,6 +120,11 @@ namespace Baro.CoreLibrary.Ray
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return ReaderLock<System.Collections.IEnumerator>(() => _list.Values.GetEnumerator());
+        }
+
+        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
+        {
+            NotifySuccessor(op, where, info, value);
         }
     }
 }

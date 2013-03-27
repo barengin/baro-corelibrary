@@ -18,6 +18,7 @@ namespace Baro.CoreLibrary.Ray
         private RayGroup()
         {
             // DİKKAT !!! _permission nesnesini yaratma !!!
+            //
             // 
             // _permissions = new RayPermissionList();
         }
@@ -49,6 +50,11 @@ namespace Baro.CoreLibrary.Ray
             n.AppendChild(this.Permissions.CreateXmlNode(xmlDoc));
 
             return n;
+        }
+
+        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
+        {
+            throw new NotSupportedException();
         }
     }
 }

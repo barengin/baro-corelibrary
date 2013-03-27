@@ -10,9 +10,7 @@ namespace Baro.CoreLibrary.Ray
 {
     public sealed class RayServer: RayItem<RayServer>
     {
-        private IRayDataSource _dataSource = null;
-
-        public IRayDataSource DataSource { get { return _dataSource; } }
+        private RayUserList _userList = new RayUserList();
 
         /// <summary>
         /// In-memory configuration
@@ -27,22 +25,58 @@ namespace Baro.CoreLibrary.Ray
         /// <param name="dataSource">Data source of RayServer</param>
         public RayServer(IRayDataSource dataSource)
         {
-            _dataSource = dataSource;
         }
 
         public RayUser GetUser(string username)
         {
-            return null;
+            return _userList.GetByName(username);
+        }
+
+        public RayUser GetUserByAlias(string alias)
+        {
+            return _userList.GetByAlias(alias);
+        }
+
+        public RayUser AddUser(string username)
+        {
+            RayUser u = new RayUser(username);
+            
+            _userList.Add(u);
+
+            return u;
+        }
+
+        public void AddUser(RayUser user)
+        {
+            _userList.Add(user);
+        }
+
+        public bool RemoveUser(string username)
+        {
+            return _userList.Remove(username);
+        }
+
+        public void RemoveAllUsers()
+        {
+            _userList.RemoveAllUsers();
         }
 
         public override RayServer Clone()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
+        }
+
+        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
+        {
+            // TODO: Alt nesnelerde değişim var. Gerekli bilgiler de geliyor ancak bu sadece bizim dizini kaydetmemiz
+            //       için bir işaret.
+            //
+            // KAYDET !!!
         }
     }
 }

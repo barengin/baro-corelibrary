@@ -19,27 +19,36 @@ namespace Baro.CoreLibrary.Ray
         DataStore,
         Permission,
         PermissionList,
+        Group,
+        GroupList,
         Username,
         Password
     }
 
     public abstract class RayHandler
     {
+        private volatile bool _disableNotifies = false;
         protected RayHandler _successor;
 
-        protected void SetSuccessor(RayHandler s)
+        protected bool DisableNotifies
+        {
+            get { return _disableNotifies; }
+            set { _disableNotifies = value; }
+        }
+
+        public void SetSuccessor(RayHandler s)
         {
             _successor = s;
         }
 
-        protected void NotifySuccessor(IDU op, ObjectHierarchy where, object key, object value)
+        protected void NotifySuccessor(IDU op, ObjectHierarchy where, string info, object value)
         {
             if (_successor != null)
             {
-                _successor.Handle(op, where, key, value);
+                _successor.Handle(op, where, info, value);
             }
         }
 
-        protected abstract void Handle(IDU op, ObjectHierarchy where, object key, object value);
+        protected abstract void Handle(IDU op, ObjectHierarchy where, string info, object value);
     }
 }

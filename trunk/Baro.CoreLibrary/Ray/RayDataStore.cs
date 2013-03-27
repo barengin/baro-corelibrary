@@ -23,11 +23,12 @@ namespace Baro.CoreLibrary.Ray
         {
             get
             {
-                return ReaderLock<string>(() => _list[index]);
+                return ReaderLock<string>(() => _list[index]); // TODO: Burada try-catch KeyNotFound koymak gerekebilir.
             }
             set
             {
                 WriterLock(() => _list[index] = value);
+                NotifySuccessor(IDU.Update, ObjectHierarchy.DataStore, null, new KeyValuePair<string, string>(index, value));
             }
         }
 
@@ -102,6 +103,11 @@ namespace Baro.CoreLibrary.Ray
                 });
 
             return n;
+        }
+
+        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
+        {
+            throw new NotSupportedException();
         }
     }
 }

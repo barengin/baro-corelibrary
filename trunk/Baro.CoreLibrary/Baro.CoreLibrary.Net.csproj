@@ -129,6 +129,7 @@
     <Compile Include="GdiPlus\Shapes.cs" />
     <Compile Include="GdiPlus\STATSTG.cs" />
     <Compile Include="GdiPlus\Stubs.cs" />
+    <Compile Include="Ray\DataSource\DataSourceProxy.cs" />
     <Compile Include="Ray\DataSource\IRayDataSource.cs" />
     <Compile Include="Ray\DataSource\RayDataSourceXml.cs" />
     <Compile Include="Ray\IRayQuery.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Ray\RayDataStore.cs" />
     <Compile Include="Ray\RayGroup.cs" />
     <Compile Include="Ray\RayGroupList.cs" />
+    <Compile Include="Ray\RayHandler.cs" />
     <Compile Include="Ray\RayKeyNotFoundException.cs" />
     <Compile Include="Ray\RayPermission.cs" />
     <Compile Include="Ray\RayPermissionList.cs" />
