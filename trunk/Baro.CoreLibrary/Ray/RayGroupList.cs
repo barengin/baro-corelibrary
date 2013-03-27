@@ -7,30 +7,38 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayGroupList: RayItem<RayGroupList>, IRayQuery<RayGroup>, IEnumerable<RayGroup>
+    public class RayGroupList : RayItem<RayGroupList>, IRayQuery<RayGroup>, IEnumerable<RayGroup>
     {
-        private SortedList<string, RayGroup> _list = new SortedList<string, RayGroup>();
+        #region Flyweight of List
+        private SortedList<string, RayGroup> _flylist = null;
+
+        private SortedList<string, RayGroup> _list
+        {
+            get { return _flylist ?? (_flylist = new SortedList<string, RayGroup>()); }
+        }
+
+        #endregion
 
         public void Add(RayGroup group)
         {
-            _list.Add(group.Name, group);
+            WriterLock(() => _list.Add(group.Name, group));
         }
 
         public void Remove(RayGroup group)
         {
-            _list.Remove(group.Name);
+            WriterLock(() => _list.Remove(group.Name));
         }
 
         public void Clear()
         {
-            _list.Clear();
+            WriterLock(() => _list.Clear());
         }
 
         public RayGroup this[string index]
         {
             get
             {
-                return _list[index];
+                return ReaderLock<RayGroup>(() => _list[index]);
             }
             set
             {
@@ -40,29 +48,32 @@ namespace Baro.CoreLibrary.Ray
 
         public IEnumerable<RayGroup> SelectAll()
         {
-            return _list.Values;
+            return ReaderLock<IEnumerable<RayGroup>>(() => _list.Values);
         }
 
         public IEnumerable<RayGroup> StartsWith(string value)
         {
-            return Utils.StartsWith<RayGroup>(_list, value);
+            return ReaderLock<IEnumerable<RayGroup>>(() => Utils.StartsWith<RayGroup>(_list, value));
         }
 
         public IEnumerable<RayGroup> Like(string value)
         {
-            return from kvp in _list
-                   where kvp.Key.Contains(value)
-                   select kvp.Value;
+            return ReaderLock<IEnumerable<RayGroup>>(() => from kvp in _list
+                                                           where kvp.Key.Contains(value)
+                                                           select kvp.Value);
         }
 
         public override RayGroupList Clone()
         {
             RayGroupList l = new RayGroupList();
 
-            foreach (var item in _list)
+            ReaderLock(() =>
             {
-                l._list.Add(item.Key, item.Value);
-            }
+                foreach (var item in _list)
+                {
+                    l._list.Add(item.Key, item.Value);
+                }
+            });
 
             return l;
         }
@@ -71,22 +82,25 @@ namespace Baro.CoreLibrary.Ray
         {
             XmlNode n = xmlDoc.CreateElement("groups");
 
-            foreach (var item in this)
+            ReaderLock(() =>
             {
-                n.AppendChild(item.CreateXmlNode(xmlDoc));
-            }
+                foreach (var item in this)
+                {
+                    n.AppendChild(item.CreateXmlNode(xmlDoc));
+                }
+            });
 
             return n;
         }
 
         public IEnumerator<RayGroup> GetEnumerator()
         {
-            return _list.Values.GetEnumerator();
+            return ReaderLock<IEnumerator<RayGroup>>(() => _list.Values.GetEnumerator());
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return _list.Values.GetEnumerator();
+            return ReaderLock<System.Collections.IEnumerator>(() => _list.Values.GetEnumerator());
         }
     }
 }
