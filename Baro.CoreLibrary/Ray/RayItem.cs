@@ -8,8 +8,9 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public abstract class RayItem<T> : IRayItem<T>
+    public abstract class RayItem<T> : RayHandler, IRayItem<T>
     {
+        #region Flyweight Lock
         private volatile ReaderWriterLockSlim _flylock = null;
 
         protected ReaderWriterLockSlim _lock
@@ -17,6 +18,9 @@ namespace Baro.CoreLibrary.Ray
             get { return _flylock ?? (_flylock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion)); }
         }
 
+        #endregion
+
+        #region Locking Tools
         protected TResult WriterLock<TResult>(Func<TResult> writeOp)
         {
             _lock.EnterWriteLock();
@@ -72,6 +76,8 @@ namespace Baro.CoreLibrary.Ray
                 _lock.ExitReadLock();
             }
         }
+
+        #endregion
 
         public abstract T Clone();
 
