@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayUser: RayItem<RayUser>
+    public class RayUser : RayItem<RayUser>
     {
         private string _username;
         private string _password;
@@ -17,6 +17,11 @@ namespace Baro.CoreLibrary.Ray
         private RayAliasList _aliases = new RayAliasList();
         private RayDataStore _dataStore = new RayDataStore();
 
+        public RayUser(string username)
+        {
+            _username = username;
+        }
+
         public RayDataStore DataStore
         {
             get { return _dataStore; }
@@ -25,13 +30,16 @@ namespace Baro.CoreLibrary.Ray
         public string Username
         {
             get { return _username; }
-            set { _username = value; }
         }
 
         public string Password
         {
             get { return _password; }
-            set { _password = value; }
+            set
+            {
+                _password = value;
+                NotifySuccessor(IDU.Update, ObjectHierarchy.Password, null, value);
+            }
         }
 
         public RayGroupList Groups
@@ -91,11 +99,10 @@ namespace Baro.CoreLibrary.Ray
 
         public override RayUser Clone()
         {
-            RayUser u = new RayUser();
+            RayUser u = new RayUser(this.Username);
 
-            u._username = this.Username;
-            u.Password = this.Password;
-            
+            u._password = this.Password;
+
             u._permissions = this.Permissions.Clone();
             u._groups = this.Groups.Clone();
             u._aliases = this.Aliases.Clone();
@@ -145,6 +152,11 @@ namespace Baro.CoreLibrary.Ray
             n.AppendChild(this.Aliases.CreateXmlNode(xmlDoc));
 
             return n;
+        }
+
+        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
+        {
+            NotifySuccessor(op, where, info, value);
         }
     }
 }
