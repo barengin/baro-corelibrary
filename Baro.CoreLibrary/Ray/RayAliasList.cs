@@ -10,12 +10,15 @@ namespace Baro.CoreLibrary.Ray
 {
     public class RayAliasList : RayItem<RayAliasList>, IList<string>
     {
+        #region Flyweight of list
         private List<string> _flylist = null;
 
         private List<string> _list
         {
             get { return _flylist ?? (_flylist = new List<string>()); }
         }
+
+        #endregion
 
         public override RayAliasList Clone()
         {
@@ -41,11 +44,13 @@ namespace Baro.CoreLibrary.Ray
         public void Insert(int index, string item)
         {
             WriterLock(() => _list.Insert(index, item));
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.AliasList, null, item);
         }
 
         public void RemoveAt(int index)
         {
             WriterLock(() => _list.RemoveAt(index));
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, null, index);
         }
 
         public string this[int index]
@@ -56,18 +61,20 @@ namespace Baro.CoreLibrary.Ray
             }
             set
             {
-                WriterLock(() => _list[index] = value);
+                throw new NotSupportedException(); // WriterLock(() => _list[index] = value);
             }
         }
 
         public void Add(string item)
         {
             WriterLock(() => _list.Add(item));
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.AliasList, null, item);
         }
 
         public void Clear()
         {
             WriterLock(() => _list.Clear());
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, null, null);
         }
 
         public bool Contains(string item)
@@ -95,7 +102,9 @@ namespace Baro.CoreLibrary.Ray
 
         public bool Remove(string item)
         {
-            return WriterLock<bool>(() => _list.Remove(item));
+            bool r = WriterLock<bool>(() => _list.Remove(item));
+            if (r) NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, null, item);
+            return r;
         }
 
         public IEnumerator<string> GetEnumerator()
@@ -125,6 +134,11 @@ namespace Baro.CoreLibrary.Ray
                 });
 
             return n;
+        }
+
+        protected override void Handle(IDU op, ObjectHierarchy where, object key, object value)
+        {
+            throw new NotSupportedException();
         }
     }
 }
