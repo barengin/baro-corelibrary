@@ -4,50 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    internal class RayUserList
+    public sealed class RayUserList: RayItem<RayUserList>, IRayBagList<string, RayUser>
     {
         private ConcurrentDictionary<string, RayUser> _mapUsers = new ConcurrentDictionary<string, RayUser>(Environment.ProcessorCount, 1000);
         private ConcurrentDictionary<string, RayUser> _mapAlias = new ConcurrentDictionary<string, RayUser>(Environment.ProcessorCount, 1000);
 
-        public void RemoveAllUsers()
+        internal RayUserList()
         {
-            _mapAlias.Clear();
-            _mapUsers.Clear();
-        }
-
-        public void Add(RayUser user)
-        {
-            _mapUsers.AddOrUpdate(user.Username, user, (key, u) =>
-                {
-                    return user;
-                });
-
-            foreach (var item in user.Aliases)
-            {
-                _mapAlias.AddOrUpdate(item, user, (key, u) =>
-                {
-                    return user;
-                });                
-            }
-        }
-
-        public bool Remove(string username)
-        {
-            RayUser u, u2;
-            bool r = _mapUsers.TryRemove(username, out u);
-
-            if (r)
-            {
-                foreach (var item in u.Aliases)
-                {
-                    _mapAlias.TryRemove(username, out u2);
-                }
-            }
-
-            return r;
         }
 
         public RayUser GetByAlias(string alias)
@@ -75,6 +42,69 @@ namespace Baro.CoreLibrary.Ray
             else
             {
                 return null;
+            }
+        }
+
+        public override RayUserList Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RayUser AddNew(string username)
+        {
+            RayUser u = new RayUser(username, (RayServer)_successor);
+
+            _mapUsers.AddOrUpdate(username, u, (key, update) =>
+            {
+                return u;
+            });
+
+            return u;
+        }
+
+        public bool Remove(string username)
+        {
+            RayUser u, u2;
+            bool r = _mapUsers.TryRemove(username, out u);
+
+            if (r)
+            {
+                u.SetSuccessor(null);
+
+                foreach (var item in u.Aliases)
+                {
+                    _mapAlias.TryRemove(username, out u2);
+                }
+            }
+
+            return r;
+        }
+
+        public bool Remove(RayUser value)
+        {
+            return Remove(value.Username);
+        }
+
+        public void Clear()
+        {
+            _mapAlias.Clear();
+            _mapUsers.Clear();
+        }
+
+        public RayUser this[string username]
+        {
+            get
+            {
+                return GetByName(username);
+            }
+            set
+            {
+                throw new NotSupportedException();
             }
         }
     }

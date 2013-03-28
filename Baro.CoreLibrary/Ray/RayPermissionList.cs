@@ -8,7 +8,10 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public sealed class RayPermissionList : RayItem<RayPermissionList>, IRayQuery<RayPermission>, IEnumerable<RayPermission>
+    public sealed class RayPermissionList : RayItem<RayPermissionList>, 
+                                            IRayQuery<RayPermission>, 
+                                            IRayBagList<string, RayPermission>, 
+                                            IEnumerable<RayPermission>
     {
         #region Flyweight of List
         private SortedList<string, RayPermission> _flylist = null;
@@ -20,54 +23,62 @@ namespace Baro.CoreLibrary.Ray
 
         #endregion
 
-        public void Add(RayPermission p)
+        #region cTors
+        internal RayPermissionList()
         {
-            WriterLock(() => _list.Add(p.Key, p));
-            p.SetSuccessor(this);
-            NotifySuccessor(IDU.Insert, ObjectHierarchy.PermissionList, null, p);
         }
 
-        public void Remove(string key)
+        #endregion
+
+        #region IRayBagList
+        public RayPermission AddNew(string key)
+        {
+            RayPermission p = new RayPermission(key, this);
+            p.SetSuccessor(this);
+
+            WriterLock(() => _list.Add(p.Key, p));
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.PermissionList, null, p);
+
+            return p;
+        }
+
+        public bool Remove(string key)
         {
             RayPermission p;
+            bool found = false;
 
-            if (_list.TryGetValue(key, out p))
+            WriterLock(() =>
             {
-                p.SetSuccessor(null);
-                WriterLock(() => _list.Remove(key));
-                NotifySuccessor(IDU.Delete, ObjectHierarchy.PermissionList, null, key);
-            }
+                if (found = _list.TryGetValue(key, out p))
+                {
+                    p.SetSuccessor(null);
+                    _list.Remove(key);
+                }
+            });
+
+            if (found) NotifySuccessor(IDU.Delete, ObjectHierarchy.PermissionList, null, key);
+            return found;
+        }
+
+        public bool Remove(RayPermission value)
+        {
+            return Remove(value.Key);
         }
 
         public void Clear()
         {
-            WriterLock(() => _list.Clear());
-
-            ReaderLock(() =>
+            WriterLock(() =>
             {
                 foreach (var item in this)
                 {
                     item.SetSuccessor(null);
                 }
+
+                _list.Clear();
             });
-            
+
             NotifySuccessor(IDU.Delete, ObjectHierarchy.PermissionList, null, null);
         }
-
-        //public RayPermission GetPermission(string index)
-        //{
-        //    return ReaderLock<RayPermission>(() =>
-        //    {
-        //        try
-        //        {
-        //            return _list[index];
-        //        }
-        //        catch(KeyNotFoundException)
-        //        {
-        //            return null;
-        //        }
-        //    });
-        //}
 
         public RayPermission this[string index]
         {
@@ -88,6 +99,9 @@ namespace Baro.CoreLibrary.Ray
             }
         }
 
+        #endregion
+
+        #region IRayQuery
         public IEnumerable<RayPermission> SelectAll()
         {
             return ReaderLock<IEnumerable<RayPermission>>(() => _list.Values);
@@ -105,24 +119,9 @@ namespace Baro.CoreLibrary.Ray
                                                                 select kvp.Value);
         }
 
-        public override RayPermissionList Clone()
-        {
-            RayPermissionList l = new RayPermissionList();
+        #endregion
 
-            ReaderLock(() =>
-                {
-                    foreach (var item in this._list)
-                    {
-                        RayPermission p = item.Value.Clone();
-                        p.SetSuccessor(l);
-
-                        l._list.Add(p.Key, p);
-                    }
-                });
-
-            return l;
-        }
-
+        #region IEnumerable
         public IEnumerator<RayPermission> GetEnumerator()
         {
             return ReaderLock<IEnumerator<RayPermission>>(() => _list.Values.GetEnumerator());
@@ -131,6 +130,26 @@ namespace Baro.CoreLibrary.Ray
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return ReaderLock<IEnumerator<RayPermission>>(() => _list.Values.GetEnumerator());
+        }
+
+        #endregion
+
+        public override RayPermissionList Clone()
+        {
+            RayPermissionList l = new RayPermissionList();
+
+            ReaderLock(() =>
+            {
+                foreach (var item in this._list)
+                {
+                    RayPermission p = item.Value.Clone();
+                    p.SetSuccessor(l);
+
+                    l._list.Add(p.Key, p);
+                }
+            });
+
+            return l;
         }
 
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)

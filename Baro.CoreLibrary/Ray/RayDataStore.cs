@@ -19,11 +19,45 @@ namespace Baro.CoreLibrary.Ray
 
         #endregion
 
+        #region cTors
+        internal RayDataStore()
+        {
+        }
+
+        #endregion
+
+        public void Clear()
+        {
+            WriterLock(() =>
+            {
+                _list.Clear();
+            });
+
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.DataStore, null, null);
+        }
+
+        public bool Remove(string key)
+        {
+            bool r = WriterLock<bool>(() => _list.Remove(key));
+            if (r) NotifySuccessor(IDU.Delete, ObjectHierarchy.DataStore, null, key);
+            return r;
+        }
+
         public string this[string index]
         {
             get
             {
-                return ReaderLock<string>(() => _list[index]); // TODO: Burada try-catch KeyNotFound koymak gerekebilir.
+                return ReaderLock<string>(() =>
+                {
+                    try
+                    {
+                        return _list[index];
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        return null;
+                    }
+                });
             }
             set
             {
@@ -103,11 +137,6 @@ namespace Baro.CoreLibrary.Ray
                 });
 
             return n;
-        }
-
-        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
-        {
-            throw new NotSupportedException();
         }
     }
 }

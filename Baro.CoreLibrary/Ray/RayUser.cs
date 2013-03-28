@@ -13,7 +13,7 @@ namespace Baro.CoreLibrary.Ray
         private string _password;
 
         private RayPermissionList _permissions = new RayPermissionList();
-        private RayStringList _groups = new RayStringList();
+        private RaySubscribedGroups _groups = new RaySubscribedGroups();
         private RayAliasList _aliases = new RayAliasList();
         private RayDataStore _dataStore = new RayDataStore();
 
@@ -30,6 +30,11 @@ namespace Baro.CoreLibrary.Ray
             
             _server = successor;
             SetSuccessor(successor);
+
+            _groups.SetSuccessor(this);
+            _permissions.SetSuccessor(this);
+            _aliases.SetSuccessor(this);
+            _dataStore.SetSuccessor(this);
         }
 
         public RayDataStore DataStore
@@ -52,7 +57,7 @@ namespace Baro.CoreLibrary.Ray
             }
         }
 
-        public RayStringList Groups
+        public RaySubscribedGroups Groups
         {
             get { return _groups; }
         }
@@ -69,7 +74,7 @@ namespace Baro.CoreLibrary.Ray
 
         public RayPermission GetPermission(string permissionKeyValue)
         {
-            RayPermission p = new RayPermission(permissionKeyValue);
+            RayPermission p = new RayPermission(permissionKeyValue, null);
 
             // Read Group Permissions:
             foreach (var item in Groups)
@@ -77,7 +82,7 @@ namespace Baro.CoreLibrary.Ray
                 string groupName = item;
 
                 // Eğer permission bulunamazsa NULL dönecek.
-                RayPermission gp = _server.GetGroup(groupName).Permissions.GetPermission(permissionKeyValue);
+                RayPermission gp = _server.Groups[groupName].Permissions[permissionKeyValue];
 
                 // Eğer permission bulundu ise
                 if (gp != null)
@@ -95,7 +100,7 @@ namespace Baro.CoreLibrary.Ray
 
             // Read user permissions:
             // Eğer permission bulunamazsa NULL dönecek.
-            RayPermission up = this.Permissions.GetPermission(permissionKeyValue);
+            RayPermission up = this.Permissions[permissionKeyValue];
 
             // Eğer permission bulundu ise
             if (up != null)
@@ -169,7 +174,7 @@ namespace Baro.CoreLibrary.Ray
 
         protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
         {
-            NotifySuccessor(op, where, info, value);
+            NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
         }
     }
 }

@@ -8,19 +8,28 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public sealed class RayServer: RayItem<RayServer>
+    public sealed class RayServer : RayItem<RayServer>
     {
         private IRayDataSource _dataSource;
         private RayUserList _userList = new RayUserList();
         private RayGroupList _groupList = new RayGroupList();
 
+        public RayUserList Users
+        {
+            get { return _userList; }
+        }
+
+        public RayGroupList Groups
+        {
+            get { return _groupList; }
+        }
+
         #region cTors
         /// <summary>
         /// In-memory configuration
         /// </summary>
-        public RayServer()
+        public RayServer() : this(null)
         {
-            _dataSource = new DataSourceProxy(null);
         }
 
         /// <summary>
@@ -30,47 +39,17 @@ namespace Baro.CoreLibrary.Ray
         public RayServer(IRayDataSource dataSource)
         {
             _dataSource = new DataSourceProxy(dataSource);
+
+            _groupList.SetSuccessor(this);
+            _userList.SetSuccessor(this);
         }
 
         #endregion
 
-        #region Users
-        public RayUser GetUser(string username)
+        new private void SetSuccessor(RayHandler s)
         {
-            return _userList.GetByName(username);
         }
 
-        public RayUser GetUserByAlias(string alias)
-        {
-            return _userList.GetByAlias(alias);
-        }
-
-        public RayUser AddUser(string username)
-        {
-            RayUser u = new RayUser(username, this);
-
-            _userList.Add(u);
-
-            return u;
-        }
-
-        public void AddUser(RayUser user)
-        {
-            _userList.Add(user);
-        }
-
-        public bool RemoveUser(string username)
-        {
-            return _userList.Remove(username);
-        }
-
-        public void RemoveAllUsers()
-        {
-            _userList.RemoveAllUsers();
-        }
-
-        #endregion
-        
         public override RayServer Clone()
         {
             throw new NotSupportedException();
@@ -109,11 +88,6 @@ namespace Baro.CoreLibrary.Ray
                 default:
                     break;
             }
-        }
-
-        public RayGroup GetGroup(string groupName)
-        {
-            return _groupList[groupName];
         }
     }
 }
