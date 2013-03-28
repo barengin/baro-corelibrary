@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayAliasList : RayItem<RayAliasList>, IList<string>
+    public sealed class RayAliasList : RayItem<RayAliasList>, IList<string>
     {
         #region Flyweight of list
         private List<string> _flylist = null;
@@ -20,21 +20,12 @@ namespace Baro.CoreLibrary.Ray
 
         #endregion
 
-        public override RayAliasList Clone()
+        #region cTors
+        internal RayAliasList()
         {
-            RayAliasList a = new RayAliasList();
-
-            ReaderLock(() =>
-                {
-                    foreach (var item in _list)
-                    {
-                        a._list.Add(item);
-                    }
-                }
-            );
-
-            return a;
         }
+
+        #endregion
 
         public int IndexOf(string item)
         {
@@ -117,6 +108,22 @@ namespace Baro.CoreLibrary.Ray
             return ReaderLock<System.Collections.IEnumerator>(() => _list.GetEnumerator());
         }
 
+        public override RayAliasList Clone()
+        {
+            RayAliasList a = new RayAliasList();
+
+            ReaderLock(() =>
+            {
+                foreach (var item in _list)
+                {
+                    a._list.Add(item);
+                }
+            }
+            );
+
+            return a;
+        }
+
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
         {
             XmlNode n = xmlDoc.CreateElement("aliases");
@@ -134,11 +141,6 @@ namespace Baro.CoreLibrary.Ray
                 });
 
             return n;
-        }
-
-        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
-        {
-            throw new NotSupportedException();
         }
     }
 }

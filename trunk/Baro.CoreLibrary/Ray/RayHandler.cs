@@ -21,8 +21,10 @@ namespace Baro.CoreLibrary.Ray
         PermissionList,
         Group,
         GroupList,
+        SubscribedGroupList,
         Username,
-        Password
+        Password,
+        User
     }
 
     public abstract class RayHandler
@@ -36,7 +38,7 @@ namespace Baro.CoreLibrary.Ray
             set { _disableNotifies = value; }
         }
 
-        public void SetSuccessor(RayHandler s)
+        public virtual void SetSuccessor(RayHandler s)
         {
             _successor = s;
         }
@@ -49,6 +51,9 @@ namespace Baro.CoreLibrary.Ray
             }
         }
 
-        protected abstract void Handle(IDU op, ObjectHierarchy where, string info, object value);
+        protected virtual void Handle(IDU op, ObjectHierarchy where, string info, object value)
+        {
+            NotifySuccessor(op, where, info, value);
+        }
     }
 }

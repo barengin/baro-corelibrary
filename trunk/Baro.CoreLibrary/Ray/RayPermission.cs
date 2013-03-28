@@ -21,10 +21,19 @@ namespace Baro.CoreLibrary.Ray
             }
         }
 
-        public RayPermission(string keyName)
+        #region cTors
+        private RayPermission()
+        {
+            throw new NotSupportedException();
+        }
+
+        internal RayPermission(string keyName, RayHandler successor)
         {
             this._key = keyName;
+            SetSuccessor(successor);
         }
+
+        #endregion
 
         public bool Inactive
         {
@@ -88,7 +97,7 @@ namespace Baro.CoreLibrary.Ray
             }
             else
             {
-                throw new RayInvalidPermissionSettings("Allowed and Denied can not be enabled at the same time !");
+                throw new InvalidOperationException("Allowed and Denied can not be enabled at the same time !");
             }
 
             return string.Format("Permission {0} : {1}", this.Key, value);
@@ -115,7 +124,7 @@ namespace Baro.CoreLibrary.Ray
 
         public override RayPermission Clone()
         {
-            return new RayPermission(_key) { Allowed = _allowed, Denied = _denied };
+            return new RayPermission(_key, null) { Allowed = _allowed, Denied = _denied };
         }
 
         public static IComparer<RayPermission> CreateComparer()

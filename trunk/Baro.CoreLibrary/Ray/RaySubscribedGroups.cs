@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RaySubscribedGroups: RayItem<RaySubscribedGroups>, IList<string>
+    public sealed class RaySubscribedGroups: RayItem<RaySubscribedGroups>, IList<string>
     {
         #region Flyweight of list
         private List<string> _flylist = new List<string>();
@@ -15,6 +15,13 @@ namespace Baro.CoreLibrary.Ray
         private List<string> _list
         {
             get { return _flylist ?? (_flylist = new List<string>()); }
+        }
+
+        #endregion
+
+        #region cTors
+        internal RaySubscribedGroups()
+        {
         }
 
         #endregion
@@ -27,11 +34,13 @@ namespace Baro.CoreLibrary.Ray
         public void Insert(int index, string item)
         {
             WriterLock(() => _list.Insert(index, item));
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.SubscribedGroupList, null, item);
         }
 
         public void RemoveAt(int index)
         {
             WriterLock(() => _list.RemoveAt(index));
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.SubscribedGroupList, null, index);
         }
 
         public string this[int index]
@@ -43,17 +52,20 @@ namespace Baro.CoreLibrary.Ray
             set
             {
                 WriterLock(() => _list[index] = value);
+                NotifySuccessor(IDU.Update, ObjectHierarchy.SubscribedGroupList, null, value);
             }
         }
 
         public void Add(string item)
         {
             WriterLock(() => _list.Add(item));
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.SubscribedGroupList, null, item);
         }
 
         public void Clear()
         {
             WriterLock(() => _list.Clear());
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.SubscribedGroupList, null, null);
         }
 
         public bool Contains(string item)
@@ -78,7 +90,9 @@ namespace Baro.CoreLibrary.Ray
 
         public bool Remove(string item)
         {
-            return WriterLock<bool>(() => _list.Remove(item));
+            bool r = WriterLock<bool>(() => _list.Remove(item));
+            if (r) NotifySuccessor(IDU.Delete, ObjectHierarchy.SubscribedGroupList, null, item);
+            return r;
         }
 
         public IEnumerator<string> GetEnumerator()
@@ -128,11 +142,6 @@ namespace Baro.CoreLibrary.Ray
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
         {
             return CreateXmlNode(xmlDoc, "list");
-        }
-
-        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
-        {
-            NotifySuccessor(op, where, info, value);
         }
     }
 }

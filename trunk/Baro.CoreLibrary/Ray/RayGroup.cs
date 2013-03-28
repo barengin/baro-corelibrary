@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayGroup: RayItem<RayGroup>
+    public sealed class RayGroup: RayItem<RayGroup>
     {
         private string _name;
         private RayPermissionList _permissions;
@@ -15,6 +15,7 @@ namespace Baro.CoreLibrary.Ray
         public string Name { get { return _name; } }
         public RayPermissionList Permissions { get { return _permissions; } }
 
+        #region cTors
         private RayGroup()
         {
             throw new NotSupportedException();
@@ -25,12 +26,14 @@ namespace Baro.CoreLibrary.Ray
             // _permissions = new RayPermissionList();
         }
 
-        internal RayGroup(string groupName, RayServer successor)
+        internal RayGroup(string groupName, RayHandler successor)
         {
             _name = groupName;
             _permissions = new RayPermissionList();
             SetSuccessor(successor);
         }
+
+        #endregion
 
         public override RayGroup Clone()
         {
@@ -59,7 +62,7 @@ namespace Baro.CoreLibrary.Ray
 
         protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
         {
-            throw new NotSupportedException();
+            NotifySuccessor(IDU.Update, ObjectHierarchy.Group, null, this);
         }
     }
 }

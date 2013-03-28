@@ -7,7 +7,10 @@ using System.Xml;
 
 namespace Baro.CoreLibrary.Ray
 {
-    public class RayGroupList : RayItem<RayGroupList>, IRayQuery<RayGroup>, IEnumerable<RayGroup>
+    public sealed class RayGroupList : RayItem<RayGroupList>, 
+                                       IRayQuery<RayGroup>,
+                                       IRayBagList<string, RayGroup>,
+                                       IEnumerable<RayGroup>
     {
         #region Flyweight of List
         private SortedList<string, RayGroup> _flylist = null;
@@ -19,32 +22,58 @@ namespace Baro.CoreLibrary.Ray
 
         #endregion
 
-        public void Add(RayGroup group)
+        #region cTor
+        internal RayGroupList()
         {
-            group.SetSuccessor(this);
-            WriterLock(() => _list.Add(group.Name, group));
-
-            NotifySuccessor(IDU.Insert, ObjectHierarchy.GroupList, null, group);
         }
 
-        public void Remove(RayGroup group)
-        {
-            group.SetSuccessor(null);
-            WriterLock(() => _list.Remove(group.Name));
+        #endregion
 
-            NotifySuccessor(IDU.Delete, ObjectHierarchy.GroupList, null, group);
+        #region IRayBagList
+        public RayGroup AddNew(string key)
+        {
+            RayGroup g = new RayGroup(key, this);
+
+            WriterLock(() => _list.Add(g.Name, g));
+
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.GroupList, null, g);
+
+            return g;
+        }
+
+        public bool Remove(string key)
+        {
+            RayGroup p;
+            bool found = false;
+
+            WriterLock(() =>
+            {
+                if (found = _list.TryGetValue(key, out p))
+                {
+                    p.SetSuccessor(null);
+                    _list.Remove(key);
+                }
+            });
+
+            if (found) NotifySuccessor(IDU.Delete, ObjectHierarchy.GroupList, null, key);
+            return found;
+        }
+
+        public bool Remove(RayGroup value)
+        {
+            return Remove(value.Name);
         }
 
         public void Clear()
         {
-            WriterLock(() => _list.Clear());
-
-            ReaderLock(() =>
+            WriterLock(() =>
             {
-                foreach (var item in _list)
+                foreach (var item in this)
                 {
-                    item.Value.SetSuccessor(null);
+                    item.SetSuccessor(null);
                 }
+
+                _list.Clear();
             });
 
             NotifySuccessor(IDU.Delete, ObjectHierarchy.GroupList, null, null);
@@ -61,6 +90,8 @@ namespace Baro.CoreLibrary.Ray
                 throw new NotSupportedException();
             }
         }
+
+        #endregion
 
         public IEnumerable<RayGroup> SelectAll()
         {
@@ -124,7 +155,7 @@ namespace Baro.CoreLibrary.Ray
 
         protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
         {
-            NotifySuccessor(op, where, info, value);
+            // TODO: Overload here !!!!!!    NotifySuccessor(op, where, info, value);
         }
     }
 }
