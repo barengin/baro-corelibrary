@@ -17,26 +17,31 @@ namespace Baro.CoreLibrary.Ray
 
         private RayGroup()
         {
+            throw new NotSupportedException();
+
             // DİKKAT !!! _permission nesnesini yaratma !!!
             //
             // 
             // _permissions = new RayPermissionList();
         }
 
-        public RayGroup(string groupName)
+        internal RayGroup(string groupName, RayServer successor)
         {
             _name = groupName;
             _permissions = new RayPermissionList();
+            SetSuccessor(successor);
         }
 
         public override RayGroup Clone()
         {
-            RayGroup g = new RayGroup();
+            throw new NotSupportedException();
 
-            g._name = this.Name;
-            g._permissions = this.Permissions.Clone();
+            //RayGroup g = new RayGroup();
 
-            return g;
+            //g._name = this.Name;
+            //g._permissions = this.Permissions.Clone();
+
+            //return g;
         }
 
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)

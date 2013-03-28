@@ -45,7 +45,7 @@ namespace Baro.CoreLibrary.Ray
         {
             if (_successor != null)
             {
-                _successor.Handle(op, where, info, value);
+                if (!_disableNotifies) _successor.Handle(op, where, info, value);
             }
         }
 
