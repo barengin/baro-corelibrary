@@ -13,13 +13,23 @@ namespace Baro.CoreLibrary.Ray
         private string _password;
 
         private RayPermissionList _permissions = new RayPermissionList();
-        private RayGroupList _groups = new RayGroupList();
+        private RayStringList _groups = new RayStringList();
         private RayAliasList _aliases = new RayAliasList();
         private RayDataStore _dataStore = new RayDataStore();
 
-        public RayUser(string username)
+        private RayServer _server;
+
+        private RayUser()
+        {
+            throw new NotSupportedException();
+        }
+
+        internal RayUser(string username, RayServer successor)
         {
             _username = username;
+            
+            _server = successor;
+            SetSuccessor(successor);
         }
 
         public RayDataStore DataStore
@@ -42,7 +52,7 @@ namespace Baro.CoreLibrary.Ray
             }
         }
 
-        public RayGroupList Groups
+        public RayStringList Groups
         {
             get { return _groups; }
         }
@@ -62,11 +72,12 @@ namespace Baro.CoreLibrary.Ray
             RayPermission p = new RayPermission(permissionKeyValue);
 
             // Read Group Permissions:
-            IEnumerable<RayGroup> groups = Groups.SelectAll();
-            foreach (var item in groups)
+            foreach (var item in Groups)
             {
+                string groupName = item;
+
                 // Eğer permission bulunamazsa NULL dönecek.
-                RayPermission gp = item.Permissions.GetPermission(permissionKeyValue);
+                RayPermission gp = _server.GetGroup(groupName).Permissions.GetPermission(permissionKeyValue);
 
                 // Eğer permission bulundu ise
                 if (gp != null)
@@ -99,16 +110,18 @@ namespace Baro.CoreLibrary.Ray
 
         public override RayUser Clone()
         {
-            RayUser u = new RayUser(this.Username);
+            throw new NotSupportedException();
 
-            u._password = this.Password;
+            //RayUser u = _server.AddUser(this.Username);
 
-            u._permissions = this.Permissions.Clone();
-            u._groups = this.Groups.Clone();
-            u._aliases = this.Aliases.Clone();
-            u._dataStore = this.DataStore.Clone();
+            //u._password = this.Password;
 
-            return u;
+            //u._permissions = this.Permissions.Clone();
+            //u._groups = this.Groups.Clone();
+            //u._aliases = this.Aliases.Clone();
+            //u._dataStore = this.DataStore.Clone();
+
+            //return u;
         }
 
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
@@ -134,7 +147,7 @@ namespace Baro.CoreLibrary.Ray
 
                 // Group name attribute
                 a = xmlDoc.CreateAttribute("name");
-                a.Value = item.Name;
+                a.Value = item;
                 g.Attributes.Append(a);
 
                 mg.AppendChild(g);
