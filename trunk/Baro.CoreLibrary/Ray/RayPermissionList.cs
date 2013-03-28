@@ -54,20 +54,20 @@ namespace Baro.CoreLibrary.Ray
             NotifySuccessor(IDU.Delete, ObjectHierarchy.PermissionList, null, null);
         }
 
-        public RayPermission GetPermission(string index)
-        {
-            return ReaderLock<RayPermission>(() =>
-            {
-                try
-                {
-                    return _list[index];
-                }
-                catch(KeyNotFoundException)
-                {
-                    return null;
-                }
-            });
-        }
+        //public RayPermission GetPermission(string index)
+        //{
+        //    return ReaderLock<RayPermission>(() =>
+        //    {
+        //        try
+        //        {
+        //            return _list[index];
+        //        }
+        //        catch(KeyNotFoundException)
+        //        {
+        //            return null;
+        //        }
+        //    });
+        //}
 
         public RayPermission this[string index]
         {
@@ -79,7 +79,7 @@ namespace Baro.CoreLibrary.Ray
                 }
                 catch (KeyNotFoundException)
                 {
-                    throw new RayKeyNotFoundException("Key not found: " + index);
+                    return null;
                 }
             }
             set
@@ -146,12 +146,6 @@ namespace Baro.CoreLibrary.Ray
                 });
 
             return n;
-        }
-
-        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
-        {
-            // TODO: Burada aşağıdan gelen bilgiyi yukarı gönderiyoruz. Ancak filtreleme gerekebilir???
-            NotifySuccessor(op, where, info, value);
         }
     }
 }
