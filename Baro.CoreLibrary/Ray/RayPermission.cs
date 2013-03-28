@@ -151,10 +151,5 @@ namespace Baro.CoreLibrary.Ray
 
             return p;
         }
-
-        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
-        {
-            throw new NotSupportedException();
-        }
     }
 }
