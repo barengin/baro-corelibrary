@@ -33,7 +33,7 @@ namespace Baro.CoreLibrary.Ray
         #region IRayBagList
         public RayPermission AddNew(string key)
         {
-            RayPermission p = new RayPermission(key, this);
+            RayPermission p = new RayPermission(key);
             p.SetSuccessor(this);
 
             WriterLock(() => _list.Add(p.Key, p));

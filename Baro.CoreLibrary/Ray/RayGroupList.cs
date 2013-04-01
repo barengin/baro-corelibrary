@@ -153,9 +153,5 @@ namespace Baro.CoreLibrary.Ray
             return ReaderLock<System.Collections.IEnumerator>(() => _list.Values.GetEnumerator());
         }
 
-        protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
-        {
-            // TODO: Overload here !!!!!!    NotifySuccessor(op, where, info, value);
-        }
     }
 }

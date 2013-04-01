@@ -62,7 +62,19 @@ namespace Baro.CoreLibrary.Ray
 
         protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
         {
-            NotifySuccessor(IDU.Update, ObjectHierarchy.Group, null, this);
+            switch (where)
+            {
+                case ObjectHierarchy.Permission:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.Group, null, this);
+                    break;
+                
+                case ObjectHierarchy.PermissionList:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.Group, null, this);
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

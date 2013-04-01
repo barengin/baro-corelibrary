@@ -24,7 +24,8 @@ namespace Baro.CoreLibrary.Ray
         SubscribedGroupList,
         Username,
         Password,
-        User
+        User,
+        UserList
     }
 
     public abstract class RayHandler
