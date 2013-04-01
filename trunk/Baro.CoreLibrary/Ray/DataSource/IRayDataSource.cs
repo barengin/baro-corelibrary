@@ -20,5 +20,8 @@ namespace Baro.CoreLibrary.Ray.DataSource
 
         string[] GetUserList();
         string[] GetGroupList();
+
+        void ClearUsers();
+        void ClearGroups();
     }
 }

@@ -27,7 +27,7 @@ namespace Baro.CoreLibrary.Ray
         internal RayUser(string username, RayServer successor)
         {
             _username = username;
-            
+
             _server = successor;
             SetSuccessor(successor);
 
@@ -53,7 +53,7 @@ namespace Baro.CoreLibrary.Ray
             set
             {
                 _password = value;
-                NotifySuccessor(IDU.Update, ObjectHierarchy.Password, null, value);
+                NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Baro.CoreLibrary.Ray
 
         public RayPermission GetPermission(string permissionKeyValue)
         {
-            RayPermission p = new RayPermission(permissionKeyValue, null);
+            RayPermission p = new RayPermission(permissionKeyValue);
 
             // Read Group Permissions:
             foreach (var item in Groups)
@@ -174,7 +174,50 @@ namespace Baro.CoreLibrary.Ray
 
         protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
         {
-            NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+            switch (where)
+            {
+                case ObjectHierarchy.AliasList:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+                    break;
+
+                case ObjectHierarchy.DataStore:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+                    break;
+
+                case ObjectHierarchy.Permission:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+                    break;
+
+                case ObjectHierarchy.PermissionList:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+                    break;
+
+                case ObjectHierarchy.Group:
+                    break;
+                
+                case ObjectHierarchy.GroupList:
+                    break;
+
+                case ObjectHierarchy.SubscribedGroupList:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+                    break;
+                
+                case ObjectHierarchy.Username:
+                    break;
+                
+                case ObjectHierarchy.Password:
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+                    break;
+                
+                case ObjectHierarchy.User:
+                    break;
+                
+                case ObjectHierarchy.UserList:
+                    break;
+                
+                default:
+                    break;
+            }
         }
     }
 }

@@ -52,7 +52,17 @@ namespace Baro.CoreLibrary.Ray
 
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
         {
-            throw new NotImplementedException();
+            XmlNode n = xmlDoc.CreateElement("users");
+
+            ReaderLock(() =>
+            {
+                foreach (var item in _mapUsers.Values)
+                {
+                    n.AppendChild(item.CreateXmlNode(xmlDoc));
+                }
+            });
+
+            return n;
         }
 
         public RayUser AddNew(string username)
@@ -63,6 +73,8 @@ namespace Baro.CoreLibrary.Ray
             {
                 return u;
             });
+
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.UserList, null, u);
 
             return u;
         }
@@ -80,6 +92,8 @@ namespace Baro.CoreLibrary.Ray
                 {
                     _mapAlias.TryRemove(username, out u2);
                 }
+
+                NotifySuccessor(IDU.Delete, ObjectHierarchy.UserList, null, u);
             }
 
             return r;
@@ -94,6 +108,8 @@ namespace Baro.CoreLibrary.Ray
         {
             _mapAlias.Clear();
             _mapUsers.Clear();
+
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.UserList, null, null);
         }
 
         public RayUser this[string username]

@@ -27,10 +27,9 @@ namespace Baro.CoreLibrary.Ray
             throw new NotSupportedException();
         }
 
-        internal RayPermission(string keyName, RayHandler successor)
+        internal RayPermission(string keyName)
         {
             this._key = keyName;
-            SetSuccessor(successor);
         }
 
         #endregion
@@ -124,7 +123,7 @@ namespace Baro.CoreLibrary.Ray
 
         public override RayPermission Clone()
         {
-            return new RayPermission(_key, null) { Allowed = _allowed, Denied = _denied };
+            return new RayPermission(_key) { Allowed = _allowed, Denied = _denied };
         }
 
         public static IComparer<RayPermission> CreateComparer()

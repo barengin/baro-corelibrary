@@ -110,5 +110,22 @@ namespace Baro.CoreLibrary.Ray.DataSource
                 return null;
             }
         }
+
+
+        public void ClearUsers()
+        {
+            if (_source != null)
+            {
+                _source.ClearUsers();
+            }
+        }
+
+        public void ClearGroups()
+        {
+            if (_source != null)
+            {
+                _source.ClearGroups();
+            }
+        }
     }
 }

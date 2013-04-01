@@ -1,6 +1,7 @@
 ﻿using Baro.CoreLibrary.Ray.DataSource;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,10 +63,7 @@ namespace Baro.CoreLibrary.Ray
 
         protected override void Handle(IDU op, ObjectHierarchy where, string info, object value)
         {
-            // TODO: Alt nesnelerde değişim var. Gerekli bilgiler de geliyor ancak bu sadece bizim dizini kaydetmemiz
-            //       için bir işaret.
-            //
-            // KAYDET !!!
+            Debug.WriteLine("{0} - {1} - {2} - {3}", op.ToString(), where.ToString(), info, value);
 
             switch (where)
             {
@@ -81,9 +79,15 @@ namespace Baro.CoreLibrary.Ray
                     break;
                 case ObjectHierarchy.GroupList:
                     break;
+                case ObjectHierarchy.SubscribedGroupList:
+                    break;
                 case ObjectHierarchy.Username:
                     break;
                 case ObjectHierarchy.Password:
+                    break;
+                case ObjectHierarchy.User:
+                    break;
+                case ObjectHierarchy.UserList:
                     break;
                 default:
                     break;

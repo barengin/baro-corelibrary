@@ -66,5 +66,16 @@ namespace Baro.CoreLibrary.Ray.DataSource
         {
             throw new NotImplementedException();
         }
+
+
+        public void ClearUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearGroups()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

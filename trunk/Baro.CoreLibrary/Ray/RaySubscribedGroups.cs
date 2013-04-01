@@ -128,7 +128,7 @@ namespace Baro.CoreLibrary.Ray
             {
                 foreach (var item in _list)
                 {
-                    XmlNode a = xmlDoc.CreateElement("item");
+                    XmlNode a = xmlDoc.CreateElement("group");
 
                     XmlAttribute t = xmlDoc.CreateAttribute("name");
                     t.Value = item;
@@ -141,7 +141,7 @@ namespace Baro.CoreLibrary.Ray
 
         public override XmlNode CreateXmlNode(XmlDocument xmlDoc)
         {
-            return CreateXmlNode(xmlDoc, "list");
+            return CreateXmlNode(xmlDoc, "groups");
         }
     }
 }
