@@ -64,7 +64,8 @@ namespace Ray.MongoDb.Connector
 
         public string[] GetUserList()
         {
-            throw new NotImplementedException();
+            MongoCollection c = database.GetCollection<RayUser>("Users");
+            
         }
 
         public string[] GetGroupList()
