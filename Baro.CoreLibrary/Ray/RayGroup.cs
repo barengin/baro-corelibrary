@@ -29,7 +29,10 @@ namespace Baro.CoreLibrary.Ray
         internal RayGroup(string groupName, RayHandler successor)
         {
             _name = groupName;
+            
             _permissions = new RayPermissionList();
+            _permissions.SetSuccessor(this);
+
             SetSuccessor(successor);
         }
 

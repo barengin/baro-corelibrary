@@ -47,10 +47,6 @@ namespace Baro.CoreLibrary.Ray
 
         #endregion
 
-        new private void SetSuccessor(RayHandler s)
-        {
-        }
-
         public override RayServer Clone()
         {
             throw new NotSupportedException();

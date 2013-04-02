@@ -39,7 +39,7 @@ namespace Baro.CoreLibrary.Ray
             set { _disableNotifies = value; }
         }
 
-        public virtual void SetSuccessor(RayHandler s)
+        internal virtual void SetSuccessor(RayHandler s)
         {
             _successor = s;
         }
