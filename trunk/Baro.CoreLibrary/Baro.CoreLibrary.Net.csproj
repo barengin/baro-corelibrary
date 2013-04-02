@@ -40,7 +40,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>corelib.pfx</AssemblyOriginatorKeyFile>
@@ -132,6 +132,7 @@
     <Compile Include="Ray\DataSource\DataSourceProxy.cs" />
     <Compile Include="Ray\DataSource\IRayDataSource.cs" />
     <Compile Include="Ray\DataSource\RayDataSourceXml.cs" />
+    <Compile Include="Ray\IRayBagList.cs" />
     <Compile Include="Ray\IRayQuery.cs" />
     <Compile Include="Ray\RayAliasList.cs" />
     <Compile Include="Ray\RayDataStore.cs" />
@@ -142,10 +143,10 @@
     <Compile Include="Ray\RayPermission.cs" />
     <Compile Include="Ray\RayPermissionList.cs" />
     <Compile Include="Ray\RayInvalidKeyException.cs" />
-    <Compile Include="Ray\RayInvalidPermissionSettings.cs" />
     <Compile Include="Ray\IRayItem.cs" />
     <Compile Include="Ray\RayItem.cs" />
     <Compile Include="Ray\RayServer.cs" />
+    <Compile Include="Ray\RaySubscribedGroups.cs" />
     <Compile Include="Ray\RayUser.cs" />
     <Compile Include="Ray\RayUserList.cs" />
     <Compile Include="Ray\Utils.cs" />
@@ -300,9 +301,7 @@
     </None>
     <None Include="corelib.pfx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Ray\DataSource\MongoDB\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
