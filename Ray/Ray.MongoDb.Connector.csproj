@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ERayGroup.cs" />
     <Compile Include="ERayPermission.cs" />
     <Compile Include="ERayUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
