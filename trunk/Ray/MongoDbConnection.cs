@@ -71,7 +71,7 @@ namespace Ray.MongoDb.Connector
                 u.AliasList.Add(item);
             }
 
-            this.Groups.Insert(g);
+            this.Users.Insert(u);
         }
 
         public void UpdateUser(RayUser user)
