@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Baro.CoreLibrary.Ray;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Ray.MongoDb.Connector
     {
         // public ObjectId Id { get; set; }
 
-        [BsonId()]
+        [BsonId]
         public string Username { get; set; }
         public string Password { get; set; }
 
@@ -20,5 +21,13 @@ namespace Ray.MongoDb.Connector
         public List<KeyValuePair<string, string>> DataStore { get; set; }
         public List<string> Groups { get; set; }
         public List<ERayPermission> Permissions { get; set; }
+
+        public ERayUser()
+        {
+            AliasList = new List<string>();
+            DataStore = new List<KeyValuePair<string, string>>();
+            Groups = new List<string>();
+            Permissions = new List<ERayPermission>();
+        }
     }
 }
