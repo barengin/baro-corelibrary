@@ -11,12 +11,12 @@ namespace Baro.CoreLibrary.Ray.DataSource
         void InsertUser(RayUser user);
         void UpdateUser(RayUser user);
         void DeleteUser(string username);
-        RayUser ReadUser(string username);
+        RayUser ReadUser(string username, RayUserList listToAdd);
 
         void InsertGroup(RayGroup group);
         void UpdateGroup(RayGroup group);
         void DeleteGroup(string groupname);
-        RayGroup ReadGroup(string groupname);
+        RayGroup ReadGroup(string groupname, RayGroupList listToAdd);
 
         string[] GetUserList();
         string[] GetGroupList();

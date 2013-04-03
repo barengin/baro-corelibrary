@@ -39,11 +39,11 @@ namespace Baro.CoreLibrary.Ray.DataSource
             }
         }
 
-        public RayUser ReadUser(string username)
+        public RayUser ReadUser(string username, RayUserList listToAdd)
         {
             if (_source != null)
             {
-                return _source.ReadUser(username);
+                return _source.ReadUser(username, listToAdd);
             }
             else
             {
@@ -75,11 +75,11 @@ namespace Baro.CoreLibrary.Ray.DataSource
             }
         }
 
-        public RayGroup ReadGroup(string groupname)
+        public RayGroup ReadGroup(string groupname, RayGroupList listToAdd)
         {
             if (_source != null)
             {
-                return _source.ReadGroup(groupname);
+                return _source.ReadGroup(groupname, listToAdd);
             }
             else
             {
