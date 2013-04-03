@@ -32,7 +32,7 @@ namespace Baro.CoreLibrary.Ray.DataSource
             throw new NotImplementedException();
         }
 
-        public RayUser ReadUser(string username)
+        public RayUser ReadUser(string username, RayUserList listToAdd)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +52,7 @@ namespace Baro.CoreLibrary.Ray.DataSource
             throw new NotImplementedException();
         }
 
-        public RayGroup ReadGroup(string groupname)
+        public RayGroup ReadGroup(string groupname, RayGroupList listToAdd)
         {
             throw new NotImplementedException();
         }
