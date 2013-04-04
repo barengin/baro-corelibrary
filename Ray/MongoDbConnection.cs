@@ -43,7 +43,7 @@ namespace Ray.MongoDb.Connector
             database = server.GetDatabase(dbName);
         }
 
-        public void InsertUser(RayUser user)
+        void IRayDataSource.InsertUser(RayUser user)
         {
             ERayUser u = new ERayUser()
             {
@@ -74,7 +74,7 @@ namespace Ray.MongoDb.Connector
             this.Users.Insert(u);
         }
 
-        public void UpdateUser(RayUser user)
+        void IRayDataSource.UpdateUser(RayUser user)
         {
             ERayUser u = new ERayUser()
             {
@@ -105,13 +105,13 @@ namespace Ray.MongoDb.Connector
             this.Users.Save(u);
         }
 
-        public void DeleteUser(string username)
+        void IRayDataSource.DeleteUser(string username)
         {
             var query = Query<ERayUser>.EQ(e => e.Username, username);
             this.Users.Remove(query);
         }
 
-        public RayUser ReadUser(string username, RayUserList listToAdd)
+        RayUser IRayDataSource.ReadUser(string username, RayUserList listToAdd)
         {
             MongoCollection<ERayUser> c = this.Users;
 
@@ -152,7 +152,7 @@ namespace Ray.MongoDb.Connector
             return u;
         }
 
-        public void InsertGroup(RayGroup group)
+        void IRayDataSource.InsertGroup(RayGroup group)
         {
             ERayGroup g = new ERayGroup() { Name = group.Name };
 
@@ -164,7 +164,7 @@ namespace Ray.MongoDb.Connector
             this.Groups.Insert(g);
         }
 
-        public void UpdateGroup(RayGroup group)
+        void IRayDataSource.UpdateGroup(RayGroup group)
         {
             ERayGroup g = new ERayGroup() { Name = group.Name };
 
@@ -176,13 +176,13 @@ namespace Ray.MongoDb.Connector
             this.Groups.Save(g);
         }
 
-        public void DeleteGroup(string groupname)
+        void IRayDataSource.DeleteGroup(string groupname)
         {
             var query = Query<ERayGroup>.EQ(e => e.Name, groupname);
             this.Groups.Remove(query);
         }
 
-        public RayGroup ReadGroup(string groupname, RayGroupList listToAdd)
+        RayGroup IRayDataSource.ReadGroup(string groupname, RayGroupList listToAdd)
         {
             MongoCollection<ERayGroup> c = this.Groups;
 
@@ -206,7 +206,7 @@ namespace Ray.MongoDb.Connector
             return g;
         }
 
-        public string[] GetUserList()
+        string[] IRayDataSource.GetUserList()
         {
             MongoCollection c = this.Users;
 
@@ -231,7 +231,7 @@ namespace Ray.MongoDb.Connector
             //return null;
         }
 
-        public string[] GetGroupList()
+        string[] IRayDataSource.GetGroupList()
         {
             MongoCollection c = this.Groups;
 
@@ -241,12 +241,12 @@ namespace Ray.MongoDb.Connector
             return q.ToArray<string>();
         }
 
-        public void ClearUsers()
+        void IRayDataSource.ClearUsers()
         {
             this.Users.Drop();
         }
 
-        public void ClearGroups()
+        void IRayDataSource.ClearGroups()
         {
             this.Groups.Drop();
         }
