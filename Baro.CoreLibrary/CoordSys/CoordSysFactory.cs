@@ -42,6 +42,9 @@ namespace Baro.CoreLibrary.CoordSys
                 case CoordSysType.OSGB:
                     return new CoordSysOSGB1936();
 
+                case CoordSysType.Google:
+                    return new CoordSysGoogle();
+
                 default:
                     throw new CoordSysException("Invalid coordsys. internal error");
             }

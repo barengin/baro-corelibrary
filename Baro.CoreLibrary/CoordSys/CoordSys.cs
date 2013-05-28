@@ -24,7 +24,11 @@ namespace Baro.CoreLibrary.CoordSys
         /// <summary>
         /// British National Grid EPSG: 27700
         /// </summary>
-        OSGB = 3
+        OSGB = 3,
+        /// <summary>
+        /// Google Spherical Mercator
+        /// </summary>
+        Google = 4
     }
 
     /// <summary>
