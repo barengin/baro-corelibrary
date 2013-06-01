@@ -133,6 +133,13 @@ namespace Baro.CoreLibrary.YolbilClient
             _sendQueue = new SendQueue(settings.SentFolder);
         }
 
+        public YBClient4(ConnectionSettings settings, Action<string> logCallback)
+        {
+            _logCB = logCallback;
+            _settings = settings;
+            _sendQueue = new SendQueue(settings.SentFolder);
+        }
+
         #endregion
 
         public void DeleteFromServer(MessageHeader header)
