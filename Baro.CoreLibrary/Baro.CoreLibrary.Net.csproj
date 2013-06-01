@@ -83,6 +83,7 @@
     <Compile Include="Configuration\IConfigSection.cs" />
     <Compile Include="CoordSys\CoordSys.cs" />
     <Compile Include="CoordSys\CoordSysFactory.cs" />
+    <Compile Include="CoordSys\CoordSysGoogle.cs" />
     <Compile Include="CoordSys\CoordSysLambert.cs" />
     <Compile Include="CoordSys\CoordSysMercator.cs" />
     <Compile Include="CoordSys\CoordSysOSGB.cs" />
