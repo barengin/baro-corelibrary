@@ -48,7 +48,7 @@ namespace Baro.CoreLibrary.YolbilClient
                 }
                 else
                 {
-                    Log("Control thread SLEEP ... " + _lastActivity.Peek().ToString());
+                    // Log("Control thread SLEEP ... " + _lastActivity.Peek().ToString());
                     Thread.Sleep(3000);
                 }
             }
