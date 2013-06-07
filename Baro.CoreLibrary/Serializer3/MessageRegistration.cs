@@ -43,7 +43,7 @@ namespace Baro.CoreLibrary.Serializer3
 
     public static class MessageRegistration
     {
-        private readonly static ConcurrentDictionary<Int32, Type> _registeredMessages = new ConcurrentDictionary<int, Type>();
+        private readonly static ConcurrentDictionary<Int32, Type> _registeredMessages = new ConcurrentDictionary<Int32, Type>();
 
         public static void ClearAllRegisteredMessageTypes()
         {
