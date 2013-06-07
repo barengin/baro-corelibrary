@@ -67,6 +67,9 @@ namespace Baro.CoreLibrary.Ray
 
         public RayUser AddNew(string username)
         {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentNullException("username");
+
             RayUser u = new RayUser(username, (RayServer)_successor);
 
             _mapUsers.AddOrUpdate(username, u, (key, update) =>
