@@ -10,57 +10,53 @@ namespace Baro.CoreLibrary.Serializer3
     {
         public int Size { get; set; }
 
-        public int CommandId { get; set; }
+        public int MessageId { get; set; }
 
-        public int UniqueId1 { get; set; }
-        public int UniqueId2 { get; set; }
-        public int UniqueId3 { get; set; }
-        public int UniqueId4 { get; set; }
+        public uint UniqueId1 { get; set; }
+        public uint UniqueId2 { get; set; }
+        public uint UniqueId3 { get; set; }
+        public uint UniqueId4 { get; set; }
 
-        public int UniqueIdCRC { get; set; }
+        public uint UniqueIdCRC { get; set; }
 
-        public int Inbox { get; set; }
+        public uint Inbox { get; set; }
 
         public long ExpireDate { get; set; }
 
-        public Header FromRawData(RawData data)
+        public Header FromRawData(ArraySegment<byte> data)
         {
             // Header h = new Header();
 
             DataReader r = new DataReader(data);
 
             this.Size = r.ReadInt32();
-            this.CommandId = r.ReadInt32();
-            this.UniqueId1 = r.ReadInt32();
-            this.UniqueId2 = r.ReadInt32();
-            this.UniqueId3 = r.ReadInt32();
-            this.UniqueId4 = r.ReadInt32();
-            this.UniqueIdCRC = r.ReadInt32();
+            this.MessageId = r.ReadInt32();
+            this.UniqueId1 = (uint)r.ReadInt32();
+            this.UniqueId2 = (uint)r.ReadInt32();
+            this.UniqueId3 = (uint)r.ReadInt32();
+            this.UniqueId4 = (uint)r.ReadInt32();
+            this.UniqueIdCRC = (uint)r.ReadInt32();
             this.ExpireDate = r.ReadInt64();
-            this.Inbox = r.ReadInt32();
+            this.Inbox = (uint)r.ReadInt32();
 
             return this;
         }
 
-        public RawData ToRawData()
+        public ArraySegment<byte> ToRawData()
         {
             DataWriter w = new DataWriter(40);
 
             w.WriteInt32(this.Size);
-            w.WriteInt32(this.CommandId);
-            w.WriteInt32(this.UniqueId1);
-            w.WriteInt32(this.UniqueId2);
-            w.WriteInt32(this.UniqueId3);
-            w.WriteInt32(this.UniqueId4);
-            w.WriteInt32(this.UniqueIdCRC);
+            w.WriteInt32(this.MessageId);
+            w.WriteInt32((int)this.UniqueId1);
+            w.WriteInt32((int)this.UniqueId2);
+            w.WriteInt32((int)this.UniqueId3);
+            w.WriteInt32((int)this.UniqueId4);
+            w.WriteInt32((int)this.UniqueIdCRC);
             w.WriteInt64(this.ExpireDate);
-            w.WriteInt32(this.Inbox);
+            w.WriteInt32((int)this.Inbox);
 
-            RawData d = new RawData() { Index = 0 };
-            d.Data = w.GetBuffer();
-            d.Count = (int)w.Length;
-
-            return d;
+            return new ArraySegment<byte>(w.GetBuffer(), 0, (int)w.Length);
         }
 
         public int MessageSize
