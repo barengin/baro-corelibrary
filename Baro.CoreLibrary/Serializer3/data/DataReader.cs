@@ -17,8 +17,8 @@ namespace Baro.CoreLibrary.Serializer3
         {
         }
 
-        public DataReader(RawData raw)
-            : this(raw.Data, raw.Index, raw.Count)
+        public DataReader(ArraySegment<byte> raw)
+            : this(raw.Array, raw.Offset, raw.Count)
         {
         }
 
