@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Baro.CoreLibrary.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,11 @@ namespace Baro.CoreLibrary.Serializer3
         public uint Inbox { get; set; }
 
         public long ExpireDate { get; set; }
+
+        public UniqueID ToUniqueID()
+        {
+            return new UniqueID(this.UniqueId1, this.UniqueId2, this.UniqueId3, this.UniqueId4);
+        }
 
         public Header FromRawData(ArraySegment<byte> data)
         {
