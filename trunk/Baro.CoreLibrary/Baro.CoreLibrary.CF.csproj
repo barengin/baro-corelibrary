@@ -328,6 +328,8 @@
     <Content Include="UI\UI Controls.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoordSys\CoordSysGoogle.cs" />
+    <Compile Include="Core\RegistryUtils.cs" />
     <Compile Include="UI\Controls\Lines.cs" />
     <Compile Include="YolbilClient\Tools.cs" />
     <Compile Include="YolbilClient\YBClient4.Receive.cs" />
