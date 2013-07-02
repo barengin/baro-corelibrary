@@ -97,7 +97,22 @@ namespace Baro.CoreLibrary.UI.Controls
             this.UICanvas.Parent = this;
         }
 
-        public Image BackgroundImage { get; set; }
+        private Image _backgroundImage;
+        
+        public Image BackgroundImage {
+            get { return _backgroundImage; }
+            set
+            {
+                if (_backgroundImage != null)
+                {
+                    _backgroundImage.Dispose();
+                    _backgroundImage = null;
+                }
+
+                _backgroundImage = value;
+            }
+        }
+
         public G3Color BackgroundColor { get; set; }
 
         protected override void OnPaint(PaintEventArgs e)
