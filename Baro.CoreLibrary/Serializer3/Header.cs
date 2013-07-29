@@ -35,8 +35,9 @@ namespace Baro.CoreLibrary.Serializer3
 
         public Header()
         {
-            CacheInReceivedMessages = true;
-            CacheInSentMessages = true;
+            CacheInReceivedMessages = MessageSettings.CacheInReceivedMessages;
+            CacheInSentMessages = MessageSettings.CacheInSentMessages;
+            ExpireDate = DateTime.Now.Ticks + TimeSpan.FromHours(MessageSettings.TTL).Ticks;
         }
 
         public UniqueID ToUniqueID()
