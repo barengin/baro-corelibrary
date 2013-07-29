@@ -123,11 +123,11 @@ namespace Baro.CoreLibrary.Serializer3
             return m;
         }
 
-        public static Message Create(IMessageSerializer o, uint toInbox, bool cacheInReceived, bool cacheInSent)
+        public static Message Create(IMessageSerializer o, uint toInbox, int ttl, bool cacheInReceived, bool cacheInSent)
         {
             Header h = new Header();
             h.Inbox = toInbox;
-            // h.ExpireDate = DateTime.Now.Ticks + TimeSpan.FromHours(ttl).Ticks;
+            h.ExpireDate = DateTime.Now.Ticks + TimeSpan.FromHours(ttl).Ticks;
             h.CacheInReceivedMessages = cacheInReceived;
             h.CacheInSentMessages = cacheInSent;
 
