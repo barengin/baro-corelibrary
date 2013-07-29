@@ -9,75 +9,55 @@ namespace Baro.CoreLibrary.Serializer3
 {
     public sealed class Message
     {
-        private readonly IMessageContent _message;
-        private readonly object _objectCache;
+        private Header _header;
+        private object _object;
 
-        public Header Header { get; private set; }
+        public object Msg { get { return _object; } }
+        public Header Header { get { return _header; } }
 
-        public int MessageSize
+        public static Message Create(ArraySegment<byte> fullArray)
         {
-            get
-            {
-                return Header.MessageSize + _message.MessageSize;
-            }
+            return null;
         }
 
-        public Message(MessageInbox info, object message)
+        public static Message Create(Header h, ArraySegment<byte> oArray)
         {
-            this._message = (IMessageContent)message;
-
-            Header h = new Header();
-
-            h.MessageId = MessageAttribute.GetMessageID(message);
-            h.ExpireDate = info.ExpireDate.Ticks;
-            h.Inbox = info.Inbox;
-            h.Size = h.MessageSize + _message.MessageSize;
-
-            UniqueID ui = UniqueID.CreateNew();
-
-            h.UniqueId1 = ui.Data1;
-            h.UniqueId2 = ui.Data2;
-            h.UniqueId3 = ui.Data3;
-            h.UniqueId4 = ui.Data4;
-            h.UniqueIdCRC = ui.Crc;
-
-            this.Header = h;
-
-            _objectCache = message;
+            return null;
         }
 
-        public Message(ArraySegment<byte> fullContent)
+        public static Message Create(ArraySegment<byte> hArray, IMessageSerializer o)
         {
-            this.Header = new Header().FromRawData(fullContent);
-
-            ArraySegment<byte> n = new ArraySegment<byte>(fullContent.Array,
-                                                          fullContent.Offset + this.Header.MessageSize,
-                                                          fullContent.Count - this.Header.MessageSize);
-
-            object o = MessageRegistration.CreateObject(this.Header.MessageId);
-            _message = o as IMessageContent;
-
-            _objectCache = o.GetType().GetMethod("FromRawData").Invoke(o, new object[] { n });
+            return null;
         }
 
-        public ArraySegment<byte> ToRawData()
+        public static Message Create(ArraySegment<byte> hArray, ArraySegment<byte> oArray)
         {
-            ArraySegment<byte> h = this.Header.ToRawData();
-            ArraySegment<byte> o = this._message.ToRawData();
-
-            int size = Header.MessageSize + _message.MessageSize;
-
-            byte[] b = new byte[size];
-
-            Buffer.BlockCopy(h.Array, h.Offset, b, 0, h.Count);
-            Buffer.BlockCopy(o.Array, o.Offset, b, h.Count, o.Count);
-
-            return new ArraySegment<byte>(b, 0, size);
+            return null;
         }
 
-        public Object ToObject()
+        public static Message Create(Header h, IMessageSerializer o)
         {
-            return _objectCache;
+            return null;
+        }
+
+        public static Message Create(IMessageSerializer o, uint toInbox)
+        {
+            return null;
+        }
+
+        public static Message Create(IMessageSerializer o, uint toInbox, int ttl)
+        {
+            return null;
+        }
+
+        public static Message Create(IMessageSerializer o, uint toInbox, bool cacheInReceived, bool cacheInSent)
+        {
+            return null;
+        }
+
+        public static Header ParseHeader(ArraySegment<byte> hArray)
+        {
+            return null;
         }
     }
 }
