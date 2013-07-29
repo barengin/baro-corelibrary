@@ -15,6 +15,10 @@ namespace Baro.CoreLibrary.Serializer3
         public object Msg { get { return _object; } }
         public Header Header { get { return _header; } }
 
+        private Message()
+        {
+        }
+
         public static Message Create(ArraySegment<byte> fullArray)
         {
             return null;
@@ -22,6 +26,11 @@ namespace Baro.CoreLibrary.Serializer3
 
         public static Message Create(Header h, ArraySegment<byte> oArray)
         {
+            Message m = new Message();
+            m._header = h;
+
+            m._object = MessageUtils.CreateObject(h.MessageId);
+            IMessageSerializer
             return null;
         }
 
