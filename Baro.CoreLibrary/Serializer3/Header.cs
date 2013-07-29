@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Baro.CoreLibrary.Serializer3
 {
-    public sealed class Header: IMessageContent, IMessageContent<Header>
+    public sealed class Header: IMessageSerializer
     {
         public int Size { get; set; }
 
@@ -21,15 +21,46 @@ namespace Baro.CoreLibrary.Serializer3
         public uint UniqueIdCRC { get; set; }
 
         public uint Inbox { get; set; }
-
         public long ExpireDate { get; set; }
+
+        /// <summary>
+        /// Sunucudan gelen bu mesaj Received listesi içinde depolansın mı?
+        /// </summary>
+        public bool CacheInReceivedMessages { get; set; }
+
+        /// <summary>
+        /// Sunucuya giden bu mesaj Sent listesi içinde depolansın mı?
+        /// </summary>
+        public bool CacheInSentMessages { get; set; }
+
+        public Header()
+        {
+            CacheInReceivedMessages = true;
+            CacheInSentMessages = true;
+        }
 
         public UniqueID ToUniqueID()
         {
             return new UniqueID(this.UniqueId1, this.UniqueId2, this.UniqueId3, this.UniqueId4);
         }
 
-        public Header FromRawData(ArraySegment<byte> data)
+        private void writeCache(byte field)
+        {
+            CacheInReceivedMessages = (field | 1) == 1;
+            CacheInSentMessages = (field | 2) == 2;
+        }
+
+        private byte readCache()
+        {
+            int r = 0;
+
+            r = CacheInReceivedMessages ? 1 : 0;
+            r |= CacheInSentMessages ? 2 : 0;
+
+            return (byte)r;
+        }
+
+        public object FromRawData(ArraySegment<byte> data)
         {
             // Header h = new Header();
 
@@ -44,13 +75,14 @@ namespace Baro.CoreLibrary.Serializer3
             this.UniqueIdCRC = (uint)r.ReadInt32();
             this.ExpireDate = r.ReadInt64();
             this.Inbox = (uint)r.ReadInt32();
+            writeCache(r.ReadByte());
 
             return this;
         }
 
         public ArraySegment<byte> ToRawData()
         {
-            DataWriter w = new DataWriter(40);
+            DataWriter w = new DataWriter();
 
             w.WriteInt32(this.Size);
             w.WriteInt32(this.MessageId);
@@ -61,13 +93,14 @@ namespace Baro.CoreLibrary.Serializer3
             w.WriteInt32((int)this.UniqueIdCRC);
             w.WriteInt64(this.ExpireDate);
             w.WriteInt32((int)this.Inbox);
+            w.WriteByte(readCache());
 
             return new ArraySegment<byte>(w.GetBuffer(), 0, (int)w.Length);
         }
 
         public int MessageSize
         {
-            get { return 40; }
+            get { return 41; }
         }
     }
 }

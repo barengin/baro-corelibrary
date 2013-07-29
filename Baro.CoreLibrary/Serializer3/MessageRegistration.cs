@@ -8,53 +8,24 @@ using System.Threading.Tasks;
 
 namespace Baro.CoreLibrary.Serializer3
 {
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class MessageAttribute : Attribute
-    {
-        public Int32 ID { get; set; }
-
-        public static MessageAttribute GetMessageAttribute(Type t)
-        {
-            object[] attr = t.GetCustomAttributes(typeof(MessageAttribute), true);
-
-            if (attr == null || attr.Length == 0)
-            {
-                throw new Exception("Bu nesne MessageAttribute ile işaretlenmemiş!");
-            }
-
-            return (attr[0] as MessageAttribute);
-        }
-
-        public static MessageAttribute GetMessageAttribute(object o)
-        {
-            return GetMessageAttribute(o.GetType());
-        }
-
-        public static Int32 GetMessageID(Type t)
-        {
-            return GetMessageAttribute(t).ID;
-        }
-
-        public static Int32 GetMessageID(object o)
-        {
-            return GetMessageAttribute(o).ID;
-        }
-    }
-
     public static class MessageRegistration
     {
         private readonly static ConcurrentDictionary<Int32, Type> _registeredMessages = new ConcurrentDictionary<Int32, Type>();
+
+        static MessageRegistration()
+        {
+        }
 
         public static void ClearAllRegisteredMessageTypes()
         {
             _registeredMessages.Clear();
         }
 
-        public static void UnRegisterMessageType(Type t)
+        public static bool UnRegisterMessageType(Type t)
         {
             Int32 id = MessageAttribute.GetMessageID(t);
 
-            _registeredMessages.TryRemove(id, out t);
+            return _registeredMessages.TryRemove(id, out t);
         }
 
         public static void RegisterMessageType(Type t)
@@ -68,16 +39,9 @@ namespace Baro.CoreLibrary.Serializer3
             }
         }
 
-        public static object CreateObject(Int32 MessageID)
+        internal static Type Get(int MessageID)
         {
-            Type t = _registeredMessages[MessageID];
-            return CreateObject(t);
-        }
-
-        public static object CreateObject(Type t)
-        {
-            Int32 id = MessageAttribute.GetMessageID(t);
-            return Activator.CreateInstance(t);
+            return _registeredMessages[MessageID];
         }
     }
 }

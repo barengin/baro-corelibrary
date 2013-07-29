@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace Baro.CoreLibrary.Serializer3
 {
-    public interface IMessageContent
+    public interface IMessageSerializer
     {
         int MessageSize { get; }
-        ArraySegment<byte> ToRawData();
-    }
 
-    public interface IMessageContent<T>
-    {
-        T FromRawData(ArraySegment<byte> data);
+        ArraySegment<byte> ToRawData();
+        object FromRawData(ArraySegment<byte> data);
     }
 }
