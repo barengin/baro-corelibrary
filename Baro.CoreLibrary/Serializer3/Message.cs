@@ -12,7 +12,7 @@ namespace Baro.CoreLibrary.Serializer3
         private Header _header;
         private object _object;
 
-        public object Msg { get { return _object; } }
+        public object Obj { get { return _object; } }
         public Header Header { get { return _header; } }
 
         private Message()
@@ -34,6 +34,9 @@ namespace Baro.CoreLibrary.Serializer3
 
             return new ArraySegment<byte>(data, 0, data.Length);
         }
+
+        // TODO: Aşağıdaki methodlar içinde ARRAY'ler cache'lenebilir.
+        // Her defasında yeniden oluşturulmak zorunda kalmazlar.
 
         public static Message Create(ArraySegment<byte> fullArray)
         {
