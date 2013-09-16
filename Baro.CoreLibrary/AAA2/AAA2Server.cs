@@ -14,10 +14,13 @@ namespace Baro.CoreLibrary.AAA2
         private FileSystemWatcher _xmlWatcher = new FileSystemWatcher();
         private volatile ConcurrentDictionary<string, User2> _users = new ConcurrentDictionary<string, User2>(Environment.ProcessorCount, 20000);
         private Keys _keys = new Keys();
+        private Action<string> _logCallback;
 
-        public AAA2Server(string xmlfile)
+        public AAA2Server(string xmlfile, Action<string> logCallback)
         {
-            LoadXml(xmlfile, _users);
+            _logCallback = logCallback;
+
+            LoadXml(xmlfile, _users, logCallback);
 
             _xmlWatcher.Filter = Path.GetFileName(xmlfile);
             _xmlWatcher.IncludeSubdirectories = false;
@@ -32,7 +35,7 @@ namespace Baro.CoreLibrary.AAA2
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object o)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(300);
                     ReadXml(o);
                 }), e);
         }
@@ -45,12 +48,12 @@ namespace Baro.CoreLibrary.AAA2
 
             try
             {
-                LoadXml(e.FullPath, u);
+                LoadXml(e.FullPath, u, _logCallback);
             }
             catch
             {
                 Thread.Sleep(1000);
-                
+
                 ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object obj)
                 {
                     ReadXml(obj);
@@ -62,7 +65,7 @@ namespace Baro.CoreLibrary.AAA2
             _users = u;
         }
 
-        private void LoadXml(string xmlfile, ConcurrentDictionary<string, User2> dict)
+        private void LoadXml(string xmlfile, ConcurrentDictionary<string, User2> dict, Action<string> logCallback)
         {
             FileStream s = new FileStream(xmlfile, FileMode.Open, FileAccess.Read, FileShare.Read);
             XmlReader xml = XmlReader.Create(s);
@@ -83,11 +86,15 @@ namespace Baro.CoreLibrary.AAA2
 
                         if (!dict.TryAdd(user.Credential.Username, user))
                         {
-                            throw new ArgumentException("Bu isimde bir kullanıcı zaten sistemde kaytlı. " + user.Credential.Username);
+                            // throw new ArgumentException("Bu isimde bir kullanıcı zaten sistemde kaytlı. " + user.Credential.Username);
+                            if (logCallback != null)
+                                logCallback("Bu isimde bir kullanıcı zaten sistemde kaytlı. " + user.Credential.Username);
+
+                            continue;
                         }
 
                         UserData2[] data = user.Data.Search("Keys.*");
-                        
+
                         if (data != null)
                         {
                             foreach (var item in data)
