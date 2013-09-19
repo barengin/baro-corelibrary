@@ -15,11 +15,13 @@ namespace Baro.CoreLibrary.UI.Controls
         public Image Image { get; set; }
         public string Text { get; set; }
         public CompoundFont FontStyle { get; set; }
+        public TextAlign TextAlign { get; set; }
 
         public ImageButton()
             : base()
         {
             this.FontStyle = new CompoundFont(null, G3Color.BLACK, G3Color.WHITE);
+            this.TextAlign = TextAlign.Center;
         }
 
         internal override void MouseDown(System.Drawing.Point p)
@@ -44,10 +46,9 @@ namespace Baro.CoreLibrary.UI.Controls
         public override void Render(G3Canvas g)
         {
             {
-                Graphics gx = g.Surface.WindowsGraphics;
-
                 if (Image != null)
                 {
+                    Graphics gx = g.Surface.WindowsGraphics;
                     gx.DrawImageTransparent(Image, this.Bound);
                 }
             }
@@ -57,7 +58,7 @@ namespace Baro.CoreLibrary.UI.Controls
                 g.BeginDrawing();
 
                 g.DrawText(Text, Parent.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
-                    TextAlign.Center, this.Bound);
+                    this.TextAlign, this.Bound);
 
                 if (_pressed)
                 {
