@@ -31,9 +31,9 @@ namespace Baro.CoreLibrary.Ray
         #endregion
 
         #region IRayBagList
-        public RayPermission AddNew(string key)
+        public RayPermission AddNew(string permission)
         {
-            RayPermission p = new RayPermission(key);
+            RayPermission p = new RayPermission(permission);
             p.SetSuccessor(this);
 
             WriterLock(() => _list.Add(p.Key, p));
@@ -42,27 +42,27 @@ namespace Baro.CoreLibrary.Ray
             return p;
         }
 
-        public bool Remove(string key)
+        public bool Remove(string permission)
         {
             RayPermission p;
             bool found = false;
 
             WriterLock(() =>
             {
-                if (found = _list.TryGetValue(key, out p))
+                if (found = _list.TryGetValue(permission, out p))
                 {
                     p.SetSuccessor(null);
-                    _list.Remove(key);
+                    _list.Remove(permission);
                 }
             });
 
-            if (found) NotifySuccessor(IDU.Delete, ObjectHierarchy.PermissionList, null, key);
+            if (found) NotifySuccessor(IDU.Delete, ObjectHierarchy.PermissionList, null, permission);
             return found;
         }
 
-        public bool Remove(RayPermission value)
+        public bool Remove(RayPermission permission)
         {
-            return Remove(value.Key);
+            return Remove(permission.Key);
         }
 
         public void Clear()
@@ -80,13 +80,13 @@ namespace Baro.CoreLibrary.Ray
             NotifySuccessor(IDU.Delete, ObjectHierarchy.PermissionList, null, null);
         }
 
-        public RayPermission this[string index]
+        public RayPermission this[string permissionName]
         {
             get
             {
                 try
                 {
-                    return ReaderLock<RayPermission>(() => _list[index]);
+                    return ReaderLock<RayPermission>(() => _list[permissionName]);
                 }
                 catch (KeyNotFoundException)
                 {
