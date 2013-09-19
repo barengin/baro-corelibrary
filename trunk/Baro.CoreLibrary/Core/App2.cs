@@ -27,7 +27,7 @@ namespace Baro.CoreLibrary
         private const int SW_RESTORE = 9;
 
         [DllImport(SystemDLL.NAME)]
-        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
         [DllImport(SystemDLL.NAME)]
         private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);

@@ -433,7 +433,8 @@ namespace Baro.CoreLibrary.G3
                     throw new NotImplementedException();
 
                 case TextAlign.BottomCenter:
-                    throw new NotImplementedException();
+                    DrawTextAlignBottomCenter(lines, r, font, fontColor, haloColor);
+                    break;
 
                 case TextAlign.UpperRight:
                     throw new NotImplementedException();
@@ -478,6 +479,26 @@ namespace Baro.CoreLibrary.G3
 
                 if (r.Contains(x, y - (font.FontHeight / 2)) && r.Contains(x, y + (font.FontHeight / 2)))
                     _DrawTextC(l, font, x + w, y, fontColor, haloColor);
+
+                y = y + font.FontHeight;
+            }
+        }
+
+        private void DrawTextAlignBottomCenter(IList<byte[]> lines, Rectangle r,
+            G3Font font, G3Color fontColor, G3Color haloColor)
+        {
+            int x = r.X + (r.Width / 2); // Orta nokta (X)
+            int y = r.Y + r.Height;      //(Y)
+
+            // y = y - ((font.FontHeight * lines.Count) / 2);
+            // y = y - (font.FontHeight / 2);
+
+            y = y - (font.FontHeight * lines.Count);
+
+            foreach (var l in lines)
+            {
+                if (r.Contains(x, y - (font.FontHeight / 2)) && r.Contains(x, y + (font.FontHeight / 2)))
+                    _DrawTextC(l, font, x, y, fontColor, haloColor);
 
                 y = y + font.FontHeight;
             }
