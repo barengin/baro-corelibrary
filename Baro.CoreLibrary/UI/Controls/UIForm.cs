@@ -103,11 +103,13 @@ namespace Baro.CoreLibrary.UI.Controls
             get { return _backgroundImage; }
             set
             {
-                if (_backgroundImage != null)
-                {
-                    _backgroundImage.Dispose();
-                    _backgroundImage = null;
-                }
+                // AŞAĞIDAKİ KOD HATALI!
+
+                //if (_backgroundImage != null)
+                //{
+                //    _backgroundImage.Dispose();
+                //    _backgroundImage = null;
+                //}
 
                 _backgroundImage = value;
             }
