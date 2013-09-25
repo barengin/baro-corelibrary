@@ -22,6 +22,8 @@ namespace Baro.CoreLibrary.UI.Controls
         public Gradient Gradient { get; set; }
         public Border Border { get; set; }
 
+        public TextAlign TextAlign { get; set; }
+
         public GradientButton()
             : base()
         {
@@ -30,7 +32,9 @@ namespace Baro.CoreLibrary.UI.Controls
             MaskImageColor = G3Color.FromRGB(238, 28, 36);
 
             Border = new Border() { Color = G3Color.GRAY, Enabled = false };
-            
+
+            TextAlign = TextAlign.Center;
+
             Gradient = new Gradient()
             {
                 FromColor = G3Color.FromRGB(247, 243, 247),
@@ -89,7 +93,7 @@ namespace Baro.CoreLibrary.UI.Controls
                     Border.Draw(g, this.Bound);
 
                 g.DrawText(Text, Parent.Encoding, FontStyle.Font, FontStyle.FontColor, FontStyle.HaloColor,
-                     TextAlign.Center, this.Bound);
+                     this.TextAlign, this.Bound);
 
                 g.EndDrawing();
             }
