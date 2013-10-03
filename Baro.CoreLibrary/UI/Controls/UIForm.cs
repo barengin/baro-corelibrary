@@ -76,7 +76,11 @@ namespace Baro.CoreLibrary.UI.Controls
             {
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(new Action<Activity>(setNewActivity), value);
+                    try
+                    {
+                        this.Invoke(new Action<Activity>(setNewActivity), value);
+                    }
+                    catch { }
                 }
                 else
                 {
