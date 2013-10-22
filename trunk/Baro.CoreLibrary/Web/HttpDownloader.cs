@@ -70,19 +70,22 @@ namespace Baro.CoreLibrary.Web
         private void download()
         {
             isDownloading = true;
+            FileStream fs = null;
+            HttpWebRequest r = null;
+            HttpWebResponse res = null;
 
             try
             {
-                HttpWebRequest r = (HttpWebRequest)HttpWebRequest.Create(_downloadUri);
+                r = (HttpWebRequest)HttpWebRequest.Create(_downloadUri);
+                res = (HttpWebResponse)r.GetResponse();
 
-                HttpWebResponse res = (HttpWebResponse)r.GetResponse();
                 int sizeOfFile = (int)res.ContentLength;
                 Stream s = res.GetResponseStream();
 
                 int bufsize = 2048 * 2;
                 byte[] buf = new byte[bufsize];
 
-                FileStream fs = new FileStream(_path, FileMode.Create);
+                fs = new FileStream(_path, FileMode.Create);
 
                 int total = 0;
                 int k;
@@ -114,6 +117,10 @@ namespace Baro.CoreLibrary.Web
             }
             catch (Exception ex)
             {
+                if (fs != null) fs.Close();
+                if (res != null) res.Close();
+                r = null;
+
                 FireOnError(new FileErrorEventArg() { Error = ex, File = _path, State = _state });
             }
             finally
