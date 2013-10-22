@@ -331,6 +331,11 @@
     <Compile Include="CoordSys\CoordSysGoogle.cs" />
     <Compile Include="Core\RegistryUtils.cs" />
     <Compile Include="UI\Controls\Lines.cs" />
+    <Compile Include="Web\FileCompletedEventArg.cs" />
+    <Compile Include="Web\FileErrorEventArg.cs" />
+    <Compile Include="Web\FileProgressEventArg.cs" />
+    <Compile Include="Web\HttpDownloader.cs" />
+    <Compile Include="Web\HttpDownloaderEventArgs.cs" />
     <Compile Include="YolbilClient\Tools.cs" />
     <Compile Include="YolbilClient\YBClient4.Receive.cs" />
     <Compile Include="YolbilClient\YBClient4.Send.cs" />
