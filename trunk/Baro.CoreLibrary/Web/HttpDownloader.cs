@@ -82,7 +82,7 @@ namespace Baro.CoreLibrary.Web
                 int sizeOfFile = (int)res.ContentLength;
                 Stream s = res.GetResponseStream();
 
-                int bufsize = 2048 * 2;
+                int bufsize = 65536;
                 byte[] buf = new byte[bufsize];
 
                 fs = new FileStream(_path, FileMode.Create);
