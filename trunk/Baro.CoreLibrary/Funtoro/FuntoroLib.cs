@@ -35,6 +35,9 @@ namespace Baro.CoreLibrary.Funtoro
         [DllImport("PndSystemEx.dll")]
         public static extern int EceGetBKWStatus(ref int status);
 
+        [DllImport("PndSystemEx.dll")]
+        public static extern int EceHardReset();
+
         public static bool is3GCardExists()
         {
             Ece3GCard e = Ece3GCard.NotExists;
