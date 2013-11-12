@@ -41,7 +41,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>corelib.pfx</AssemblyOriginatorKeyFile>
@@ -70,6 +70,7 @@
     <Compile Include="AAA2\UserData2Collection.cs" />
     <Compile Include="Cache\LruCache.cs" />
     <Compile Include="Collections\ArraySegmentSeamlessBuffer.cs" />
+    <Compile Include="Collections\ArraySegmentSeamlessBuffer2.cs" />
     <Compile Include="Collections\PCQ.cs" />
     <Compile Include="Collections\SynchBiDictionary.cs" />
     <Compile Include="Collections\SynchDictionary.cs" />
