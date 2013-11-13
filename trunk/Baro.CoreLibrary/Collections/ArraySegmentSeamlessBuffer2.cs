@@ -36,7 +36,7 @@ namespace Baro.CoreLibrary.Collections
 
         public List<ArraySegment<T>> RemoveFromStart(int count)
         {
-            if (count < 0 || count > m_bufferSize)
+            if (count <= 0 || count > m_bufferSize)
                 throw new ArgumentOutOfRangeException("count");
 
             List<ArraySegment<T>> result = new List<ArraySegment<T>>();
