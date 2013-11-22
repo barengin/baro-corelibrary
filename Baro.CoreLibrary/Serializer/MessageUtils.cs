@@ -76,6 +76,13 @@ namespace Baro.CoreLibrary.Serializer2
             this.CorrelationID = Environment.TickCount;
         }
 
+        public MessageInfo(ushort toInbox, TimeSpan timeSpan)
+        {
+            this.ExpireDate = DateTime.Now + timeSpan;
+            this.ToInbox = toInbox;
+            this.CorrelationID = Environment.TickCount;
+        }
+
         public MessageInfo(ushort toInbox, int hours, int correlationID)
         {
             this.ExpireDate = DateTime.Now + new TimeSpan(hours, 0, 0);

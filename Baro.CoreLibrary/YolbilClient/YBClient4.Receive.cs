@@ -75,9 +75,6 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private ProcessBufferResult ProcessBufferList()
         {
-            // todo : _buffer.BufferSize >= Message.MESSAGE_INTERNAL_HEADER_SIZE  bu kısım büyüktür idi,
-            // bunun test edılmesı lazım
-
             // Process edilecek BufferSize eğer INTERNAL_HEADER'dan büyükse bir bilgi gelmiş olma ihtimali var.
             while (_buffer.BufferSize >= Message.MESSAGE_INTERNAL_HEADER_SIZE)
             {
