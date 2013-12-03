@@ -169,7 +169,7 @@ namespace Baro.CoreLibrary.Serializer2
 
             for (int k = 0; k < fi.Length; k++)
             {
-                if (fi[k].GetType() == typeof(string))
+                if (fi[k].FieldType == typeof(string))
                 {
                     var obj = fi[k].GetValue(command);
 
