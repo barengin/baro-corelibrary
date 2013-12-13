@@ -48,6 +48,12 @@ namespace Baro.CoreLibrary.Serializer2
         {
             return GetMessageAttribute(o).ID;
         }
+
+        public static UInt16 GetMessageID<T>()
+        {
+            Type t = typeof(T);
+            return GetMessageID(t);
+        }
     }
 
     public sealed class MessageInfo
