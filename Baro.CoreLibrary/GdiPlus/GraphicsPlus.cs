@@ -429,9 +429,9 @@ namespace Baro.CoreLibrary.GdiPlus
         }
 
 
-        //TODO: Does this work?
-        void Clear(Color color)
+        private void Clear(Color color)
         {
+            // Bu kod hatalý olabilir.
             SetStatus(GdiPlus.GdipGraphicsPlusClear(nativeGraphics,color.ToArgb()));
         }
 
