@@ -15,9 +15,6 @@ namespace Baro.CoreLibrary.W3
     {
         private FormsAuthenticationUtil()
         {
-            //
-            // TODO: Add constructor logic here
-            //
         }
 
         /// <summary>
