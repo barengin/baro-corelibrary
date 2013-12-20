@@ -15,9 +15,6 @@ namespace Baro.CoreLibrary
         private static readonly string appPath = string.Concat(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\");
 #endif
 
-        // TODO: Bu kod hatalı. DLL'in versiyonunu gösteriyor sadece. !!!!!!!!!!!!!!!!!!!!!!!
-        // private static readonly Version appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-
         #region Show Window API
         private const int SW_HIDE = 0;
         private const int SW_SHOWNORMAL = 1;
@@ -45,11 +42,6 @@ namespace Baro.CoreLibrary
 
         [DllImport(SystemDLL.NAME, CharSet = CharSet.Unicode, SetLastError = false)]
         private static extern bool CloseHandle(IntPtr handle);
-
-        //public static Version AppVersion
-        //{
-        //    get { return appVersion; }
-        //}
 
         public static string AppPath
         {
