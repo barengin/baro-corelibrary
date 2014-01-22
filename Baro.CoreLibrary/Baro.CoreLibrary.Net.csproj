@@ -265,6 +265,7 @@
     <Compile Include="SimpleDB\SimpleFields.cs" />
     <Compile Include="Text\SimpleStringEncryptor.cs" />
     <Compile Include="W3\FormsAuthenticationUtil.cs" />
+    <Compile Include="W3\W3Utils.cs" />
     <Compile Include="WindowsInput\IInputDeviceStateAdaptor.cs" />
     <Compile Include="WindowsInput\IInputMessageDispatcher.cs" />
     <Compile Include="WindowsInput\IInputSimulator.cs" />
