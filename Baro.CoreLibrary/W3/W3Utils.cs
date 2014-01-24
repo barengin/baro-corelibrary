@@ -19,7 +19,10 @@ namespace Baro.CoreLibrary.W3
             }
             else
             {
-                context.Response.Write(callback + "(" + json + ");");
+                context.Response.Write(callback);
+                context.Response.Write("(");
+                context.Response.Write(json);
+                context.Response.Write(");");
             }
         }
         public static void SetContextJsonResponse(HttpContext context)
