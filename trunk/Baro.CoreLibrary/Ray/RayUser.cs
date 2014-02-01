@@ -177,7 +177,24 @@ namespace Baro.CoreLibrary.Ray
             switch (where)
             {
                 case ObjectHierarchy.AliasList:
-                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, null, this);
+                    // Alias listesi
+
+                    if (info == "add")
+                    {
+                        _server.Users.internalAddAlias(value.ToString(), this);
+                    }
+
+                    if (info == "remove")
+                    {
+                        _server.Users.internalRemoveAlias(value.ToString());
+                    }
+
+                    if (info == "clear")
+                    {
+                        _server.Users.internalClearAlias();
+                    }
+
+                    NotifySuccessor(IDU.Update, ObjectHierarchy.User, info, this);
                     break;
 
                 case ObjectHierarchy.DataStore:

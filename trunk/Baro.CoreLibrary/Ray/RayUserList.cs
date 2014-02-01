@@ -74,7 +74,7 @@ namespace Baro.CoreLibrary.Ray
 
             _mapUsers.AddOrUpdate(username, u, (key, update) =>
             {
-                return u;
+                return update;
             });
 
             NotifySuccessor(IDU.Insert, ObjectHierarchy.UserList, null, u);
@@ -125,6 +125,26 @@ namespace Baro.CoreLibrary.Ray
             {
                 throw new NotSupportedException();
             }
+        }
+
+        internal void internalAddAlias(string alias, RayUser rayUser)
+        {
+            _mapAlias.AddOrUpdate(alias, rayUser, (k, v) =>
+                {
+                    return v;
+                }
+            );
+        }
+
+        internal void internalRemoveAlias(string alias)
+        {
+            RayUser u;
+            _mapAlias.TryRemove(alias, out u);
+        }
+
+        internal void internalClearAlias()
+        {
+            _mapAlias.Clear();
         }
     }
 }
