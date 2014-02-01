@@ -11,6 +11,8 @@ namespace Baro.CoreLibrary.W3
     {
         public static void PostJson(HttpContext context, string json)
         {
+            SetContextJsonResponse(context);
+
             string callback = context.Request.QueryString["callback"];
 
             if (string.IsNullOrEmpty(callback))
