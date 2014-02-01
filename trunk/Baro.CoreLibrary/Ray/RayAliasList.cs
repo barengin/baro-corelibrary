@@ -34,14 +34,12 @@ namespace Baro.CoreLibrary.Ray
 
         public void Insert(int index, string item)
         {
-            WriterLock(() => _list.Insert(index, item));
-            NotifySuccessor(IDU.Insert, ObjectHierarchy.AliasList, null, item);
+            throw new NotSupportedException();
         }
 
         public void RemoveAt(int index)
         {
-            WriterLock(() => _list.RemoveAt(index));
-            NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, null, index);
+            throw new NotSupportedException();
         }
 
         public string this[int index]
@@ -58,14 +56,21 @@ namespace Baro.CoreLibrary.Ray
 
         public void Add(string item)
         {
-            WriterLock(() => _list.Add(item));
-            NotifySuccessor(IDU.Insert, ObjectHierarchy.AliasList, null, item);
+            WriterLock(() =>
+                {
+                    int i = IndexOf(item);
+
+                    if (i == -1)
+                        _list.Add(item);
+                });
+
+            NotifySuccessor(IDU.Insert, ObjectHierarchy.AliasList, "add", item);
         }
 
         public void Clear()
         {
             WriterLock(() => _list.Clear());
-            NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, null, null);
+            NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, "clear", null);
         }
 
         public bool Contains(string item)
@@ -94,7 +99,7 @@ namespace Baro.CoreLibrary.Ray
         public bool Remove(string item)
         {
             bool r = WriterLock<bool>(() => _list.Remove(item));
-            if (r) NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, null, item);
+            if (r) NotifySuccessor(IDU.Delete, ObjectHierarchy.AliasList, "remove", item);
             return r;
         }
 
