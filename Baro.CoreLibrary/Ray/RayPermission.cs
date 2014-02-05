@@ -90,7 +90,8 @@ namespace Baro.CoreLibrary.Ray
             else if (this.Allowed && !this.Denied)
             {
                 value = "allowed";
-            } if (!this.Allowed && !this.Denied)
+            } 
+            else if (!this.Allowed && !this.Denied)
             {
                 value = "natural";
             }
