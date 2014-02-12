@@ -74,7 +74,7 @@ namespace Baro.CoreLibrary.Ray
 
             _mapUsers.AddOrUpdate(username, u, (key, update) =>
             {
-                return update;
+                throw new RayDuplicateUserException(username);
             });
 
             NotifySuccessor(IDU.Insert, ObjectHierarchy.UserList, null, u);
