@@ -139,6 +139,7 @@
     <Compile Include="Ray\IRayQuery.cs" />
     <Compile Include="Ray\RayAliasList.cs" />
     <Compile Include="Ray\RayDataStore.cs" />
+    <Compile Include="Ray\RayDuplicateUserException.cs" />
     <Compile Include="Ray\RayGroup.cs" />
     <Compile Include="Ray\RayGroupList.cs" />
     <Compile Include="Ray\RayHandler.cs" />
