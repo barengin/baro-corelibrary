@@ -133,6 +133,7 @@
     <Compile Include="GdiPlus\Shapes.cs" />
     <Compile Include="GdiPlus\STATSTG.cs" />
     <Compile Include="GdiPlus\Stubs.cs" />
+    <Compile Include="GIS\QuickHull.cs" />
     <Compile Include="HAC\Algorithm\AbstractCriterionAlgorithm.cs" />
     <Compile Include="HAC\Algorithm\DistanceCriterionAlgorithm.cs" />
     <Compile Include="HAC\Algorithm\NumberCriterionAlgorithm.cs" />
