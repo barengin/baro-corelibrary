@@ -28,7 +28,7 @@ namespace HAC
                 this.elements.Add(e);
         }
 
-        internal Element[] GetElements()
+        public Element[] GetElements()
         {
             return elements.ToArray<Element>();
         }
