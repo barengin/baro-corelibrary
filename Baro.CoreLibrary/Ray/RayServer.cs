@@ -123,7 +123,7 @@ namespace Baro.CoreLibrary.Ray
                     }
                     else
                     {
-                        _dataSource.DeleteUser(((RayUser)value).Username);
+                        _dataSource.DeleteUser((string)value);
                     }
                     break;
                 

@@ -96,7 +96,7 @@ namespace Baro.CoreLibrary.Ray
                     _mapAlias.TryRemove(username, out u2);
                 }
 
-                NotifySuccessor(IDU.Delete, ObjectHierarchy.UserList, null, u);
+                NotifySuccessor(IDU.Delete, ObjectHierarchy.UserList, null, username);
             }
 
             return r;
