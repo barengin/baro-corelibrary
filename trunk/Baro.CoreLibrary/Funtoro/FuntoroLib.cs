@@ -32,11 +32,25 @@ namespace Baro.CoreLibrary.Funtoro
         [DllImport("PndSystemEx.dll")]
         private static extern int EceSetVolumeLevel(int level);
 
+        /// <summary>
+        /// Geri kamera bilgisi
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         [DllImport("PndSystemEx.dll")]
         public static extern int EceGetBKWStatus(ref int status);
 
         [DllImport("PndSystemEx.dll")]
         public static extern int EceHardReset();
+
+        [DllImport("PndSystemEx.dll")]
+        public static extern int EceSetBacklightTimeout(int seconds);
+
+        [DllImport("PndSystemEx.dll")]
+        public static extern int EceBacklightOn();
+
+        [DllImport("PndSystemEx.dll")]
+        public static extern int EceBacklightOff();
 
         public static bool is3GCardExists()
         {
