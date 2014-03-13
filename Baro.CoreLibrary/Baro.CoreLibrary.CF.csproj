@@ -325,6 +325,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SharpConfig\Version.txt" />
     <Content Include="UI\UI Controls.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +335,19 @@
     <Compile Include="Core\FastHex.cs" />
     <Compile Include="Core\RegistryUtils.cs" />
     <Compile Include="GIS\QuickHull.cs" />
+    <Compile Include="SharpConfig\Comment.cs" />
+    <Compile Include="SharpConfig\CommentCollection.cs" />
+    <Compile Include="SharpConfig\Configuration.cs" />
+    <Compile Include="SharpConfig\Configuration.Deserialization.cs" />
+    <Compile Include="SharpConfig\Configuration.Parsing.cs" />
+    <Compile Include="SharpConfig\Configuration.Serialization.cs" />
+    <Compile Include="SharpConfig\ParseFlags.cs" />
+    <Compile Include="SharpConfig\ParserException.cs" />
+    <Compile Include="SharpConfig\Setting.cs" />
+    <Compile Include="SharpConfig\SettingCategory.cs" />
+    <Compile Include="SharpConfig\SettingCategoryCollection.cs" />
+    <Compile Include="SharpConfig\SettingCollection.cs" />
+    <Compile Include="SharpConfig\SettingValueCastException.cs" />
     <Compile Include="Spatial\RTreeMemory.cs" />
     <Compile Include="Spatial\TreeNodes.cs" />
     <Compile Include="UI\Controls\Lines.cs" />
