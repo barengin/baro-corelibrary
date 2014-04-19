@@ -72,6 +72,11 @@ namespace Baro.CoreLibrary.Funtoro
             return EceGetBacklightValue(ref level) != 0;
         }
 
+        /// <summary>
+        /// Arka plan ışığı. 0-6 arasında değer alır.
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
         public static bool SetBacklightValue(int level)
         {
             return EceSetBacklightValue(level) != 0;
