@@ -177,12 +177,12 @@ namespace Baro.CoreLibrary.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _queue.GetEnumerator();
+            throw new NotSupportedException();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return _queue.GetEnumerator();
+            throw new NotSupportedException();
         }
 
         #endregion

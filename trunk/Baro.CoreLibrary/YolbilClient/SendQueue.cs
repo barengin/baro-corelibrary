@@ -11,6 +11,8 @@ namespace Baro.CoreLibrary.YolbilClient
 {
     public sealed class SendQueue: IEnumerable<Message>
     {
+        private const int MAXITEMS = 2000;
+
         private readonly SynchQueue<Message> _q = new SynchQueue<Message>();
         private readonly string _folder;
 
@@ -126,6 +128,12 @@ namespace Baro.CoreLibrary.YolbilClient
 
         private void EnqueueInternal(Message m, bool saveToDisk)
         {
+            if (_q.Count == MAXITEMS)
+            {
+                Message dummy;
+                DequeueInternal(out dummy);
+            }
+
             _q.Enqueue(m);
 
             if (saveToDisk)

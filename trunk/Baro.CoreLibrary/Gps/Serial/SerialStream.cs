@@ -115,7 +115,7 @@ namespace Baro.CoreLibrary.Gps.Serial
                 // We'll be using a smaller buffer size of around 128 bytes in order to more quickly get an NMEA sentence
                 // Pass along the buffer size to the port
                 _Result = NativeMethods.SetupComm(_Handle, 128, 128);
-                // HACK: if (!_Result) CheckError();
+                // WARNING: if (!_Result) CheckError();
                 // Yukarıdaki satırı çıkardık.
 
                 /* Configure our timeout behavior. According to MSDN (http://msdn.microsoft.com/en-us/library/aa363190(VS.85).aspx)
