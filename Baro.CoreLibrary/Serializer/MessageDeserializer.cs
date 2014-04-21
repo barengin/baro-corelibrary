@@ -169,7 +169,6 @@ namespace Baro.CoreLibrary.Serializer2
 
             if ((header.Structure & MessageStructure.Compressed) == MessageStructure.Compressed)
             {
-                // TODO: Compression Support
                 throw new NotSupportedException("Compression is not supported");
             }
             else
