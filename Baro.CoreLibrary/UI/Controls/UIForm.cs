@@ -29,6 +29,8 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public int TransitionMSec { get { return _transitionMSec; } set { _transitionMSec = value; } }
 
+        public bool UIInteractivityEnabled { get; set; }
+
         public Encoding Encoding
         {
             get
@@ -76,11 +78,11 @@ namespace Baro.CoreLibrary.UI.Controls
             {
                 if (this.InvokeRequired)
                 {
-                    try
-                    {
-                        this.Invoke(new Action<Activity>(setNewActivity), value);
-                    }
-                    catch { }
+                    //try
+                    //{
+                        this.BeginInvoke(new Action<Activity>(setNewActivity), value);
+                    //}
+                    //catch { }
                 }
                 else
                 {
@@ -99,6 +101,7 @@ namespace Baro.CoreLibrary.UI.Controls
             InitializeComponent();
 
             this.UICanvas.Parent = this;
+            UIInteractivityEnabled = true;
         }
 
         private Image _backgroundImage;
@@ -259,6 +262,9 @@ namespace Baro.CoreLibrary.UI.Controls
         {
             _refMouseHolder = _refCounter;
 
+            if (!UIInteractivityEnabled)
+                return;
+
             this.UICanvas.MouseDown(e);
             this.Invalidate();
         }
@@ -266,6 +272,9 @@ namespace Baro.CoreLibrary.UI.Controls
         private void UIForm_MouseUp(object sender, MouseEventArgs e)
         {
             if (this.NewActivityLoaded)
+                return;
+
+            if (!UIInteractivityEnabled)
                 return;
 
             this.UICanvas.MouseUp(e);
@@ -277,6 +286,9 @@ namespace Baro.CoreLibrary.UI.Controls
             if (this.NewActivityLoaded)
                 return;
 
+            if (!UIInteractivityEnabled)
+                return;
+            
             this.UICanvas.MouseMove(e);
             this.Invalidate();
         }

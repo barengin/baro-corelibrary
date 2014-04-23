@@ -531,15 +531,15 @@ namespace Baro.CoreLibrary.G3
 
             while (i < encodedByteCharArray.Length)
             {
-                // en son rastlanılan SPACE !!!
-                if (encodedByteCharArray[i] == 32)
+                // en son rastlanılan SPACE veya ENTER!!!
+                if (encodedByteCharArray[i] == 32 || encodedByteCharArray[i] == 10)
                 {
                     lastSpace = i;
                 }
 
                 totalWidth += font.Chars[encodedByteCharArray[i]].width;
 
-                if (totalWidth > r.Width)
+                if ((totalWidth > r.Width) || (encodedByteCharArray[i] == 10))
                 {
                     if (lastSpace != -1)
                     {
