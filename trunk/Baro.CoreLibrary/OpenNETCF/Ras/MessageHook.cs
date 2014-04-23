@@ -23,7 +23,7 @@ namespace OpenNETCF.Net
             entry.OnRasStatus(msg.Msg, state, error);
             entry.OnRasError(error);
 
-            Debug.WriteLine(string.Format("RAS Message: state='{0}' error='{1}'", state.ToString(), error.ToString()));
+            // Debug.WriteLine(string.Format("RAS Message: state='{0}' error='{1}'", state.ToString(), error.ToString()));
         }
     }
 }

@@ -11,8 +11,6 @@ namespace OpenNETCF.Net
 		public MarshalStructs()
 		{
 			//
-			// TODO: Add constructor logic here
-			//
 		}
 
 	}
