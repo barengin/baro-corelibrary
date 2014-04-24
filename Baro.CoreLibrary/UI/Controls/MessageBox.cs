@@ -60,7 +60,7 @@ namespace Baro.CoreLibrary.UI.Controls
 
         public override void Render(G3Canvas g)
         {
-            // TODO: Bu kod UIElement içine yapılacak bir eklenti ile BeforeAdd ve AfterRemove işlemleri
+            // IMPROVE: Bu kod UIElement içine yapılacak bir eklenti ile BeforeAdd ve AfterRemove işlemleri
             // içerisine taşınacak.
             Parent.UICanvas.DisableAll();
             this.Enable = true;

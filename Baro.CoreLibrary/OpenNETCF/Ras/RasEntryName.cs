@@ -44,7 +44,6 @@ namespace OpenNETCF.Net
 
         public void Dispose()
         {
-            // TODO:  Add RasEntryName.Dispose implementation
         }
 
         #endregion
