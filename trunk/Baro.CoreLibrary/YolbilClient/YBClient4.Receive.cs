@@ -101,7 +101,7 @@ namespace Baro.CoreLibrary.YolbilClient
                     // İşler yolunda gitmedi.
                     if (result != ProcessBufferResult.OK)
                     {
-                        // TODO: Exceptions.MessageSocketException("result != ProcessBufferResult.OK - işler yolunda gitmedi ");
+                        // IMPROVE: Exceptions.MessageSocketException("result != ProcessBufferResult.OK - işler yolunda gitmedi ");
                         return result;
                     }
                 }
