@@ -101,6 +101,7 @@
     <Compile Include="Core\UniqueID.cs" />
     <Compile Include="GIS\PolygonClipper.cs" />
     <Compile Include="GIS\QuickHull.cs" />
+    <Compile Include="Google\GeocodeAPI.cs" />
     <Compile Include="HAC\Algorithm\AbstractCriterionAlgorithm.cs" />
     <Compile Include="HAC\Algorithm\DistanceCriterionAlgorithm.cs" />
     <Compile Include="HAC\Algorithm\NumberCriterionAlgorithm.cs" />
