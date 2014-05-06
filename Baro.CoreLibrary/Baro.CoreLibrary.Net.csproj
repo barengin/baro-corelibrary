@@ -90,6 +90,7 @@
     <Compile Include="CoordSys\CoordSysLambert.cs" />
     <Compile Include="CoordSys\CoordSysMercator.cs" />
     <Compile Include="CoordSys\CoordSysOSGB.cs" />
+    <Compile Include="CoordSys\CoordSysTools.cs" />
     <Compile Include="Core\ConsoleHelper.cs" />
     <Compile Include="Core\DescriptionAttribute.cs" />
     <Compile Include="Core\FastHex.cs" />
