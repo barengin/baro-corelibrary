@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using Baro.CoreLibrary.Memory;
 
 namespace Baro.CoreLibrary.IO.NativeFile
 {
