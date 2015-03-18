@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Baro.CoreLibrary.CoordSys
 {
-    internal sealed class CoordSysLambert : CoordSys
+    public sealed class CoordSysLambert : CoordSys
     {
         //CONSTANTS WGS84
         private const double WGS84_A = 6378137d;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Baro.CoreLibrary.CoordSys
 {
-    internal sealed class CoordSysGoogle : CoordSys
+    public sealed class CoordSysGoogle : CoordSys
     {
         private const double radius = 6378137d;
 

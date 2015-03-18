@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Baro.CoreLibrary.CoordSys
 {
-    internal sealed class CoordSysOSGB1936 : CoordSys
+    public sealed class CoordSysOSGB1936 : CoordSys
     {        
         // OSGB1936
         // British Isles (Airy Ellipsoid)
