@@ -199,7 +199,12 @@
     <Compile Include="Serializer\MessageUtils.cs" />
     <Compile Include="Serializer\UncompressBufferPool.cs" />
     <Compile Include="Text\SimpleStringEncryptor.cs" />
+    <Compile Include="W3\FileCompletedEventArg.cs" />
+    <Compile Include="W3\FileErrorEventArg.cs" />
+    <Compile Include="W3\FileProgressEventArg.cs" />
     <Compile Include="W3\FormsAuthenticationUtil.cs" />
+    <Compile Include="W3\HttpDownloader.cs" />
+    <Compile Include="W3\HttpDownloaderEventArgs.cs" />
     <Compile Include="W3\W3Utils.cs" />
     <Compile Include="WindowsInput\IInputDeviceStateAdaptor.cs" />
     <Compile Include="WindowsInput\IInputMessageDispatcher.cs" />
