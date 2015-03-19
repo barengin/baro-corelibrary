@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Baro.CoreLibrary.CoordSys
 {
-    public sealed class CoordSysLambert : CoordSys
+    public sealed class CoordSysLambert: CoordSys
     {
         //CONSTANTS WGS84
         private const double WGS84_A = 6378137d;
@@ -32,10 +32,35 @@ namespace Baro.CoreLibrary.CoordSys
 
         private const double phiFSin = 0.42261826174198425d;
 
-        public override CoordSysType CoordSysType
-        {
-            get { return CoordSysType.Lambert; }
-        }
+        // LL2Flat
+        private static readonly double e = Math.Pow((2 * WGS84_F - Math.Pow(WGS84_F, 2)), 0.5); //eccentricity
+        private static readonly double m1 = phi1Cos / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(phi1Sin, 2))), 0.5);
+        private static readonly double m2 = phi2Cos / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(phi2Sin, 2))), 0.5);
+        private static readonly double m1m2Log = Math.Log(m1) - Math.Log(m2);
+
+        private static readonly double t1 = Math.Tan((QPI) - phi1 / 2) / Math.Pow(((1 - e * phi1Sin) / (1 + e * phi1Sin)), e / 2);
+        private static readonly double t2 = Math.Tan((QPI) - phi2 / 2) / Math.Pow(((1 - e * phi2Sin) / (1 + e * phi2Sin)), e / 2);
+        private static readonly double tF = Math.Tan((QPI) - phiF / 2) / Math.Pow(((1 - e * phiFSin) / (1 + e * phiFSin)), e / 2);
+        private static readonly double t1t2Log = Math.Log(t1) - Math.Log(t2);
+        private static readonly double n = (m1m2Log) / (t1t2Log);
+        private static readonly double powt1n = Math.Pow(t1, n);
+        private static readonly double F = m1 / (n * powt1n);
+
+        // Flat2LL
+        private static readonly double Fm1 = Math.Cos(phi1) / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(Math.Sin(phi1), 2))), 0.5);
+        private static readonly double Fm2 = Math.Cos(phi2) / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(Math.Sin(phi2), 2))), 0.5);
+
+        private static readonly double Ft1 = Math.Tan((Math.PI / 4) - phi1 / 2) / Math.Pow(((1 - e * Math.Sin(phi1)) / (1 + e * Math.Sin(phi1))), e / 2);
+        private static readonly double Ft2 = Math.Tan((Math.PI / 4) - phi2 / 2) / Math.Pow(((1 - e * Math.Sin(phi2)) / (1 + e * Math.Sin(phi2))), e / 2);
+        private static readonly double FtF = Math.Tan((Math.PI / 4) - phiF / 2) / Math.Pow(((1 - e * Math.Sin(phiF)) / (1 + e * Math.Sin(phiF))), e / 2);
+
+        private static readonly double h1 = Math.Log(Fm1);
+        private static readonly double h2 = Math.Log(Fm2);
+        private static readonly double h3 = Math.Log(Ft1);
+        private static readonly double h4 = Math.Log(Ft2);
+        private static readonly double Fn = (h1 - h2) / (h3 - h4);
+        private static readonly double FF = Fm1 / (Fn * Math.Pow(Ft1, Fn));
+        private static readonly double rF = WGS84_A * FF * Math.Pow(FtF, Fn);
 
         public override void LL2Flat(ref double XLong, ref double YLat)
         {
@@ -43,18 +68,7 @@ namespace Baro.CoreLibrary.CoordSys
             double phi = YLat * DEG2RAD;
             double lambda = XLong * DEG2RAD;
 
-            double e = Math.Pow((2 * WGS84_F - Math.Pow(WGS84_F, 2)), 0.5); //eccentricity
-
-            double m1 = phi1Cos / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(phi1Sin, 2))), 0.5);
-            double m2 = phi2Cos / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(phi2Sin, 2))), 0.5);
-
             double t = Math.Tan((QPI) - phi / 2) / Math.Pow(((1 - e * Math.Sin(phi)) / (1 + e * Math.Sin(phi))), e / 2);
-            double t1 = Math.Tan((QPI) - phi1 / 2) / Math.Pow(((1 - e * phi1Sin) / (1 + e * phi1Sin)), e / 2);
-            double t2 = Math.Tan((QPI) - phi2 / 2) / Math.Pow(((1 - e * phi2Sin) / (1 + e * phi2Sin)), e / 2);
-            double tF = Math.Tan((QPI) - phiF / 2) / Math.Pow(((1 - e * phiFSin) / (1 + e * phiFSin)), e / 2);
-
-            double n = (Math.Log(m1) - Math.Log(m2)) / (Math.Log(t1) - Math.Log(t2));
-            double F = m1 / (n * Math.Pow(t1, n));
 
             double r = WGS84_A * F * Math.Pow(t, n);
             double rF = WGS84_A * F * Math.Pow(tF, n);
@@ -67,31 +81,11 @@ namespace Baro.CoreLibrary.CoordSys
 
         public override void Flat2LL(ref double XLong, ref double YLat)
         {
-            double e = Math.Pow((2 * WGS84_F - Math.Pow(WGS84_F, 2)), 0.5); //eccentricity
-
-            double m1 = Math.Cos(phi1) / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(Math.Sin(phi1), 2))), 0.5);
-            double m2 = Math.Cos(phi2) / Math.Pow((1 - ((Math.Pow(e, 2)) * Math.Pow(Math.Sin(phi2), 2))), 0.5);
-
-            double t1 = Math.Tan((Math.PI / 4) - phi1 / 2) / Math.Pow(((1 - e * Math.Sin(phi1)) / (1 + e * Math.Sin(phi1))), e / 2);
-            double t2 = Math.Tan((Math.PI / 4) - phi2 / 2) / Math.Pow(((1 - e * Math.Sin(phi2)) / (1 + e * Math.Sin(phi2))), e / 2);
-            double tF = Math.Tan((Math.PI / 4) - phiF / 2) / Math.Pow(((1 - e * Math.Sin(phiF)) / (1 + e * Math.Sin(phiF))), e / 2);
-
-            double h1 = Math.Log(m1);
-            double h2 = Math.Log(m2);
-            double h3 = Math.Log(t1);
-            double h4 = Math.Log(t2);
-
-            double n = (h1 - h2) / (h3 - h4);
-
-            double F = m1 / (n * Math.Pow(t1, n));
-
-            double rF = WGS84_A * F * Math.Pow(tF, n);
-
             double rn = Math.Abs(Math.Pow((Math.Pow((XLong - TurkFalseEast), 2) + Math.Pow(rF - (YLat - TurkFalseNorth), 2)), 0.5));
-            double tn = Math.Pow((rn / (WGS84_A * F)), 1 / n);
+            double tn = Math.Pow((rn / (WGS84_A * FF)), 1 / Fn);
             double tetan = Math.Atan((XLong - TurkFalseEast) / (rF - (YLat - TurkFalseNorth)));
 
-            double lambda = tetan / n + lambdaF;
+            double lambda = tetan / Fn + lambdaF;
 
             double phi = Math.PI / 2 - 2 * Math.Atan(tn);
 
@@ -102,6 +96,11 @@ namespace Baro.CoreLibrary.CoordSys
 
             YLat = phi * RAD2DEG;
             XLong = lambda * RAD2DEG;
+        }
+
+        public override CoordSysType CoordSysType
+        {
+            get { return CoreLibrary.CoordSys.CoordSysType.Lambert; }
         }
     }
 }
