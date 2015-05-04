@@ -95,6 +95,7 @@
     <Compile Include="Core\DescriptionAttribute.cs" />
     <Compile Include="Core\FastHex.cs" />
     <Compile Include="Core\RandomC5.cs" />
+    <Compile Include="Core\ShortGuid.cs" />
     <Compile Include="Core\SystemDLL.cs" />
     <Compile Include="Core\ThreadSafeRandom.cs" />
     <Compile Include="Core\ThreadStaticBuffer.cs" />
