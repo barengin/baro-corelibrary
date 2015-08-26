@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Baro.CoreLibrary.HAC.Fusions;
+using Baro.CoreLibrary.HAC.Metrics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HAC;
-using HAC.Fusions;
-using HAC.Metrics;
 
-namespace HAC.Algorithm
+namespace Baro.CoreLibrary.HAC.Algorithm
 {
     /// <summary>
     /// Abstract class to implement the generic part of the algorithm. Subclasses implement the stop condition to stop the algorithm.

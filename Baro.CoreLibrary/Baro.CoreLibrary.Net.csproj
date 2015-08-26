@@ -48,6 +48,26 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.0.4.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>packages\EPPlus.4.0.4\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.0.1.27, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MongoDB.Bson.2.0.1\lib\net45\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.0.1.27, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MongoDB.Driver.2.0.1\lib\net45\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.0.1.27, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MongoDB.Driver.Core.2.0.1\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpKml, Version=2.1.0.0, Culture=neutral, PublicKeyToken=9bb853c026a5c0ac, processorArchitecture=MSIL">
+      <HintPath>packages\SharpKml.Core.2.1.0\lib\portable-net4+sl5+wp8+win8\SharpKml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -55,10 +75,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AAA2\AAA2Credential.cs" />
@@ -91,8 +113,10 @@
     <Compile Include="CoordSys\CoordSysMercator.cs" />
     <Compile Include="CoordSys\CoordSysOSGB.cs" />
     <Compile Include="CoordSys\CoordSysTools.cs" />
+    <Compile Include="Core\ByteOrder.cs" />
     <Compile Include="Core\ConsoleHelper.cs" />
     <Compile Include="Core\DescriptionAttribute.cs" />
+    <Compile Include="Core\ErrorCodes.cs" />
     <Compile Include="Core\FastHex.cs" />
     <Compile Include="Core\RandomC5.cs" />
     <Compile Include="Core\ShortGuid.cs" />
@@ -101,8 +125,60 @@
     <Compile Include="Core\ThreadStaticBuffer.cs" />
     <Compile Include="Core\TryCatch.cs" />
     <Compile Include="Core\UniqueID.cs" />
+    <Compile Include="Core\ValidEmail.cs" />
+    <Compile Include="Core\WildcardFilter.cs" />
+    <Compile Include="GIS\GooglePoints.cs" />
+    <Compile Include="GIS\KmlConversionV1.cs" />
+    <Compile Include="GIS\Mitab.cs" />
+    <None Include="GIS\MongoTableV3.cs" />
+    <Compile Include="GIS\MsPointCompression.cs" />
+    <Compile Include="GIS\OGC\BoundingBox.cs" />
+    <Compile Include="GIS\OGC\Coordinate.cs" />
+    <Compile Include="GIS\OGC\CoordinateCollection.cs" />
+    <Compile Include="GIS\OGC\DistanceUnits.cs" />
+    <Compile Include="GIS\OGC\Extensions.cs" />
+    <Compile Include="GIS\OGC\Geometry.cs" />
+    <Compile Include="GIS\OGC\GeometryCollection.cs" />
+    <Compile Include="GIS\OGC\GeometryType.cs" />
+    <Compile Include="GIS\OGC\IO\BaseFeed.cs" />
+    <Compile Include="GIS\OGC\IO\BaseTextFeed.cs" />
+    <Compile Include="GIS\OGC\IO\BingDataSourceFeed.cs" />
+    <Compile Include="GIS\OGC\IO\BingDataSourceType.cs" />
+    <Compile Include="GIS\OGC\IO\DBaseFileReader.cs" />
+    <Compile Include="GIS\OGC\IO\DelimitedFileReader.cs" />
+    <Compile Include="GIS\OGC\IO\DelimitedFileWriter.cs" />
+    <Compile Include="GIS\OGC\IO\GeoJsonFeed.cs" />
+    <Compile Include="GIS\OGC\IO\GeoRssFeed.cs" />
+    <Compile Include="GIS\OGC\IO\Gml.cs" />
+    <Compile Include="GIS\OGC\IO\KmlFeed.cs" />
+    <Compile Include="GIS\OGC\IO\NumberReader.cs" />
+    <Compile Include="GIS\OGC\IO\ServiceHelper.cs" />
+    <Compile Include="GIS\OGC\IO\ShapefileReader.cs" />
+    <Compile Include="GIS\OGC\IO\WellKnownBinary.cs" />
+    <Compile Include="GIS\OGC\IO\WellKnownText.cs" />
+    <Compile Include="GIS\OGC\IO\WKBShapeType.cs" />
+    <Compile Include="GIS\OGC\IO\XmlUtilities.cs" />
+    <Compile Include="GIS\OGC\LineString.cs" />
+    <Compile Include="GIS\OGC\Models\DBaseColumnDescription.cs" />
+    <Compile Include="GIS\OGC\Models\DBaseFile.cs" />
+    <Compile Include="GIS\OGC\Models\DBaseFileHeader.cs" />
+    <Compile Include="GIS\OGC\Models\ShapeFileShapeType.cs" />
+    <Compile Include="GIS\OGC\Models\ShapeMetadata.cs" />
+    <Compile Include="GIS\OGC\Models\ShapeStyle.cs" />
+    <Compile Include="GIS\OGC\Models\SpatialDataSet.cs" />
+    <Compile Include="GIS\OGC\Models\StyleColor.cs" />
+    <Compile Include="GIS\OGC\MultiLineString.cs" />
+    <Compile Include="GIS\OGC\MultiPoint.cs" />
+    <Compile Include="GIS\OGC\MultiPolygon.cs" />
+    <Compile Include="GIS\OGC\Point.cs" />
+    <Compile Include="GIS\OGC\Polygon.cs" />
     <Compile Include="GIS\PolygonClipper.cs" />
     <Compile Include="GIS\QuickHull.cs" />
+    <Compile Include="GIS\SpatialIndexes\Envelope.cs" />
+    <Compile Include="GIS\SpatialIndexes\RTree.cs" />
+    <Compile Include="GIS\SpatialIndexes\RTreeNode.cs" />
+    <Compile Include="GIS\SpatialIndexes\StackExtensions.cs" />
+    <Compile Include="GIS\SpatialTools.cs" />
     <Compile Include="Google\GeocodeAPI.cs" />
     <Compile Include="HAC\Algorithm\AbstractCriterionAlgorithm.cs" />
     <Compile Include="HAC\Algorithm\DistanceCriterionAlgorithm.cs" />
@@ -170,8 +246,7 @@
     <Compile Include="Collections\Generics\StaticStack.cs" />
     <Compile Include="Collections\Hash\HashFunctions.cs" />
     <Compile Include="Collections\PQueueInt.cs" />
-    <Compile Include="Crc\Crc.cs" />
-    <Compile Include="Crc\Crc32.cs" />
+    <Compile Include="Core\Crc.cs" />
     <Compile Include="Cache\CacheItem.cs" />
     <Compile Include="Cache\Q2Algorithm.cs" />
     <Compile Include="Cache\CircularQueue.cs" />
@@ -254,6 +329,7 @@
     <None Include="AAA2\aaav1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

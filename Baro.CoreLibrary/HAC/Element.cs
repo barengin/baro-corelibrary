@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace HAC
+namespace Baro.CoreLibrary.HAC
 {
     /// <summary>
     /// An element consists of an array of data points. To use single values (e.g. to cluster numbers) add that value 

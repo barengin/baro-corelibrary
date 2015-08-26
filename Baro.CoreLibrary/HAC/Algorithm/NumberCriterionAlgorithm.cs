@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace HAC.Algorithm
+namespace Baro.CoreLibrary.HAC.Algorithm
 {
     /// <summary>
     /// Implements the cluster algorithm by stopping it as soon as a specified count of clusters is reached.

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Baro.CoreLibrary.HAC.Algorithm;
+using Baro.CoreLibrary.HAC.Fusions;
+using Baro.CoreLibrary.HAC.Metrics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HAC.Fusions;
-using HAC.Metrics;
-using HAC.Algorithm;
 
-namespace HAC
+namespace Baro.CoreLibrary.HAC
 {
     public class HacStart
     {

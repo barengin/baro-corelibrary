@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace HAC.Fusions
+namespace Baro.CoreLibrary.HAC.Fusions
 {
     public class SingleLinkage : Fusion
     {

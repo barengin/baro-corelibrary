@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Baro.CoreLibrary.Crc
+namespace Baro.CoreLibrary.Core
 {
     public enum CRCPolynomial : ulong
     {

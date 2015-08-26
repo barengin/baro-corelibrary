@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Baro.CoreLibrary.HAC.Fusions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HAC.Fusions;
 
-namespace HAC
+namespace Baro.CoreLibrary.HAC
 {
     public class Cluster : IEnumerable
     {

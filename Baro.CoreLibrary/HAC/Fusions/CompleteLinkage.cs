@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HAC.Fusions
+namespace Baro.CoreLibrary.HAC.Fusions
 {
     public class CompleteLinkage : Fusion
     {
