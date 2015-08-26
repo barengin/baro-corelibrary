@@ -40,6 +40,7 @@
     /// Represents a high-resolution stopwatch. It can be used to measure 
     /// very small intervals of time.
     /// </summary>
+    [Obsolete]
     public sealed class StopWatch
     {
         /// <summary>

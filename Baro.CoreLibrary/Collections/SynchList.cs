@@ -6,6 +6,7 @@ using System.Threading;
 
 namespace Baro.CoreLibrary.Collections
 {
+    [Obsolete]
     public class SynchList<T> : IList<T>
     {
         private List<T> m_list = new List<T>();

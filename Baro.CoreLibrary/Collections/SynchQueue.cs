@@ -6,7 +6,8 @@ using System.Threading;
 
 namespace Baro.CoreLibrary.Collections
 {
-    public class SynchQueue<T>: IEnumerable<T>
+    [Obsolete]
+    public class SynchQueue<T> : IEnumerable<T>
     {
         private Queue<T> _queue = new Queue<T>();
 

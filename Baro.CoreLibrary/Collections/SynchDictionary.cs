@@ -6,6 +6,7 @@ using System.Threading;
 
 namespace Baro.CoreLibrary.Collections
 {
+    [Obsolete]
     public class SynchDictionary<Key, Value>
     {
         private Dictionary<Key, Value> m_dict;
