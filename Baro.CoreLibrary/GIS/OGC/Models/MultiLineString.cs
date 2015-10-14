@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Baro.CoreLibrary.GIS.OGC
+namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// A MultiLineString is a collection of LineStrings.

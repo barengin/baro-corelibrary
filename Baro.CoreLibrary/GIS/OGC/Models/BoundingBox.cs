@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Baro.CoreLibrary.GIS.OGC
+namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// Discribes a rectangular region. This region usually encloses a set of geometries or represents a area of view.

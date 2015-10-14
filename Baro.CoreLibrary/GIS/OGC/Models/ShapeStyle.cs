@@ -166,11 +166,6 @@ namespace Baro.CoreLibrary.GIS.OGC.Models
             return newStyle;
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override bool Equals(object obj)
         {
             if (obj is ShapeStyle)

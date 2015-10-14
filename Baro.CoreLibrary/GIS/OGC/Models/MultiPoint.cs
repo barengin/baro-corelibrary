@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Baro.CoreLibrary.GIS.OGC
+namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// A MultiPoint is a 0-dimensional GeometryCollection. The elements of a MultiPoint are restricted to Points. The

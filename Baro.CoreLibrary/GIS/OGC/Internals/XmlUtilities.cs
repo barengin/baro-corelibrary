@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Baro.CoreLibrary.GIS.OGC.IO
+namespace Baro.CoreLibrary.GIS.OGC.Internals
 {
     internal static class XmlUtilities
     {

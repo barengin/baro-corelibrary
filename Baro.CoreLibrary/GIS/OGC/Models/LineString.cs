@@ -1,4 +1,4 @@
-﻿namespace Baro.CoreLibrary.GIS.OGC
+﻿namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// A LineString is an ordered set of vertices. Often refered to as a Polyline.

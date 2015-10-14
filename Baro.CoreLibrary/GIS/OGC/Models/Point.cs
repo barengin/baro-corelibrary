@@ -1,4 +1,4 @@
-﻿namespace Baro.CoreLibrary.GIS.OGC
+﻿namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// A Point is a 0-dimensional geometric object and represents a single location in coordinate space. A Point has an

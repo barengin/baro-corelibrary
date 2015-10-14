@@ -1,11 +1,11 @@
-﻿using Baro.CoreLibrary.GIS.OGC;
+﻿using Baro.CoreLibrary.GIS.OGC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baro.CoreLibrary.GIS
+namespace Baro.CoreLibrary.GIS.OGC
 {
     /// <summary>
     /// A set of common spatial calculation tools.
@@ -72,9 +72,6 @@ namespace Baro.CoreLibrary.GIS
 
         #region Degree and Radian Conversions
 
-        private const double TO_RADIAN_FACTOR = Math.PI / 180d;
-        private const double TO_DEGREE_FACTOR = 180d / Math.PI;
-
         /// <summary>
         /// Converts an angle that is in degrees to radians. Angle * (PI / 180)
         /// </summary>
@@ -82,7 +79,7 @@ namespace Baro.CoreLibrary.GIS
         /// <returns>An angle in radians</returns>
         public static double ToRadians(double angle)
         {
-            return angle * TO_RADIAN_FACTOR;
+            return angle * (Math.PI / 180);
         }
 
         /// <summary>
@@ -92,7 +89,7 @@ namespace Baro.CoreLibrary.GIS
         /// <returns>An angle in degrees</returns>
         public static double ToDegrees(double angle)
         {
-            return angle * TO_DEGREE_FACTOR;
+            return angle * (180 / Math.PI);
         }
 
         #endregion

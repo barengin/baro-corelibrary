@@ -16,26 +16,26 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
         /// <typeparam name="T">The object type to cast the data to.</typeparam>
         /// <param name="url">URL that points to data to download.</param>
         /// <returns>A data object of the specified type.</returns>
-        //public static Task<T> GetJsonAsync<T>(Uri url) where T : new()
-        //{
-        //    return Task.Run<T>(async () =>
-        //    {
-        //        try
-        //        {
-        //            using (var stream = await GetStreamAsync(url))
-        //            {
-        //                using (StreamReader reader = new StreamReader(stream))
-        //                {
-        //                    var t = new T();
-        //                    return Newtonsoft.Json.JsonConvert.DeserializeAnonymousType<T>(reader.ReadToEnd(), t, null);
-        //                }
-        //            }
-        //        }
-        //        catch { }
+        public static Task<T> GetJsonAsync<T>(Uri url) where T : new()
+        {
+            return Task.Run<T>(async () =>
+            {
+                try
+                {
+                    using (var stream = await GetStreamAsync(url))
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            var t = new T();
+                            return Newtonsoft.Json.JsonConvert.DeserializeAnonymousType<T>(reader.ReadToEnd(), t, null);
+                        }
+                    }
+                }
+                catch { }
 
-        //        return default(T);
-        //    });
-        //}
+                return default(T);
+            });
+        }
 
         /// <summary>
         /// Downloads data as a string from a URL.

@@ -2,13 +2,11 @@
  * Based on the OGC Simple Features: http://www.opengeospatial.org/standards/sfa
  */
 
-using Baro.CoreLibrary.GIS.OGC.IO;
-using Baro.CoreLibrary.GIS.OGC.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Baro.CoreLibrary.GIS.OGC
+namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// A general class that is inherited by all simple shapes (Point, LineString, Polygon)

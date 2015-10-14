@@ -1,4 +1,5 @@
-﻿using Baro.CoreLibrary.GIS.OGC.Models;
+﻿using Baro.CoreLibrary.GIS.OGC.Internals;
+using Baro.CoreLibrary.GIS.OGC.Models;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;

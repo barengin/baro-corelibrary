@@ -16,11 +16,6 @@ namespace Baro.CoreLibrary.GIS.OGC.Models
 
         #region Public Methods
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override bool Equals(object obj)
         {
             if (obj is StyleColor)

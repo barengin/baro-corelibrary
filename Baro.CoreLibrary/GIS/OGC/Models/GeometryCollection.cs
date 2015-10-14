@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Baro.CoreLibrary.GIS.OGC
+namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// Regresents a collection of Geometry objects.

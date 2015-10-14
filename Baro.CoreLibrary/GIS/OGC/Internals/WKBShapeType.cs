@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baro.CoreLibrary.GIS.OGC.IO
+namespace Baro.CoreLibrary.GIS.OGC.Internals
 {
     /// <summary>
     /// This enumerator represents the different types of shapes that can be in a Shapefiles

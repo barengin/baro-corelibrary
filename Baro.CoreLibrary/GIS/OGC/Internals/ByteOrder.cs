@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baro.CoreLibrary.Core
+namespace Baro.CoreLibrary.GIS.OGC.Internals
 {
     /// <summary>
     /// This enumerator represents the two types of byte orders that binary data can have; Big Endian (XDR) and Little Endian (NDR).

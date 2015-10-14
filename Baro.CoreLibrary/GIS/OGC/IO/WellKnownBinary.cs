@@ -11,7 +11,7 @@
  * 
  ****************************************************************************/
 
-using Baro.CoreLibrary.Core;
+using Baro.CoreLibrary.GIS.OGC.Internals;
 using Baro.CoreLibrary.GIS.OGC.Models;
 using System;
 using System.Collections.Generic;

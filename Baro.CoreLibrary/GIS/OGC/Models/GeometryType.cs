@@ -1,5 +1,5 @@
 ﻿
-namespace Baro.CoreLibrary.GIS.OGC
+namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     public enum GeometryType
     {

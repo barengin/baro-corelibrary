@@ -1,12 +1,11 @@
-﻿using Baro.CoreLibrary.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baro.CoreLibrary.GIS.OGC.IO
+namespace Baro.CoreLibrary.GIS.OGC.Internals
 {
     /// <summary>
     /// This class contains a set of methods for reading numbers from a BinaryReader 

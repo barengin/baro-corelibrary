@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Baro.CoreLibrary.GIS.OGC
+namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// Used to store a Geodesic Coordinate (X(Longitude), Y(Latitude), Z(Altitude)).

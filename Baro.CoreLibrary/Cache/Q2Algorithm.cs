@@ -17,7 +17,6 @@ namespace Baro.CoreLibrary.Cache
         /// Cache Manager sınıfı ile pageBufferSize büyüklüğünde buffer sayfalarından pageCount kadar yaratılmasını sağlar ve
         /// bunları LRUQueue sınıfı ile 2Q algoritmasını kullanarak cache'ler.
         /// </summary>
-        /// <param name="pageBufferSize"></param>
         /// <param name="pageCount"></param>
         public Q2Algorithm(int pageCount)
         {

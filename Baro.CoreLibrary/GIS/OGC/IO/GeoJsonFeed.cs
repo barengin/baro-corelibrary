@@ -5,13 +5,12 @@
 //Uses JSON.Net library: http://www.nuget.org/packages/Newtonsoft.Json
 
 using Baro.CoreLibrary.GIS.OGC.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 
 namespace Baro.CoreLibrary.GIS.OGC.IO
 {
@@ -194,11 +193,11 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
         {
             List<Geometry> geoms = null;
 
+            using (var jsonReader = new Newtonsoft.Json.JsonTextReader(geoJSON))
             {
-                var root = BsonSerializer.Deserialize<BsonDocument>(geoJSON);
+                var root = JObject.ReadFrom(jsonReader) as JObject;
+                string type = root.Value<string>("type");
 
-                string type = root["type"].AsString;
-                
                 switch (type)
                 {
                     case "FeatureCollection":
@@ -234,9 +233,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return geoms;
         }
 
-        private async Task<Geometry> ParseGeometry(BsonDocument json)
+        private async Task<Geometry> ParseGeometry(JObject json)
         {
-            var type = json["type"].AsString;
+            var type = json.Value<string>("type");
 
             switch (type)
             {
@@ -261,27 +260,27 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private Coordinate? ParseCoordinate(BsonArray jsonArray)
+        private Coordinate? ParseCoordinate(JArray jsonArray)
         {
             if (jsonArray.Count >= 3)
             {
-                return new Coordinate(jsonArray[1].AsDouble, jsonArray[0].AsDouble, jsonArray[2].AsDouble);
+                return new Coordinate(jsonArray[1].Value<double>(), jsonArray[0].Value<double>(), jsonArray[2].Value<double>());
             }
             else if (jsonArray.Count >= 2)
             {
-                return new Coordinate(jsonArray[1].AsDouble, jsonArray[0].AsDouble);
+                return new Coordinate(jsonArray[1].Value<double>(), jsonArray[0].Value<double>());
             }
 
             return null;
         }
 
-        private async Task<CoordinateCollection> ParseCoordinates(BsonArray jsonArray)
+        private async Task<CoordinateCollection> ParseCoordinates(JArray jsonArray)
         {
             var coords = new CoordinateCollection();
 
-            foreach (BsonArray c in jsonArray)
+            foreach (var c in jsonArray)
             {
-                var coord = ParseCoordinate(c);
+                var coord = ParseCoordinate(c as JArray);
                 if (coord.HasValue)
                 {
                     coords.Add(coord.Value);
@@ -296,9 +295,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return coords;
         }
 
-        private Geometry ParsePoint(BsonDocument json)
+        private Geometry ParsePoint(JObject json)
         {
-            var coords = ParseCoordinate(json["coordinates"].AsBsonArray);
+            var coords = ParseCoordinate(json["coordinates"] as JArray);
             if (coords.HasValue)
             {
                 return new Point(coords.Value);
@@ -307,9 +306,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private async Task<Geometry> ParseLineString(BsonDocument json)
+        private async Task<Geometry> ParseLineString(JObject json)
         {
-            var coords = await ParseCoordinates(json["coordinates"].AsBsonArray);
+            var coords = await ParseCoordinates(json["coordinates"] as JArray);
             if (coords != null && coords.Count >= 2)
             {
                 return new LineString(coords);
@@ -318,18 +317,18 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private async Task<Geometry> ParsePolygon(BsonDocument json)
+        private async Task<Geometry> ParsePolygon(JObject json)
         {
-            var rings = json["coordinates"].AsBsonArray;
+            var rings = json["coordinates"] as JArray;
 
             if (rings.Count > 0)
             {
-                var coords = await ParseCoordinates(rings[0].AsBsonArray);
+                var coords = await ParseCoordinates(rings[0] as JArray);
                 var polygon = new Polygon(coords);
 
                 for (int i = 1; i < rings.Count; i++)
                 {
-                    coords = await ParseCoordinates(rings[i].AsBsonArray);
+                    coords = await ParseCoordinates(rings[i] as JArray);
                     if (coords != null && coords.Count > 0)
                     {
                         polygon.InteriorRings.Add(coords);
@@ -342,9 +341,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private async Task<Geometry> ParseMultiPoint(BsonDocument json)
+        private async Task<Geometry> ParseMultiPoint(JObject json)
         {
-            var coords = await ParseCoordinates(json["coordinates"].AsBsonArray);
+            var coords = await ParseCoordinates(json["coordinates"] as JArray);
             if (coords != null && coords.Count > 0)
             {
                 var mp = new MultiPoint(coords.Count);
@@ -358,15 +357,15 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private async Task<Geometry> ParseMultiLineString(BsonDocument json)
+        private async Task<Geometry> ParseMultiLineString(JObject json)
         {
-            var lines = json["coordinates"].AsBsonArray;
+            var lines = json["coordinates"] as JArray;
 
             var mp = new MultiLineString();
 
-            foreach (BsonArray l in lines)
+            foreach (var l in lines)
             {
-                var coords = await ParseCoordinates(l);
+                var coords = await ParseCoordinates(l as JArray);
                 if (coords != null && coords.Count > 0)
                 {
                     mp.Geometries.Add(new LineString(coords));
@@ -381,23 +380,23 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private async Task<Geometry> ParseMultiPolygon(BsonDocument json)
+        private async Task<Geometry> ParseMultiPolygon(JObject json)
         {
-            var polygons = json["coordinates"].AsBsonArray;
+            var polygons = json["coordinates"] ;
 
             var mp = new MultiPolygon();
 
-            foreach (BsonArray p in polygons)
+            foreach (var p in polygons)
             {
-                var rings = p;
+                var rings = p as JArray;
                 if (rings.Count > 0)
                 {
-                    var coords = await ParseCoordinates(rings[0].AsBsonArray);
+                    var coords = await ParseCoordinates(rings[0] as JArray);
                     var polygon = new Polygon(coords);
 
                     for (int i = 1; i < rings.Count; i++)
                     {
-                        coords = await ParseCoordinates(rings[i].AsBsonArray);
+                        coords = await ParseCoordinates(rings[i] as JArray);
                         if (coords != null && coords.Count > 0)
                         {
                             polygon.InteriorRings.Add(coords);
@@ -415,17 +414,17 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private async Task<Geometry> ParseGeometryCollection(BsonDocument json)
+        private async Task<Geometry> ParseGeometryCollection(JObject json)
         {
-            var jsonGeom = json["geometries"].AsBsonArray;
+            var jsonGeom = json["geometries"] as JArray;
 
             if (jsonGeom != null)
             {
                 var gc = new GeometryCollection();
 
-                foreach (BsonDocument g in jsonGeom)
+                foreach (var g in jsonGeom)
                 {
-                    var geom = await ParseGeometry(g);
+                    var geom = await ParseGeometry(g as JObject);
                     if (geom != null)
                     {
                         gc.Geometries.Add(geom);
@@ -441,14 +440,14 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private async Task<List<Geometry>> ParseFeatureCollection(BsonDocument json)
+        private async Task<List<Geometry>> ParseFeatureCollection(JObject json)
         {
             var geoms = new List<Geometry>();
-            var features = json["features"].AsBsonArray;
+            var features = json["features"] as JArray;
 
-            foreach (BsonDocument f in features)
+            foreach (var f in features)
             {
-                var geom = await ParseFeature(f);
+                var geom = await ParseFeature(f as JObject);
                 if (geom != null)
                 {
                     geoms.Add(geom);
@@ -458,9 +457,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return geoms;
         }
 
-        private async Task<Geometry> ParseFeature(BsonDocument json)
+        private async Task<Geometry> ParseFeature(JObject json)
         {
-            var jsonGeom = json["geometry"].AsBsonDocument;
+            var jsonGeom = json["geometry"] as JObject;
             var geom = await ParseGeometry(jsonGeom);
 
             if (geom != null)
@@ -478,12 +477,12 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private ShapeMetadata ParseProperties(BsonDocument json)
+        private ShapeMetadata ParseProperties(JObject json)
         {
             var metadata = new ShapeMetadata();
 
-            var propJson = json["properties"].AsBsonDocument;
-            var idJson = json["id"].AsString;
+            var propJson = json["properties"] as JObject;
+            var idJson = json.Value<string>("id");
 
             if (!string.IsNullOrWhiteSpace(idJson))
             {
@@ -492,26 +491,25 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
 
             if (propJson != null)
             {
-                foreach (BsonElement child in propJson.Elements)
+                foreach (var child in propJson.Children())
                 {
-                    var p = child;
+                    var p = child as JProperty;
 
                     try
                     {
-                        switch (p.Value.BsonType)
+                        switch (p.Value.Type)
                         {
-                            case BsonType.String:
-                                metadata.Properties.Add(p.Name, p.Value.AsString);
+                            case JTokenType.String:
+                                metadata.Properties.Add(p.Name, p.Value.Value<string>());
                                 break;
-                            case BsonType.Double:
-                                metadata.Properties.Add(p.Name, p.Value.AsDouble);
+                            case JTokenType.Float:
+                                metadata.Properties.Add(p.Name, p.Value.Value<double>());
                                 break;
-                            case BsonType.Int32:
-                            case BsonType.Int64:
-                                metadata.Properties.Add(p.Name, p.Value.AsInt64);
+                            case JTokenType.Integer:
+                                metadata.Properties.Add(p.Name, p.Value.Value<int>());
                                 break;
-                            case BsonType.Boolean:
-                                metadata.Properties.Add(p.Name, p.Value.AsBoolean);
+                            case JTokenType.Boolean:
+                                metadata.Properties.Add(p.Name, p.Value.Value<bool>());
                                 break;
                             default:
                                 break;
@@ -542,7 +540,7 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
         {
             if (geometries != null)
             {
-                BsonDocument root;
+                JObject root;
 
                 if (geometries.Count == 1 && (geometries[0].Metadata == null || geometries[0].Metadata.Properties.Count == 0))
                 {
@@ -550,8 +548,8 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
                 }
                 else
                 {
-                    root = new BsonDocument();
-                    root.Add("type", "FeatureCollection");
+                    root = new JObject();
+                    root.Add("type", JValue.CreateString("FeatureCollection"));
                     root.Add("features", CreateFeatures(geometries));
                 }
 
@@ -561,9 +559,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return string.Empty;
         }
 
-        private static BsonArray CreateFeatures(List<Geometry> geometries)
+        private static JArray CreateFeatures(List<Geometry> geometries)
         {
-            var features = new BsonArray();
+            var features = new JArray();
 
             foreach (var g in geometries)
             {
@@ -573,11 +571,11 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return features;
         }
 
-        private static BsonDocument CreateFeature(Geometry geometry)
+        private static JObject CreateFeature(Geometry geometry)
         {
-            var feature = new BsonDocument();
+            var feature = new JObject();
 
-            feature.Add("type", "Feature");
+            feature.Add("type", JValue.CreateString("Feature"));
             feature.Add("geometry", CreateGeometry(geometry));
 
             if (geometry.Metadata != null && geometry.Metadata.Properties.Count > 0)
@@ -588,20 +586,20 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return feature;
         }
 
-        private static BsonDocument CreateProperties(ShapeMetadata metadata)
+        private static JObject CreateProperties(ShapeMetadata metadata)
         {
-            var properties = new BsonDocument();
+            var properties = new JObject();
             bool tempBool;
             double tempDouble;
 
             if (!string.IsNullOrEmpty(metadata.Title))
             {
-                properties.Add("title", metadata.Title);
+                properties.Add("title", JValue.CreateString(metadata.Title));
             }
 
             if (!string.IsNullOrEmpty(metadata.Description))
             {
-                properties.Add("description", metadata.Description);
+                properties.Add("description", JValue.CreateString(metadata.Description));
             }
 
             foreach (var t in metadata.Properties)
@@ -624,7 +622,7 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return properties;
         }
 
-        private static BsonDocument CreateGeometry(Geometry geometry)
+        private static JObject CreateGeometry(Geometry geometry)
         {
             if (geometry is Point)
             {
@@ -658,9 +656,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return null;
         }
 
-        private static BsonArray CreateCoordinate(Coordinate coordinate)
+        private static JArray CreateCoordinate(Coordinate coordinate)
         {
-            var coord = new BsonArray();
+            var coord = new JArray();
 
             coord.Add(coordinate.Longitude);
             coord.Add(coordinate.Latitude);
@@ -673,9 +671,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return coord;
         }
 
-        private static BsonArray CreateCoordinates(CoordinateCollection coordinates)
+        private static JArray CreateCoordinates(CoordinateCollection coordinates)
         {
-            var coords = new BsonArray();
+            var coords = new JArray();
 
             foreach (var c in coordinates)
             {
@@ -685,9 +683,9 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return coords;
         }
 
-        private static BsonArray CreateRings(List<CoordinateCollection> rings)
+        private static JArray CreateRings(List<CoordinateCollection> rings)
         {
-            var coords = new BsonArray();
+            var coords = new JArray();
 
             foreach (var r in rings)
             {
@@ -697,31 +695,31 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return coords;
         }
 
-        private static BsonDocument CreatePoint(Point point)
+        private static JObject CreatePoint(Point point)
         {
-            var json = new BsonDocument();
+            var json = new JObject();
 
-            json.Add("type", "Feature");
+            json.Add("type", JValue.CreateString("Feature"));
             json.Add("coordinates", CreateCoordinate(point.Coordinate));
 
             return json;
         }
 
-        private static BsonDocument CreateLineString(LineString line)
+        private static JObject CreateLineString(LineString line)
         {
-            var json = new BsonDocument();
+            var json = new JObject();
 
-            json.Add("type", "LineString");
+            json.Add("type", JValue.CreateString("LineString"));
             json.Add("coordinates", CreateCoordinates(line.Vertices));
 
             return json;
         }
 
-        private static BsonDocument CreatePolygon(Polygon polygon)
+        private static JObject CreatePolygon(Polygon polygon)
         {
-            var json = new BsonDocument();
+            var json = new JObject();
 
-            json.Add("type", "Polygon");
+            json.Add("type", JValue.CreateString("Polygon"));
 
             var exRing = CreateCoordinates(polygon.ExteriorRing);
             var inRings = CreateRings(polygon.InteriorRings);
@@ -733,11 +731,11 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return json;
         }
 
-        private static BsonDocument CreateMultiPoint(MultiPoint points)
+        private static JObject CreateMultiPoint(MultiPoint points)
         {
-            var json = new BsonDocument();
+            var json = new JObject();
 
-            json.Add("type", "MultiPoint");
+            json.Add("type", JValue.CreateString("MultiPoint"));
 
             var coords = new CoordinateCollection();
             foreach (var p in points)
@@ -750,11 +748,11 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return json;
         }
 
-        private static BsonDocument CreateMultiLineString(MultiLineString lines)
+        private static JObject CreateMultiLineString(MultiLineString lines)
         {
-            var json = new BsonDocument();
+            var json = new JObject();
 
-            json.Add("type", "MultiLineString");
+            json.Add("type", JValue.CreateString("MultiLineString"));
 
             var coords = new List<CoordinateCollection>();
             foreach (var l in lines)
@@ -767,13 +765,13 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return json;
         }
 
-        private static BsonDocument CreateMultiPolygon(MultiPolygon polygons)
+        private static JObject CreateMultiPolygon(MultiPolygon polygons)
         {
-            var json = new BsonDocument();
+            var json = new JObject();
 
-            json.Add("type", "MultiPolygon");
+            json.Add("type", JValue.CreateString("MultiPolygon"));
 
-            var coords = new BsonArray();
+            var coords = new JArray();
 
             foreach (var p in polygons)
             {
@@ -790,13 +788,13 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
             return json;
         }
 
-        private static BsonDocument CreateGeometryCollection(GeometryCollection geometries)
+        private static JObject CreateGeometryCollection(GeometryCollection geometries)
         {
-            var json = new BsonDocument();
+            var json = new JObject();
 
-            json.Add("type", "GeometryCollection");
+            json.Add("type", JValue.CreateString("GeometryCollection"));
 
-            var geoms = new BsonArray();
+            var geoms = new JArray();
 
             foreach (var g in geometries)
             {

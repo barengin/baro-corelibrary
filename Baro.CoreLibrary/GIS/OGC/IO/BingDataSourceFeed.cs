@@ -1,4 +1,5 @@
-﻿using Baro.CoreLibrary.GIS.OGC.Models;
+﻿using Baro.CoreLibrary.GIS.OGC.Internals;
+using Baro.CoreLibrary.GIS.OGC.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -481,7 +482,7 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
                         {
                             if (!string.IsNullOrWhiteSpace(row[i]))
                             {
-                                g = await new Baro.CoreLibrary.GIS.OGC.IO.WellKnownText().Read(row[i]);
+                                g = await new WellKnownText().Read(row[i]);
                             }
                         }
                     }
@@ -663,7 +664,7 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
 
                         if (!string.IsNullOrWhiteSpace(sGeom))
                         {
-                            g = await new Baro.CoreLibrary.GIS.OGC.IO.WellKnownText().Read(sGeom);
+                            g = await new WellKnownText().Read(sGeom);
                         }
                     }
                 }

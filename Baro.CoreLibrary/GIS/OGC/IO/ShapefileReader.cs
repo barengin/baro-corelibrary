@@ -1,4 +1,5 @@
-﻿using Baro.CoreLibrary.GIS.OGC.Models;
+﻿using Baro.CoreLibrary.GIS.OGC.Internals;
+using Baro.CoreLibrary.GIS.OGC.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -203,7 +204,10 @@ namespace Baro.CoreLibrary.GIS.OGC.IO
                         var r = DBaseFileReader.ReadRow(attributesHeader, dbfReader, colRules, numValidRulesCols);
                         if (r != null)
                         {
-                            dataSet.Geometries[i].Metadata.Properties.Concat(r);
+                            foreach (KeyValuePair<string, object> row in r)
+                            {
+                                dataSet.Geometries[i].Metadata.Properties.Add(row.Key, row.Value);
+                            }
                         }
                     }
                 }

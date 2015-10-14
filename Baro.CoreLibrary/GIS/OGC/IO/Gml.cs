@@ -52,6 +52,8 @@
 *   - gml:geometryMember
 ****************************************************************************/
 
+using Baro.CoreLibrary.GIS.OGC.Internals;
+using Baro.CoreLibrary.GIS.OGC.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
