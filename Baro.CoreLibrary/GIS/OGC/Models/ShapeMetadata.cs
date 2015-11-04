@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using MongoDB.Bson;
 
 namespace Baro.CoreLibrary.GIS.OGC.Models
 {
     /// <summary>
     /// A class used to store metadata of a spatial object.
-    /// </sumC:\Users\richbrun\Desktop\Code Samples\CodePlex37\Mirosoft.Maps.SpatialToolbox\Source\Microsoft.Maps.SpatialToolbox.Core\Models\ShapeMetadata.csmary>
+    /// </summary>
     public class ShapeMetadata
     {
         #region Private Properties
@@ -21,29 +22,29 @@ namespace Baro.CoreLibrary.GIS.OGC.Models
         public ShapeMetadata()
         {
             _properties = new Dictionary<string, object>();
-            ID = string.Empty;
-            Title = string.Empty;
-            Description = string.Empty;
+            //ID = string.Empty;
+            //Title = string.Empty;
+            //Description = string.Empty;
         }
 
         #endregion
 
         #region Public Properties
 
-        /// <summary>
-        /// A unique identifier for the Geometry
-        /// </summary>
-        public string ID { get; set; }
+        ///// <summary>
+        ///// A unique identifier for the Geometry
+        ///// </summary>
+        //public string ID { get; set; }
 
-        /// <summary>
-        /// Main title or name.
-        /// </summary>
-        public string Title { get; set; }
+        ///// <summary>
+        ///// Main title or name.
+        ///// </summary>
+        //public string Title { get; set; }
 
-        /// <summary>
-        /// Main descriotion.
-        /// </summary>
-        public string Description { get; set; }
+        ///// <summary>
+        ///// Main descriotion.
+        ///// </summary>
+        //public string Description { get; set; }
 
         /// <summary>
         /// A dictionary of all additional metadata objects by name.
@@ -56,15 +57,14 @@ namespace Baro.CoreLibrary.GIS.OGC.Models
             }
         }
 
-        #endregion
-
-        #region Public Methods
-
-        public bool HasMetadata()
+        /// <summary>
+        /// This method converts only properties
+        /// </summary>
+        /// <returns></returns>
+        public BsonDocument ToGeoJsonData()
         {
-            return (!string.IsNullOrEmpty(ID) || !string.IsNullOrEmpty(Title) || !string.IsNullOrEmpty(Description) || Properties.Count > 0);
+            return _properties.ToBsonDocument();
         }
-
         #endregion
     }
 }
