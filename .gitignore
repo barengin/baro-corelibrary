@@ -7,3 +7,4 @@
 /Baro.CoreLibrary/bin/Release
 /Baro.CoreLibrary/obj/Release
 /Ray/obj/Debug
+*.tmp
