@@ -12,3 +12,6 @@ This is 3th line
 this is is in the stage area
 
 now we're on the DEV branch
+
+
+footer
