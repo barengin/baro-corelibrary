@@ -8,3 +8,4 @@
 /Baro.CoreLibrary/obj/Release
 /Ray/obj/Debug
 *.tmp
+*.orig
