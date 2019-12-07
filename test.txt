@@ -1,5 +1,4 @@
-This is new line from MASTER
-
+This is new line from DEV
 DEV branch
 
 test file
