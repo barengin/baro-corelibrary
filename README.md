@@ -10,3 +10,5 @@ This line is also new line. We added this line due to curiosity
 This is 3th line
 
 this is is in the stage area
+
+now we're on the DEV branch
