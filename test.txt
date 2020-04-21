@@ -1,6 +1,0 @@
-This is new line from DEV
-DEV branch
-
-test file
-2nd line
-3th line
